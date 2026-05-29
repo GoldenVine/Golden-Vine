@@ -28,9 +28,20 @@ export function Nav() {
     <>
       <nav className="fixed top-0 left-0 w-full bg-background z-40 shadow-sm">
         <div className="w-full flex flex-col items-center pt-2">
-          {/* Logo Placeholder */}
-          <Link href="/" className="w-full h-24 flex items-center justify-center bg-background no-underline hover:no-underline">
-            <span className="font-serif text-3xl font-bold tracking-widest text-foreground">GOLDEN VINE</span>
+          {/* Logo */}
+          <Link href="/" className="w-full flex items-center justify-center bg-background no-underline hover:no-underline">
+            <img
+              src="/images/logo.jpg"
+              alt="Golden Vine Piercing"
+              className="w-full h-auto max-h-32 object-contain"
+              onError={(e) => {
+                const t = e.currentTarget;
+                t.style.display = "none";
+                const fallback = t.nextElementSibling as HTMLElement;
+                if (fallback) fallback.style.display = "flex";
+              }}
+            />
+            <span className="font-serif text-3xl font-bold tracking-widest text-foreground h-24 items-center justify-center hidden">GOLDEN VINE</span>
           </Link>
           
           {/* Desktop Nav */}

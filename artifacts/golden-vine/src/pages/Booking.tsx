@@ -18,9 +18,9 @@ export function Booking() {
   }, []);
 
   const bookingImages = [
-    "https://placehold.co/800x800/DEE9CE/264412?text=Booking+1",
-    "https://placehold.co/800x800/DEE9CE/264412?text=Booking+2",
-    "https://placehold.co/800x800/DEE9CE/264412?text=Booking+3",
+    "/images/booking1.jpg",
+    "/images/booking2.jpg",
+    "/images/booking3.jpg",
   ];
 
   const policyItems = [

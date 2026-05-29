@@ -7,13 +7,13 @@ export function Home() {
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
 
   const homeCarouselImages = Array.from({ length: 9 }).map(
-    (_, i) => `https://placehold.co/1200x800/DEE9CE/264412?text=Home+Slide+${i + 1}`
+    (_, i) => `/images/home${i + 1}.jpg`
   );
 
   const collections = [
-    "https://placehold.co/800x800/DEE9CE/264412?text=Collection+1",
-    "https://placehold.co/800x800/DEE9CE/264412?text=Collection+2",
-    "https://placehold.co/800x800/DEE9CE/264412?text=Collection+3",
+    "/images/home10.jpg",
+    "/images/home11.jpg",
+    "/images/home12.jpg",
   ];
 
   return (
@@ -40,7 +40,7 @@ export function Home() {
           
           <div className="flex-1 w-full max-w-md">
             <img 
-              src="https://placehold.co/800x1000/DEE9CE/264412?text=Studio+Interior" 
+              src="/images/shopinterior.jpg" 
               alt="Golden Vine Studio Interior" 
               className="w-full h-auto rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
             />

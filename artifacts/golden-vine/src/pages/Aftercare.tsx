@@ -6,7 +6,7 @@ export function Aftercare() {
       <section className="section-cream max-w-4xl mx-auto space-y-8 font-serif">
         <div className="w-full mb-8 rounded-xl overflow-hidden shadow-md">
           <img 
-            src="https://placehold.co/1200x600/DEE9CE/264412?text=Piercing+Aftercare" 
+            src="/images/info.jpg" 
             alt="Piercing Aftercare Tips" 
             className="w-full h-auto object-cover"
           />

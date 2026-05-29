@@ -4,7 +4,7 @@ export function Jewellery() {
       
       <section className="section-cream flex flex-col md:flex-row items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Our+Collection" 
+          src="/images/ourcollection.jpg" 
           alt="Our Jewellery Collection" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover aspect-square"
         />
@@ -19,7 +19,7 @@ export function Jewellery() {
 
       <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Premium+Materials" 
+          src="/images/premiummaterials.jpg" 
           alt="Premium Jewellery Materials" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover aspect-square"
         />
@@ -40,7 +40,7 @@ export function Jewellery() {
 
       <section className="section-cream flex flex-col md:flex-row items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Unique+Designs" 
+          src="/images/uniquedesigns.jpg" 
           alt="Stylish Jewellery Designs" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover aspect-square"
         />
@@ -57,17 +57,17 @@ export function Jewellery() {
         <h4 className="text-3xl font-bold font-serif inline-block border-b-2 border-primary/20 pb-2">Some Highlights of Quality Jewellery</h4>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <img src="https://placehold.co/600x600/DEE9CE/264412?text=Mirror+Finish" alt="Mirror Finish Polish" className="w-full rounded-xl shadow-sm hover:scale-105 transition-transform" />
+            <img src="/images/mirrorpolish.jpg" alt="Mirror Finish Polish" className="w-full rounded-xl shadow-sm hover:scale-105 transition-transform" />
             <h5 className="text-xl font-bold font-serif">Mirror Finish Polish</h5>
             <p className="font-serif">All jewellery is free from flaws (including hallmarks) and warrantied against defects.</p>
           </div>
           <div className="space-y-4">
-            <img src="https://placehold.co/600x600/DEE9CE/264412?text=Materials" alt="Verifiable Materials" className="w-full rounded-xl shadow-sm hover:scale-105 transition-transform" />
+            <img src="/images/verifiablematerials.jpg" alt="Verifiable Materials" className="w-full rounded-xl shadow-sm hover:scale-105 transition-transform" />
             <h5 className="text-xl font-bold font-serif">Verifiable Materials</h5>
             <p className="font-serif">Ethically sourced materials that are traceable to origin. Safe for initial piercing and daily wear forever.</p>
           </div>
           <div className="space-y-4">
-            <img src="https://placehold.co/600x600/DEE9CE/264412?text=Custom+Made" alt="Custom Made Options" className="w-full rounded-xl shadow-sm hover:scale-105 transition-transform" />
+            <img src="/images/three.jpg" alt="Custom Made Options" className="w-full rounded-xl shadow-sm hover:scale-105 transition-transform" />
             <h5 className="text-xl font-bold font-serif">Custom Made Options</h5>
             <p className="font-serif">Talented hands are able to add a personal touch. The piece above is an example of this - eleven peach topaz gems added to signify a date to the jewellery.</p>
           </div>
@@ -90,7 +90,7 @@ export function Jewellery() {
           </div>
         </div>
         <div className="w-full lg:w-1/2 bg-background p-8 rounded-xl shadow-inner flex items-center justify-center">
-          <img src="https://placehold.co/800x800/DEE9CE/264412?text=How+To+Use+Diagram" alt="How to Use Piercing Jewellery" className="max-w-full h-auto" />
+          <img src="/images/howto.svg" alt="How to Use Piercing Jewellery" className="max-w-full h-auto" />
         </div>
       </section>
 

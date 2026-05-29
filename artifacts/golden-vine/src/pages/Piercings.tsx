@@ -3,7 +3,7 @@ import { Carousel } from "@/components/Carousel";
 
 export function Piercings() {
   const piercingImages = Array.from({ length: 9 }).map(
-    (_, i) => `https://placehold.co/800x800/DEE9CE/264412?text=Piercing+${i + 1}`
+    (_, i) => `/images/piercings${i + 1}.jpg`
   );
 
   return (

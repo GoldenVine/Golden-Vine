@@ -1,9 +1,14 @@
 import { Link } from "wouter";
 
 export function Bvla() {
-  const bvlaGallery = Array.from({ length: 6 }).map(
-    (_, i) => `https://placehold.co/600x600/DEE9CE/264412?text=BVLA+${i + 1}`
-  );
+  const bvlaGallery = [
+    "/images/BVLA7.jpg",
+    "/images/BVLA5.jpg",
+    "/images/BVLA12.jpg",
+    "/images/BVLA3.jpg",
+    "/images/BVLA2.jpg",
+    "/images/BVLA14.jpg",
+  ];
 
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12">
@@ -12,15 +17,15 @@ export function Bvla() {
         <h1 className="text-4xl font-bold font-serif mb-4">Why Get Something Custom?</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <img src="https://placehold.co/600x600/DEE9CE/264412?text=Statement" alt="Custom Statement" className="w-full rounded-xl shadow-sm" />
+            <img src="/images/BVLA32.webp" alt="Custom Statement" className="w-full rounded-xl shadow-sm" />
             <p className="font-serif text-lg">Statement pieces are often as individual as the wearer, celebrate that uniqueness by picking something that was ethically made and created especially for you.</p>
           </div>
           <div className="space-y-4">
-            <img src="https://placehold.co/600x600/DEE9CE/264412?text=Timing" alt="Perfect Timing" className="w-full rounded-xl shadow-sm" />
+            <img src="/images/three.jpg" alt="Perfect Timing" className="w-full rounded-xl shadow-sm" />
             <p className="font-serif text-lg">Sometimes your dream piece is too big for a fresh piercing, custom order allows us to pierce with simpler jewellery, giving your piercing time to settle and mature while your jewellery is meticulously made.</p>
           </div>
           <div className="space-y-4">
-            <img src="https://placehold.co/600x600/DEE9CE/264412?text=Colors" alt="Color Palettes" className="w-full rounded-xl shadow-sm" />
+            <img src="/images/BVLA33.webp" alt="Color Palettes" className="w-full rounded-xl shadow-sm" />
             <p className="font-serif text-lg">You're able to explore more colour palettes and combinations than are readily available in studio whilst using pieces in the cabinets for frame of reference on size or colours.</p>
           </div>
         </div>
@@ -28,7 +33,7 @@ export function Bvla() {
 
       <section className="section-cream flex flex-col md:flex-row items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Design+Process" 
+          src="/images/uniquedesigns.jpg" 
           alt="Interested in getting something made" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
         />
@@ -45,7 +50,7 @@ export function Bvla() {
 
       <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Gemstones" 
+          src="/images/BVLA25.webp" 
           alt="Gemstones" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
         />
@@ -57,7 +62,7 @@ export function Bvla() {
 
       <section className="section-cream flex flex-col md:flex-row items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Care" 
+          src="/images/BVLA27.webp" 
           alt="Care and Maintenance" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
         />
@@ -69,7 +74,7 @@ export function Bvla() {
 
       <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Expert+Advice" 
+          src="/images/BVLA29.webp" 
           alt="Expert Advice" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
         />
@@ -80,7 +85,7 @@ export function Bvla() {
 
       <section className="section-cream flex flex-col md:flex-row items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Care+Requirements" 
+          src="/images/BVLA31.webp" 
           alt="Care Requirements" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
         />
@@ -93,7 +98,7 @@ export function Bvla() {
 
       <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Flashes" 
+          src="/images/BVLA26.webp" 
           alt="Flashes" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
         />
@@ -104,7 +109,7 @@ export function Bvla() {
 
       <section className="section-cream flex flex-col md:flex-row items-center gap-10">
         <img 
-          src="https://placehold.co/800x800/DEE9CE/264412?text=Book+Design" 
+          src="/images/BVLA28.webp" 
           alt="Book Design Appointment" 
           className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
         />

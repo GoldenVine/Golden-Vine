@@ -40,10 +40,13 @@ export function Nav() {
           />
         </Link>
 
+        {/* Golden divider */}
+        <div style={{ height: "1px", background: "linear-gradient(to right, transparent, #c9a84c, #f0d080, #c9a84c, transparent)" }} />
+
         {/* Desktop nav links */}
         <div
-          className="hidden md:flex flex-row items-center justify-center flex-wrap gap-x-6 gap-y-1 py-2 w-full border-t"
-          style={{ background: NAV_BG, borderColor: "rgba(255,250,231,0.2)" }}
+          className="hidden md:flex flex-row items-center justify-center flex-wrap gap-x-6 gap-y-1 py-2 w-full"
+          style={{ background: NAV_BG }}
         >
           {links.map((link) => (
             <Link

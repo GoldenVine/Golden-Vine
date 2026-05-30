@@ -36,25 +36,29 @@ export function Carousel({
   }, [autoAdvance, interval, nextSlide]);
 
   if (peekMode) {
+    // Build the three visible entries, always rendering active LAST so it sits on top via DOM order
+    const peekSlides: { idx: number; offset: number }[] = [];
+    for (let idx = 0; idx < images.length; idx++) {
+      let offset = idx - currentIndex;
+      if (offset < -1 && currentIndex === images.length - 1 && idx === 0) offset = 1;
+      if (offset > 1 && currentIndex === 0 && idx === images.length - 1) offset = -1;
+      if (Math.abs(offset) <= 1) peekSlides.push({ idx, offset });
+    }
+    // Sort: adjacent slides first, active last → active always on top without z-index tricks
+    peekSlides.sort((a, b) => Math.abs(b.offset) - Math.abs(a.offset));
+
     return (
       <div
         className={containerClassName ?? "relative w-full overflow-hidden aspect-video sm:aspect-[16/9] md:aspect-[21/9] group"}
         style={{ background: "transparent" }}
       >
-        {images.map((img, idx) => {
-          let offset = idx - currentIndex;
-          if (offset < -1 && currentIndex === images.length - 1 && idx === 0) offset = 1;
-          if (offset > 1 && currentIndex === 0 && idx === images.length - 1) offset = -1;
-
+        {peekSlides.map(({ img: _img, idx, offset }) => {
+          const img = images[idx];
           const isActive = offset === 0;
-          const isAdjacent = Math.abs(offset) === 1;
-
-          if (!isActive && !isAdjacent) return null;
-
           return (
             <div
               key={idx}
-              className="absolute transition-all duration-700 ease-in-out"
+              className="absolute"
               style={{
                 width: "78%",
                 height: "90%",
@@ -62,8 +66,8 @@ export function Carousel({
                 left: "11%",
                 transform: `translateX(${offset * 87}%) scale(${isActive ? 1 : 0.92})`,
                 opacity: isActive ? 1 : 0.65,
-                zIndex: isActive ? 10 : 1,
                 filter: isActive ? "none" : "blur(3px)",
+                transition: "transform 0.7s ease-in-out, opacity 0.7s ease-in-out, filter 0.7s ease-in-out",
               }}
             >
               <img

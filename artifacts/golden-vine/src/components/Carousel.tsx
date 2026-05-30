@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -20,6 +20,7 @@ export function Carousel({
   peekMode = false
 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % images.length);
@@ -36,15 +37,25 @@ export function Carousel({
   }, [autoAdvance, interval, nextSlide]);
 
   if (peekMode) {
-    // Keep ALL slides in the DOM always. Clamp offset to ±1 for the transform so far-away
-    // slides sit pre-staged at the peek position (opacity 0). This way every slide is already
-    // at its target position before it becomes visible — no "pop-in" on either side.
     const half = Math.floor(images.length / 2);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+      touchStartX.current = e.touches[0].clientX;
+    };
+    const handleTouchEnd = (e: React.TouchEvent) => {
+      if (touchStartX.current === null) return;
+      const delta = e.changedTouches[0].clientX - touchStartX.current;
+      if (delta < -50) nextSlide();
+      else if (delta > 50) prevSlide();
+      touchStartX.current = null;
+    };
 
     return (
       <div
         className={containerClassName ?? "relative w-full overflow-hidden aspect-video sm:aspect-[16/9] md:aspect-[21/9] group"}
         style={{ background: "transparent" }}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
       >
         {images.map((img, idx) => {
           let offset = idx - currentIndex;

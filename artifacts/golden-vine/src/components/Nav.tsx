@@ -48,18 +48,26 @@ export function Nav() {
           className="hidden md:flex flex-row items-center justify-center flex-wrap gap-x-6 gap-y-1 py-2 w-full"
           style={{ background: NAV_BG }}
         >
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-serif uppercase text-sm font-semibold tracking-wider no-underline transition-colors"
-              style={{ color: LINK_COLOR }}
-              onMouseEnter={e => (e.currentTarget.style.color = LINK_HOVER)}
-              onMouseLeave={e => (e.currentTarget.style.color = LINK_COLOR)}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {links.map((link) => {
+            const isActive = link.href === "/"
+              ? location === "/"
+              : location.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="font-serif uppercase text-sm font-semibold tracking-wider no-underline transition-colors pb-0.5"
+                style={{
+                  color: LINK_COLOR,
+                  borderBottom: isActive ? "2px solid #f0d080" : "2px solid transparent",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color = LINK_HOVER)}
+                onMouseLeave={e => (e.currentTarget.style.color = LINK_COLOR)}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <div className="flex gap-4 ml-2">
             <a
               href="https://www.instagram.com/goldenvinepiercing"

@@ -20,7 +20,7 @@ export function Home() {
     <div className="flex flex-col w-full animate-in fade-in duration-500">
       
       <div className="-mx-4 md:-mx-8 mb-12">
-        <Carousel images={homeCarouselImages} autoAdvance={true} interval={3000} />
+        <Carousel images={homeCarouselImages} autoAdvance={true} interval={3000} peekMode={true} />
       </div>
 
       <section className="section-cream flex flex-col items-center text-center">

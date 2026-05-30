@@ -8,6 +8,7 @@ interface CarouselProps {
   interval?: number;
   showControls?: boolean;
   containerClassName?: string;
+  peekMode?: boolean;
 }
 
 export function Carousel({ 
@@ -15,7 +16,8 @@ export function Carousel({
   autoAdvance = false, 
   interval = 3000,
   showControls = false,
-  containerClassName
+  containerClassName,
+  peekMode = false
 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -32,6 +34,68 @@ export function Carousel({
     const timer = setInterval(nextSlide, interval);
     return () => clearInterval(timer);
   }, [autoAdvance, interval, nextSlide]);
+
+  if (peekMode) {
+    return (
+      <div
+        className={containerClassName ?? "relative w-full overflow-hidden aspect-video sm:aspect-[16/9] md:aspect-[21/9] group"}
+        style={{ background: "transparent" }}
+      >
+        {images.map((img, idx) => {
+          let offset = idx - currentIndex;
+          if (offset < -1 && currentIndex === images.length - 1 && idx === 0) offset = 1;
+          if (offset > 1 && currentIndex === 0 && idx === images.length - 1) offset = -1;
+
+          const isActive = offset === 0;
+          const isAdjacent = Math.abs(offset) === 1;
+
+          if (!isActive && !isAdjacent) return null;
+
+          return (
+            <div
+              key={idx}
+              className="absolute transition-all duration-700 ease-in-out"
+              style={{
+                width: "78%",
+                height: "90%",
+                top: "5%",
+                left: "11%",
+                transform: `translateX(${offset * 87}%) scale(${isActive ? 1 : 0.92})`,
+                opacity: isActive ? 1 : 0.65,
+                zIndex: isActive ? 10 : 1,
+                filter: isActive ? "none" : "blur(3px)",
+              }}
+            >
+              <img
+                src={img}
+                alt={`Slide ${idx + 1}`}
+                className="w-full h-full object-cover rounded-xl shadow-xl"
+              />
+            </div>
+          );
+        })}
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={prevSlide}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 text-white hover:bg-black/20 bg-black/10 rounded-full w-12 h-12 opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft className="w-8 h-8" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={nextSlide}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 text-white hover:bg-black/20 bg-black/10 rounded-full w-12 h-12 opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-8 h-8" />
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className={containerClassName ?? "relative w-full overflow-hidden bg-primary/10 aspect-video sm:aspect-[16/9] md:aspect-[21/9] flex items-center justify-center group"}>

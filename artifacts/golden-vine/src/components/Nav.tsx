@@ -36,7 +36,7 @@ export function Nav() {
           <img
             src={logoSrc}
             alt="Golden Vine Piercing"
-            className="w-full h-20 md:h-auto block object-cover"
+            className="w-full h-[60px] md:h-auto block object-cover"
           />
         </Link>
 

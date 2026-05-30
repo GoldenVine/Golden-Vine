@@ -36,25 +36,33 @@ export function Carousel({
   }, [autoAdvance, interval, nextSlide]);
 
   if (peekMode) {
-    // Build the three visible entries, always rendering active LAST so it sits on top via DOM order
-    const peekSlides: { idx: number; offset: number }[] = [];
-    for (let idx = 0; idx < images.length; idx++) {
-      let offset = idx - currentIndex;
-      if (offset < -1 && currentIndex === images.length - 1 && idx === 0) offset = 1;
-      if (offset > 1 && currentIndex === 0 && idx === images.length - 1) offset = -1;
-      if (Math.abs(offset) <= 1) peekSlides.push({ idx, offset });
-    }
-    // Sort: adjacent slides first, active last → active always on top without z-index tricks
-    peekSlides.sort((a, b) => Math.abs(b.offset) - Math.abs(a.offset));
+    // Keep ALL slides in the DOM always. Clamp offset to ±1 for the transform so far-away
+    // slides sit pre-staged at the peek position (opacity 0). This way every slide is already
+    // at its target position before it becomes visible — no "pop-in" on either side.
+    const half = Math.floor(images.length / 2);
 
     return (
       <div
         className={containerClassName ?? "relative w-full overflow-hidden aspect-video sm:aspect-[16/9] md:aspect-[21/9] group"}
         style={{ background: "transparent" }}
       >
-        {peekSlides.map(({ img: _img, idx, offset }) => {
-          const img = images[idx];
-          const isActive = offset === 0;
+        {images.map((img, idx) => {
+          let offset = idx - currentIndex;
+          // Normalise to the shortest path around the ring
+          if (offset > half) offset -= images.length;
+          if (offset < -half) offset += images.length;
+
+          const isActive   = offset === 0;
+          const isAdjacent = Math.abs(offset) === 1;
+
+          // Clamp so far slides park at ±1 (hidden behind the peek slide)
+          const clampedOffset = Math.max(-1, Math.min(1, offset));
+
+          const opacity = isActive ? 1 : isAdjacent ? 0.65 : 0;
+          const scale   = isActive ? 1 : 0.92;
+          // Active on top; adjacent behind; far slides invisible but positioned
+          const zIndex  = isActive ? 10 : isAdjacent ? 5 : 1;
+
           return (
             <div
               key={idx}
@@ -64,10 +72,12 @@ export function Carousel({
                 height: "90%",
                 top: "5%",
                 left: "11%",
-                transform: `translateX(${offset * 87}%) scale(${isActive ? 1 : 0.92})`,
-                opacity: isActive ? 1 : 0.65,
+                zIndex,
+                transform: `translateX(${clampedOffset * 87}%) scale(${scale})`,
+                opacity,
                 filter: isActive ? "none" : "blur(3px)",
                 transition: "transform 0.7s ease-in-out, opacity 0.7s ease-in-out, filter 0.7s ease-in-out",
+                pointerEvents: isActive ? "auto" : "none",
               }}
             >
               <img

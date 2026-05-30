@@ -5,11 +5,11 @@ import { Link } from "wouter";
 // null = closed all day; { open, close } = 24-hour decimal (e.g. 17.5 = 17:30)
 const HOURS: Record<number, { open: number; close: number } | null> = {
   0: null,                      // Sunday – closed
-  1: { open: 11, close: 18 },   // Monday
-  2: { open: 11, close: 18 },   // Tuesday
-  3: { open: 11, close: 18 },   // Wednesday
-  4: { open: 11, close: 18 },   // Thursday
-  5: { open: 11, close: 18 },   // Friday
+  1: null,                      // Monday – closed
+  2: null,                      // Tuesday – closed
+  3: { open: 10, close: 17 },   // Wednesday
+  4: { open: 10, close: 17 },   // Thursday
+  5: { open: 10, close: 17 },   // Friday
   6: { open: 10, close: 17 },   // Saturday
 };
 
@@ -41,12 +41,8 @@ export function Footer() {
 
   return (
     <footer className="bg-[#333] text-white py-8 mt-12 w-full">
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-        <p className="font-serif m-0 text-sm text-white/70">
-          © {new Date().getFullYear()} Golden Vine Piercing. All rights reserved.
-        </p>
-
-        {/* Open / closed badge */}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 flex flex-col items-center gap-4 text-center">
+        {/* Open / closed badge — centred row */}
         <span
           className="inline-flex items-center gap-2 text-sm font-semibold px-3 py-1 rounded-full"
           style={{
@@ -62,9 +58,14 @@ export function Footer() {
           {label}
         </span>
 
-        <Link href="/contact" className="text-sm text-white/50 hover:text-white/90 transition-colors no-underline">
-          Bath, UK · Contact us
-        </Link>
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8">
+          <p className="font-serif m-0 text-sm text-white/70">
+            © {new Date().getFullYear()} Golden Vine Piercing. All rights reserved.
+          </p>
+          <Link href="/contact" className="text-sm text-white/50 hover:text-white/90 transition-colors no-underline">
+            Bath, UK · Contact us
+          </Link>
+        </div>
       </div>
     </footer>
   );

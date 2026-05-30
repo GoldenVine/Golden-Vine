@@ -7,13 +7,15 @@ interface CarouselProps {
   autoAdvance?: boolean;
   interval?: number;
   showControls?: boolean;
+  containerClassName?: string;
 }
 
 export function Carousel({ 
   images, 
   autoAdvance = false, 
   interval = 3000,
-  showControls = false
+  showControls = false,
+  containerClassName
 }: CarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -32,7 +34,7 @@ export function Carousel({
   }, [autoAdvance, interval, nextSlide]);
 
   return (
-    <div className="relative w-full overflow-hidden bg-primary/10 aspect-video sm:aspect-[16/9] md:aspect-[21/9] flex items-center justify-center group">
+    <div className={containerClassName ?? "relative w-full overflow-hidden bg-primary/10 aspect-video sm:aspect-[16/9] md:aspect-[21/9] flex items-center justify-center group"}>
       <div className="absolute inset-0 flex items-center justify-center">
         {images.map((img, idx) => {
           let offset = idx - currentIndex;

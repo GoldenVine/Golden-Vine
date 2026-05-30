@@ -9,20 +9,27 @@ export function Piercings() {
   return (
     <div className="flex flex-col animate-in fade-in duration-500 w-full space-y-12">
       
-      <div className="flex flex-col lg:flex-row gap-12 items-center section-cream">
-        <div className="flex-1 text-center lg:text-left space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold">Fresh & Healed Piercings</h1>
-          <p className="text-lg font-serif leading-relaxed">
-            Discover a wide range of piercing options and high-quality jewellery to express your individual style.
-          </p>
-          <div className="pt-4">
-            <Link href="/booking" className="pill-btn text-lg py-4 px-10">
-              Book Now
-            </Link>
+      <div className="section-cream max-w-5xl mx-auto w-full">
+        <div className="flex flex-col lg:flex-row gap-10 items-center">
+          <div className="lg:w-2/5 text-center lg:text-left space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold">Fresh &amp; Healed Piercings</h1>
+            <p className="text-lg font-serif leading-relaxed">
+              Discover a wide range of piercing options and high-quality jewellery to express your individual style.
+            </p>
+            <div className="pt-4">
+              <Link href="/booking" className="pill-btn text-lg py-4 px-10">
+                Book Now
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="flex-1 w-full lg:w-1/2">
-          <Carousel images={piercingImages} showControls={true} autoAdvance={false} />
+          <div className="lg:w-3/5 w-full">
+            <Carousel
+              images={piercingImages}
+              showControls={true}
+              autoAdvance={false}
+              containerClassName="relative w-full overflow-hidden bg-primary/10 rounded-xl aspect-[4/3] flex items-center justify-center group"
+            />
+          </div>
         </div>
       </div>
 

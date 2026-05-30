@@ -126,11 +126,13 @@
 }
 
 .pill-btn {
-  @apply inline-flex items-center justify-center px-8 py-3 rounded-full text-[color:var(--primary-foreground)] font-serif no-underline font-semibold shadow-md transition-all duration-300;
+  @apply inline-flex items-center justify-center px-8 py-3 rounded-full font-serif no-underline font-semibold shadow-md transition-all duration-300;
   background: linear-gradient(135deg, #526545, #3b4d30);
+  color: #fffae7 !important;
 }
 .pill-btn:hover {
   @apply shadow-[0_0_15px_rgba(82,101,69,0.6)] -translate-y-0.5;
+  color: #ffffff !important;
 }
 
 .section-cream {

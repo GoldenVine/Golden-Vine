@@ -24,13 +24,13 @@ export function Home() {
       </div>
 
       <section className="section-cream flex flex-col items-center text-center">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-10 max-w-3xl mx-auto leading-tight">
           Welcome to Golden Vine: Precision Piercing Designed to Shine
         </h1>
         
         <div className="flex flex-col md:flex-row items-center gap-12 w-full max-w-5xl mx-auto">
-          <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left space-y-8">
-            <p className="font-serif text-lg leading-relaxed m-0">
+          <div className="flex-1 flex flex-col items-center text-center space-y-8">
+            <p className="font-serif text-lg leading-relaxed m-0 max-w-md">
               Welcome to Golden Vine Piercing, Bath's destination for exquisite and safe body piercing. We're dedicated to providing a relaxed and professional experience where we believe a piercing is more than just jewellery – it's an expression.
             </p>
             <Link href="/booking" className="pill-btn text-lg py-4 px-10">

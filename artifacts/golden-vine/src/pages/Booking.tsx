@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Lightbox } from "@/components/Lightbox";
 import { AccordionSection } from "@/components/AccordionSection";
+import { FadeIn } from "@/components/FadeIn";
 
 export function Booking() {
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load Setmore script on mount
     const scriptId = "setmore-script";
     if (!document.getElementById(scriptId)) {
       const script = document.createElement("script");
@@ -89,7 +89,6 @@ export function Booking() {
           <p>If your appointment is for piercing we will book a complimentary check-up for 4 weeks after the appointment. This is free and strongly encouraged for your piercing's health. All it takes is part of your aftercare routine to be neglected or misunderstood and your piercing can exhibit signs of being unhappy. At this point, if you stick with your check-up we are usually able to get ahead of the problem before it becomes too established. We will discuss what's been happening between the two dates and get to the bottom of the potential source of irritation, eliminate it and tailor your aftercare routine to reflect that. Then, schedule another check-up for X weeks later to see progress.</p>
           <p>If, at your check-up, everything seems happy and healthy, it usually suggests that you have a good handle on things and to continue as you have been. We strongly encourage you to check in with us if that changes.</p>
           <p>Some people need more help than others in the healing of a piercing and that is precisely what we are here for, if you have questions or doubts, do not play the 'wait and see' game. Be proactive and contact us to schedule a further check-up. <strong>Check-ups will always be free to our piercing clients</strong>.</p>
-          
           <p className="font-bold text-xl text-primary mt-6">Downsizing</p>
           <p>This is an important part of your healing piercing's journey and demonstrates progress from it being fresh, one step closer to that goal of a fully healed piercing.</p>
           <p>Downsizing is when the jewellery you were pierced with starts to feel/look like it's getting too long and sticking out. If left at that length it quickly becomes a potential for snagging and, in some piercings, can cause the angle to irreparably tilt, affecting how jewellery may sit at a later date or even result in the need for jewellery to be removed and let the piercing heal over.</p>
@@ -127,43 +126,48 @@ export function Booking() {
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12 pb-12">
       
-      <section className="flex flex-col md:flex-row justify-center gap-6 max-w-5xl mx-auto">
-        {bookingImages.map((img, i) => (
-          <div 
-            key={i}
-            className="flex-1 rounded-xl overflow-hidden shadow-md cursor-pointer group"
-            onClick={() => setLightboxImg(img)}
-          >
-            <img 
-              src={img} 
-              alt={`Booking info ${i + 1}`} 
-              className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
-            />
+      <FadeIn>
+        <section className="flex flex-col md:flex-row justify-center gap-6 max-w-5xl mx-auto">
+          {bookingImages.map((img, i) => (
+            <FadeIn key={i} delay={i * 0.1}>
+              <div 
+                className="flex-1 rounded-xl overflow-hidden shadow-md cursor-pointer group"
+                onClick={() => setLightboxImg(img)}
+              >
+                <img 
+                  src={img} 
+                  alt={`Booking info ${i + 1}`} 
+                  className="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
+            </FadeIn>
+          ))}
+        </section>
+      </FadeIn>
+
+      <FadeIn delay={0.1}>
+        <section className="section-cream max-w-4xl mx-auto py-12 px-6 sm:px-12 text-center">
+          <h1 className="text-4xl font-bold font-serif mb-10 pb-4 border-b-2 border-foreground/20 inline-block">
+            Booking & Policies
+          </h1>
+          
+          <div className="text-left w-full mx-auto">
+            <AccordionSection items={policyItems} />
           </div>
-        ))}
-      </section>
 
-      <section className="section-cream max-w-4xl mx-auto py-12 px-6 sm:px-12 text-center">
-        <h1 className="text-4xl font-bold font-serif mb-10 pb-4 border-b-2 border-foreground/20 inline-block">
-          Booking & Policies
-        </h1>
-        
-        <div className="text-left w-full mx-auto">
-          <AccordionSection items={policyItems} />
-        </div>
-
-        <div className="mt-16 flex justify-center">
-          <a 
-            id="Setmore_button_iframe" 
-            href="https://goldenvine.setmore.com" 
-            target="_blank" 
-            rel="noreferrer"
-            className="pill-btn text-xl px-12 py-5"
-          >
-            Book Now
-          </a>
-        </div>
-      </section>
+          <div className="mt-16 flex justify-center">
+            <a 
+              id="Setmore_button_iframe" 
+              href="https://goldenvine.setmore.com" 
+              target="_blank" 
+              rel="noreferrer"
+              className="pill-btn text-xl px-12 py-5"
+            >
+              Book Now
+            </a>
+          </div>
+        </section>
+      </FadeIn>
 
       <Lightbox 
         isOpen={!!lightboxImg} 

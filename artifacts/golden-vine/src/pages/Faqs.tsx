@@ -1,4 +1,5 @@
 import { AccordionSection } from "@/components/AccordionSection";
+import { FadeIn } from "@/components/FadeIn";
 
 export function Faqs() {
   const faqItems = [
@@ -56,7 +57,6 @@ export function Faqs() {
       content: (
         <div className="space-y-4">
           <p>We strive to accommodate all repair and modification requests for your convenience. There are sometimes complications behind the scenes, therefore we wish to highlight some important information regarding our processes and reasonable expectations. Please know that we charge the absolute minimum fee possible to repair items that are not covered by our lifetime guarantee as a token of our appreciation for wearing BVLA. Modifications are accepted on a case-by-case basis and we urge you to discuss the feasibility with our team.</p>
-          
           <p className="font-bold text-lg text-primary">What is a repair covered by the BVLA lifetime guarantee?</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Thread or Pin breakage at the solder point. *</li>
@@ -67,7 +67,6 @@ export function Faqs() {
           </ul>
           <p className="text-sm italic">*If a thread or pin breaks and the end is lost, please provide the post containing the broken segment of thread or pin as proof of breakage. We will replace the lost portion so long as proof of purchase is provided.</p>
           <p className="text-sm italic">**Pearls and Paua Shell are not covered by the BVLA lifetime guarantee as the organic nature of these items may result in problems from daily wear and exposure to chemicals or body fluids. If there is an issue with Pearl or Paua Shell within the first two weeks of purchase, please contact us for assistance.</p>
-          
           <p className="font-bold text-lg text-primary mt-4">What is not a repair covered by the BVLA lifetime guarantee?</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Items that are cut, scratched or marred from tools used by user.</li>
@@ -78,7 +77,6 @@ export function Faqs() {
             <li>Seam or hinge ring size adjustments.</li>
             <li>Dirty gems – If you think a gem is discolored, first try our ultrasonic cleaning service or at least soaking in hot water and then cleaning with an electric toothbrush. Dirty gems are often mistaken for discolored gems.</li>
           </ul>
-          
           <p className="font-bold text-lg text-primary mt-4">Realistic expectations for BVLA repairs</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>Some gemstones cannot withstand heat. In this scenario, a gemstone could discolor or break during the repair process. We may need to replace the gemstone to successfully repair the item.</li>
@@ -89,7 +87,6 @@ export function Faqs() {
             <li>For repairs that are not covered by the BVLA lifetime guarantee, we may refuse to repair items that would be better suited for remaking from new materials, which would incur a fee.</li>
             <li>We do not repair any competitor jewellery.</li>
           </ul>
-          
           <p className="font-bold text-lg text-primary mt-4">Realistic expectations for BVLA modifications</p>
           <p>There are limitations on what is possible to modify on a piece of jewellery and still yield worthy results. Sometimes it makes more sense to start anew to (a) meet our aesthetic standards and (b) avoid weakening the piece to the point of potential failure. We always aim to serve your needs, and have some of the most skilled jewelers in the world, but modifications are done on an AT YOUR OWN RISK basis. We cannot be responsible for items that fail modification processes. Please remember we offer this service as a courtesy only.</p>
           <ul className="list-disc pl-6 space-y-1">
@@ -99,9 +96,9 @@ export function Faqs() {
             <li>We can shorten chain attachments. We cannot lengthen chain attachments without starting with a fresh new piece of chain. This is to ensure durability. If you want a longer chain attachment, it is best to order a new piece.</li>
             <li>Changing the diameter on decorative rings, especially with gems, is not ideal. When we try to resize a ring that contains gemstones, the gem settings are distorted which may result in the gemstones falling out. This distortion prevents us from replacing the gemstones as well. Heating up the jewellery during the modification process can also damage gemstones.</li>
             <li>Changing the diameter of a non-gemstone item can also be problematic, as it may not scale down properly, resulting in an awkward design.</li>
-            <li>Making seam rings into hinge rings and vice versa doesn’t usually work and is often more labor intensive than starting anew. For many of our designs, we use a separately designed casting for a hinge versus a seam ring. They may look the same to the untrained eye, but there are subtle differences in the castings which allow us to attach a seam or a hinge.</li>
+            <li>Making seam rings into hinge rings and vice versa doesn't usually work and is often more labor intensive than starting anew. For many of our designs, we use a separately designed casting for a hinge versus a seam ring. They may look the same to the untrained eye, but there are subtle differences in the castings which allow us to attach a seam or a hinge.</li>
             <li>We do not modify any competitor jewellery.</li>
-            <li>We will consider modifying heirloom jewellery that’s not made by piercing industry competitors on a case-by-case basis. Contact us before sending in items.</li>
+            <li>We will consider modifying heirloom jewellery that's not made by piercing industry competitors on a case-by-case basis. Contact us before sending in items.</li>
           </ul>
         </div>
       )
@@ -172,14 +169,16 @@ export function Faqs() {
 
   return (
     <div className="w-full animate-in fade-in duration-500 pb-12">
-      <section className="section-cream max-w-5xl mx-auto py-12 px-4 sm:px-12 text-center">
-        <h1 className="text-4xl font-bold font-serif mb-10 pb-4 border-b-2 border-foreground/20 inline-block">
-          FAQs
-        </h1>
-        <div className="text-left w-full mx-auto">
-          <AccordionSection items={faqItems} />
-        </div>
-      </section>
+      <FadeIn>
+        <section className="section-cream max-w-5xl mx-auto py-12 px-4 sm:px-12 text-center">
+          <h1 className="text-4xl font-bold font-serif mb-10 pb-4 border-b-2 border-foreground/20 inline-block">
+            FAQs
+          </h1>
+          <div className="text-left w-full mx-auto">
+            <AccordionSection items={faqItems} />
+          </div>
+        </section>
+      </FadeIn>
     </div>
   );
 }

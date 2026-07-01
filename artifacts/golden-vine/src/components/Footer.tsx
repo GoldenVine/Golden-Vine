@@ -4,7 +4,7 @@ import { Link } from "wouter";
 // Update these to match your actual opening hours.
 // null = closed all day; { open, close } = 24-hour decimal (e.g. 17.5 = 17:30)
 const HOURS: Record<number, { open: number; close: number } | null> = {
-  0: null,                      // Sunday – closed
+  0: { open: 11, close: 16 },   // Sunday
   1: null,                      // Monday – closed
   2: null,                      // Tuesday – closed
   3: { open: 10, close: 17 },   // Wednesday

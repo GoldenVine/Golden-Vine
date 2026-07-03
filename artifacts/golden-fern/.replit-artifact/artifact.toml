@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/golden-fern/"
+title = "Golden Fern Piercing"
+version = "1.0.0"
+id = "artifacts/golden-fern"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/golden-fern/" ]
+localPort = 24218
+
+[services.development]
+run = "pnpm --filter @workspace/golden-fern run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/golden-fern", "run", "build" ]
+publicDir = "artifacts/golden-fern/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24218"
+BASE_PATH = "/golden-fern/"

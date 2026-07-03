@@ -1,0 +1,1310 @@
+.home-title,
+.page-subheading {
+    font-family: 'Playfair Display', serif;
+    color: #264412
+}
+
+.page-subheading,
+a {
+    text-decoration: underline
+}
+
+.fixed-nav,
+body {
+    background-color: #DEE9CE
+}
+
+.fixed-nav a:hover,
+a:hover {
+    color: #99aa8a
+}
+
+#home,
+.home-shop-image,
+section {
+    border-radius: 8px
+}
+
+#booking-policies,
+#piercings {
+    margin: 20px auto;
+    box-sizing: border-box
+}
+
+#booking-policies,
+#collections,
+#map,
+#map iframe,
+#piercings,
+.carousel-container,
+.carousel-slide,
+.carousel-slide img,
+.carousel-track,
+.collection-grid,
+.piercings-text-box,
+footer,
+section {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    color: #264412
+}
+
+a {
+    color: #0c4f71
+}
+
+a:hover {
+    text-decoration: none
+}
+
+section {
+    padding: 20px;
+    margin: 20px;
+    background-color: #fffae7
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: #fff
+}
+
+.home-title {
+    font-size: 2rem;
+    text-align: center;
+    font-weight: 700
+}
+
+.page-subheading {
+    font-size: 1.2rem;
+    text-align: left
+}
+
+.fixed-nav a,
+.pill-gradient-glow-button {
+    text-decoration: none;
+    font-family: 'Playfair Display', serif
+}
+
+.page-subheading-x2 {
+    font-size: 1.4rem;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    color: #264412
+}
+
+.page-title {
+    margin-top: 70px
+}
+
+.contact-page-title {
+    margin-top: 120px
+}
+
+p {
+    font-size: 16px;
+    font-family: 'Playfair Display', serif
+}
+
+li {
+    font-size: 1em;
+    font-family: 'Playfair Display', serif
+}
+
+.fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000
+}
+
+.header-logo-container {
+    position: relative;
+    width: 100%;
+    height: 84px;
+    overflow: hidden
+}
+
+.logo-text-overlay,
+.nav-overlay {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2
+}
+
+.header-logo-container img.nav-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: center center;
+    display: block;
+    border-radius: 0
+}
+
+.logo-text-overlay {
+    top: 0;
+    width: 30%;
+    height: 130%;
+    background-color: transparent;
+    display: block;
+    cursor: pointer
+}
+
+.nav-overlay {
+    top: 85%;
+    width: 100%;
+    display: flex;
+    justify-content: center
+}
+
+.nav-overlay ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0
+}
+
+.fixed-nav a {
+    text-transform: uppercase;
+    color: #112007
+}
+
+.nav-overlay ul li a img {
+    transition: transform .3s
+}
+
+.nav-overlay ul li a:hover img {
+    transform: rotate(20deg)
+}
+
+.nav-instagram-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    margin-left: 5px
+}
+
+.burger-menu {
+    position: fixed;
+    z-index: 1001;
+    margin-top: 20px;
+    margin-right: 10px
+}
+
+.burger-menu div {
+    width: 20px;
+    height: 2px;
+    background-color: #264412;
+    margin: 5.7px;
+    transition: .3s
+}
+
+.burger-menu.open .bar1 {
+    transform: rotate(-45deg) translate(-5px, 6px)
+}
+
+.burger-menu.open .bar2 {
+    opacity: 0
+}
+
+.burger-menu.open .bar3 {
+    transform: rotate(45deg) translate(-5px, -6px)
+}
+
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+    margin-top: 84px;
+    touch-action: pan-y;
+    padding: 0 19vw;
+    background-color: #526545
+}
+
+.carousel-track {
+    display: flex;
+    gap: 0
+}
+
+.carousel-slide {
+    flex: 0 0 61vw;
+    scroll-snap-align: center;
+    height: 592px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    margin: 0 auto;
+    filter: blur(10px);
+    transition: filter 0.6s ease-in-out;
+}
+
+.carousel-slide.active {
+    filter: blur(0);
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.booking-images img,
+.collection-item img,
+.dropdown-box summary::after {
+    transition: transform .2s ease-in-out
+}
+
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.home-bottom-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    max-width: 1200px;
+    width: 100%;
+    margin-bottom: 30px
+}
+
+.home-text-and-button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+    text-align: center;
+    margin-top: 100px;
+    margin-left: 50px
+}
+
+.home-shop-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .1);
+    margin-right: 100px
+}
+
+.book-now-button-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px
+}
+
+#collections {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 90%
+}
+
+.aftercare-container,
+.piercings-flex-container {
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex
+}
+
+.collection-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer
+}
+
+.booking-images img:hover,
+.collection-item img:hover {
+    transform: scale(1.03)
+}
+
+#map {
+    max-width: 1040px;
+    margin: 20px auto;
+    text-align: center
+}
+
+#map iframe {
+    border: 0;
+    width: 100%;
+    height: 450px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: block
+}
+
+#map p {
+    margin-top: 10px;
+    font-size: .9rem;
+    color: #555
+}
+
+.aftercare-main-content,
+.booking-main-content,
+.piercings-main-content {
+    padding-top: 60px;
+    box-sizing: border-box
+}
+
+.piercings-flex-container {
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #fffae7
+}
+
+.piercings-text-box {
+    text-align: center;
+    border-radius: 8px;
+    padding: 20px
+}
+
+#piercings {
+    font-size: 1.8rem;
+    text-align: center;
+    max-width: 900px
+}
+
+#piercings p {
+    text-align: left;
+    margin-bottom: 2.5em;
+    font-size: 16px
+}
+
+#piercings-page .carousel-container {
+    max-width: 709px;
+    height: 568px;
+    margin: 15px auto 0;
+    overflow: hidden;
+    background-color: #fffae7;
+    border-radius: 10px;
+    position: relative
+}
+
+#piercings-page .carousel-track {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: transform .6s ease-in-out, opacity .6s ease-in-out
+}
+
+#piercings-page .carousel-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: scale(1.1);
+    transition: opacity .6s ease-in-out, transform .6s ease-in-out
+}
+
+#piercings-page .carousel-slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2
+}
+
+#piercings-page .carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: 0 0;
+    border: none;
+    color: #fffae7;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 3;
+    opacity: .7;
+    transition: opacity .3s ease-in-out;
+    font-size: 2rem
+}
+
+#piercings-page .carousel-button:hover {
+    opacity: 1
+}
+
+#piercings-page .carousel-button.prev {
+    left: 10px
+}
+
+#piercings-page .carousel-button.next {
+    right: 10px
+}
+
+#booking-policies {
+    max-width: 800px;
+    padding: 20px;
+    background-color: #fffae7;
+    border-radius: 8px;
+    text-align: center
+}
+
+#booking-policies h1 {
+    border-bottom: 2px solid #264412;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: center
+}
+
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.dropdown-box {
+    background-color: transparent;
+    border-bottom: 1px solid #264412;
+    padding: 23px 20px;
+    width: 100%;
+    max-width: 600px;
+    text-align: left
+}
+
+.dropdown-box summary {
+    list-style: none;
+    cursor: pointer;
+    position: relative;
+    padding-right: 30px
+}
+
+.dropdown-box summary::after {
+    content: '\276F';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) rotate(0)
+}
+
+.dropdown-box[open] summary::after {
+    transform: translateY(-50%) rotate(90deg)
+}
+
+.booking-images {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap
+}
+
+.booking-images img {
+    max-width: 30%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .1);
+    cursor: pointer
+}
+
+.aftercare-container {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px
+}
+
+.aftercare-content-box {
+    background-color: #fffae7;
+    width: 800px;
+    padding: 30px 20px;
+    box-sizing: content-box;
+    margin: 0 auto
+}
+
+#jewellery {
+    padding: 10px;
+    margin: 0 20px 20px;
+    background-color: #fffae7;
+    border-radius: 8px
+}
+
+.content-block,
+.jewellery-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 60px
+}
+
+.jewellery-image {
+    width: 50%;
+    border-radius: 8px;
+    margin-top: 65px
+}
+
+.jewellery-text-container {
+    width: 45%
+}
+
+.jewellery-highlight-grid {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 20px
+}
+
+.jewellery-highlight-item {
+    width: 28%;
+    border-radius: 8px
+}
+
+.jewellery-highlight-item img {
+    width: 100%;
+    border-radius: 8px
+}
+
+.jewellery-highlight-item .highlight-title {
+    text-align: center;
+    margin-top: 10px
+}
+
+.how-to-use-section {
+    display: flex;
+    align-items: center
+}
+
+.how-to-use-text-container {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    z-index: 1;
+    padding-left: 50px;
+    margin-bottom: 60px
+}
+
+.content-block.center-image,
+.lightbox-overlay {
+    justify-content: center
+}
+
+.how-to-use-image {
+    width: 45%;
+    border-radius: 8px
+}
+
+.content-image {
+    width: 50%;
+    border-radius: 8px;
+    margin-top: 10px
+}
+
+.content-image.about-banner-image {
+    width: 45% !important;
+    display: block;
+    border-radius: 8px !important
+}
+
+.bio-image-jason,
+.bio-image-jess {
+    width: 35% !important;
+    margin: 0 auto !important
+}
+
+.text-container {
+    width: 45%;
+    padding-left: 80px
+}
+
+.text-container-2 {
+    width: 45%;
+    padding-right: 80px
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    padding: 42px;
+    border-radius: 50px
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 700;
+    text-align: left;
+    font-family: 'Playfair Display', serif
+}
+
+.form-group input[type=email],
+.form-group input[type=text],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box
+}
+
+.form-group textarea {
+    resize: vertical
+}
+
+.text-box {
+    padding: 25px;
+    border-radius: 8px;
+    text-align: left
+}
+
+.text-box h3 {
+    margin-bottom: 15px
+}
+
+.text-box h4 {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    text-align: center
+}
+
+.text-box address,
+.text-box ul {
+    line-height: 1.6;
+    margin-bottom: 10px;
+    text-align: left
+}
+
+.text-box address {
+    margin-top: 20px
+}
+
+.lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .8);
+    display: flex;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s ease-in-out, visibility .3s ease-in-out
+}
+
+.lightbox-overlay.active {
+    opacity: 1;
+    visibility: visible
+}
+
+.lightbox-content {
+    position: relative;
+    background-color: transparent;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .5);
+    max-width: 90%;
+    max-height: 90%;
+    aspect-ratio: 3.7/3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden
+}
+
+.lightbox-image {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    border-radius: 8px;
+    object-fit: cover
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 2001;
+    text-shadow: 0 0 5px rgba(0, 0, 0, .7)
+}
+
+.lightbox-close:hover {
+    color: #ccc
+}
+
+@media (min-width:768px) {
+    #home {
+        margin-top: 0;
+        padding-top: 0
+    }
+
+    .home-bottom-row {
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start
+    }
+
+    .home-text-and-button-group {
+        align-items: flex-start;
+        text-align: left;
+        padding-top: 100px;
+        margin-left: 0;
+        margin-top: 0
+    }
+
+    .home-text-and-button-group p {
+        text-align: left
+    }
+
+    .home-shop-image {
+        max-width: 45%
+    }
+
+    .column-left {
+        margin-right: 20px
+    }
+
+    .column-right {
+        margin-left: 20px
+    }
+
+    .burger-menu {
+        display: none
+    }
+}
+
+@media (max-width:767px) {
+
+    .contact-content-row .column-left h3,
+    .contact-content-row .column-right h3,
+    .text-container {
+        text-align: center
+    }
+
+    .fixed-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        height: 10px;
+        padding: 10px 20px
+    }
+
+    .header-logo-container {
+        position: absolute;
+        top: 0;
+        left: -55%;
+        width: 200%;
+        height: 180%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1
+    }
+
+    .header-logo-container img.nav-logo {
+        transform: scale(1)
+    }
+
+    .logo-text-overlay {
+        top: 25%;
+        left: 50%;
+        width: 30%;
+        height: 100%
+    }
+
+    .burger-menu {
+        display: block
+    }
+
+    .nav-overlay {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        background-color: #fff8dc;
+        height: 0;
+        overflow: hidden;
+        transition: height .3s ease-in-out;
+        z-index: 999;
+        box-shadow: 10px 20px 40px rgba(0, 0, 0, .2)
+    }
+
+    .nav-overlay.active {
+        height: 100%;
+        max-height: none;
+        max-width: none
+    }
+
+    .nav-overlay ul {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+        gap: 15px
+    }
+
+    .nav-overlay ul li a {
+        font-size: 1.8rem;
+        display: block;
+        width: 100%;
+        text-align: center;
+        text-decoration: underline
+    }
+
+    .nav-overlay ul li:last-child a {
+        margin-top: 10px
+    }
+
+    .nav-overlay li:last-child {
+        border-bottom: none
+    }
+
+    .content-row {
+        flex-direction: column;
+        margin: 20px auto
+    }
+
+    .column-left,
+    .column-right {
+        margin: 0 0 20px
+    }
+
+    .heading-row {
+        flex-direction: column;
+        gap: 15px
+    }
+
+    .heading-row h3 {
+        flex-basis: auto;
+        max-width: none
+    }
+
+    .booking-images {
+        flex-direction: column;
+        align-items: center
+    }
+
+    .booking-images img {
+        max-width: 90%
+    }
+
+    .lightbox-content {
+        max-width: 95%;
+        max-height: 95%
+    }
+
+    .contact-section,
+    section {
+        max-width: 100vw;
+        overflow-x: hidden
+    }
+
+    .lightbox-close {
+        font-size: 30px;
+        top: 10px;
+        right: 15px
+    }
+
+    .content-block:not(.center-image),
+    .jewellery-row {
+        flex-direction: column;
+        margin-bottom: 30px
+    }
+
+    .bio-image-jason,
+    .bio-image-jess,
+    .content-image,
+    .content-image.about-banner-image {
+        width: 90% !important;
+        margin: 20px auto !important;
+        order: -1
+    }
+
+    .content-block.reverse-layout .content-image {
+        order: -1
+    }
+
+    .text-container {
+        width: 90%;
+        padding-left: 0
+    }
+
+    .text-container-2 {
+        width: 90%;
+        padding-right: 0
+    }
+
+    .text-box,
+    .text-box h4 {
+        text-align: left
+    }
+
+    .contact-content-row {
+        flex-direction: column;
+        align-items: center;
+        padding-left: 0;
+        padding-right: 0;
+        gap: 20px
+    }
+
+    .contact-content-row .column-left,
+    .contact-content-row .column-right {
+        width: 90%;
+        max-width: 450px;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        margin-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px
+    }
+
+    .contact-section {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 20px;
+        padding-right: 20px;
+        text-align: left
+    }
+
+    .g-recaptcha,
+    input[type=email],
+    input[type=tel],
+    input[type=text],
+    textarea {
+        font-size: 16px
+    }
+
+    .carousel-container {
+        margin-top: 54px;
+        padding: 0 0vw;
+        touch-action: pan-y
+    }
+
+    .carousel-slide {
+        flex: 0 0 100vw;
+        height: 300px;
+    }
+
+    .home-bottom-row,
+    .how-to-use-section,
+    .piercings-flex-container {
+        flex-direction: column
+    }
+
+    .home-title {
+        margin-top: -10px;
+        margin-bottom: 30px;
+        font-size: 1.4rem
+    }
+
+    .contact-page-title {
+        margin-top: 80px
+    }
+
+    .home-bottom-row {
+        gap: 20px
+    }
+
+    .home-text-and-button-group {
+        margin-top: -20px;
+        margin-left: 0;
+        padding: 0 10px;
+        text-align: center;
+        max-width: 100%;
+        order: 2
+    }
+
+    .home-shop-image {
+        max-width: 90%;
+        margin-right: 0;
+        order: 1
+    }
+
+    .collection-grid {
+        grid-template-columns: 1fr;
+        width: 95%
+    }
+
+    #map iframe {
+        height: 300px
+    }
+
+    #piercings-page .carousel-container {
+        max-width: 100%;
+        height: 350px;
+        margin: 15px auto
+    }
+
+    #piercings-page .carousel-button {
+        font-size: 1.5rem;
+        padding: 5px
+    }
+
+    .piercings-text-box {
+        order: 2
+    }
+
+    .carousel-container {
+        order: 1
+    }
+
+    #booking-policies {
+        padding: 15px
+    }
+
+    .dropdown-box {
+        padding: 15px 10px
+    }
+
+    .jewellery-image {
+        width: 90%;
+        margin-top: 40px;
+        order: -1;
+        margin-bottom: 30px
+    }
+
+    .jewellery-text-container {
+        width: 100%;
+        padding: 0 10px;
+        text-align: center
+    }
+
+    .jewellery-highlight-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem
+    }
+
+    .jewellery-highlight-item {
+        width: 90%
+    }
+
+    section {
+        margin-left: auto;
+        margin-right: auto
+    }
+
+    .how-to-use-text-container {
+        width: 100%;
+        padding: 0 10px;
+        margin-bottom: 20px;
+        text-align: center
+    }
+
+    .how-to-use-image {
+        width: 90%;
+        order: -1
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-size: 1.5em
+    }
+
+    li,
+    p {
+        font-size: .95em
+    }
+}
+
+.contact-content-row .column-left,
+.contact-content-row .column-right {
+    min-width: 300px;
+    max-width: 450px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0, 1);
+    background-color: #fffae7;
+    border-radius: 8px
+}
+
+#booking-images-section {
+    padding: 20px
+}
+
+#faqs-section {
+    padding-top: 80px;
+    max-width: 800px;
+    margin: 20px auto
+}
+
+#faqs-section .home-title {
+    border-bottom: 2px solid #264412;
+    padding-bottom: 10px;
+    margin-bottom: 20px
+}
+
+.faqs-main-content {
+    box-sizing: border-box;
+    padding: 20px
+}
+
+.contact-content-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+    align-items: flex-start
+}
+
+.contact-content-row .column-left {
+    flex: 1;
+    margin-bottom: 20px;
+    padding: 20px;
+    margin-left: 200px
+}
+
+.contact-content-row .column-right {
+    flex: 1;
+    margin-bottom: 20px;
+    padding: 20px;
+    margin-right: 200px
+}
+
+.contact-section {
+    padding: 60px;
+    margin: 20px auto;
+    max-width: 1000px;
+    background-color: #fffae7;
+    border-radius: 8px;
+    box-sizing: border-box;
+    text-align: center
+}
+
+.pill-gradient-glow-button {
+    display: inline-block;
+    background-image: linear-gradient(45deg, #526545 0, #3b4d30 100%);
+    color: #fffae7;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    padding: 10px 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+    transition: .3s
+}
+
+.pill-gradient-glow-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px 5px rgba(82, 101, 69, .5), 0 6px 12px rgba(0, 0, 0, .3);
+    background-image: linear-gradient(45deg, #3b4d30 0, #526545 100%)
+}
+
+.aftercare-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #99aa8a;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .1)
+}
+
+/* Custom Pop-up Styles */
+.popup-container {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #333; /* Dark background */
+    color: #fff; /* White text */
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%; /* Could be adjusted */
+    max-width: 500px; /* Max width for larger screens */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #fff;
+    text-decoration: none;
+}
+
+.popup-content h2 {
+    color: #D4AF37; /* Golden color for headings */
+    margin-bottom: 15px;
+    font-family: 'Playfair Display', serif;
+}
+
+.popup-content p {
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+/* Style for the button inside the popup, reusing your existing button style */
+.popup-content .pill-gradient-glow-button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 50px;
+    color: white;
+    background: linear-gradient(to right, #D4AF37, #E0B445); /* Your gradient colors */
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.6); /* Glow effect */
+    transition: all 0.3s ease;
+    text-decoration: none; /* Ensure it doesn't look like a link */
+    display: inline-block; /* For proper button styling */
+}
+
+.popup-content .pill-gradient-glow-button:hover {
+    background: linear-gradient(to right, #E0B445, #D4AF37);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    transform: translateY(-2px);
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="favicon.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Golden Vine Piercing - Professional Piercing Studio">
+    <title>Contact Us | Golden Fern Piercing</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Open+Sans&display=swap" rel="stylesheet">
+</head>
+<body id="contact-page">
+    <nav class="fixed-nav">
+        <div class="header-logo-container">
+            <img src="images/logo.jpg" alt="Golden Vine Logo" class="nav-logo">
+            <a href="index.html" class="logo-text-overlay" aria-label="Golden Vine Home"></a>
+        </div>
+        <div class="burger-menu" id="burger-menu">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <div class="nav-overlay" id="nav-overlay">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="piercings.html">Piercings</a></li>
+                <li><a href="aftercare.html">Aftercare</a></li>
+                <li><a href="jewellery.html">Jewellery</a></li>
+                <li><a href="bvla.html">BVLA Creations</a></li>
+                <li><a href="booking.html">Online Booking & Policies</a></li>
+                <li><a href="faqs.html">FAQs</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="https://www.instagram.com/goldenfernpiercing/" target="_blank" aria-label="Instagram"><img src="images/instagram-icon.png" alt="Instagram" style="width:24px;height:24px;"></a></li>
+                <li><a href="https://www.facebook.com/GoldenFernPiercing/?locale=en_GB" target="_blank" aria-label="Facebook"><img src="images/facebook-icon.png" alt="Facebook" style="width:24px;height:24px;"></a></li>
+            </ul>
+        </div>
+    </nav>
+            <h1 class="home-title contact-page-title">Contact Us</h1>
+            <div class="content-row contact-content-row">
+                <div class="column-left">
+                    <h3 class="page-subheading-x2">Contact - Booking & Inquiries</h3>
+                    <form id="contactForm" action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+                        <input type="hidden" name="access_key" value="38d2b800-a54a-4d02-b50d-a6b8a4c75283">
+
+                        <div class="form-group">
+                            <label for="name"><u>Name:</u></label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email"><u>Email:</u></label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message"><u>Message:</u></label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                        </div>
+
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
+                        <button type="submit" class="pill-gradient-glow-button">Submit</button>
+                    </form>
+                </div>
+
+                <div class="column-right">
+                    <h3 class="page-subheading-x2">Get in Touch</h3>
+                    <div class="text-box">
+
+                        <h4><strong><u>Our studio is located at:</u></strong></h4>
+                        <address>
+                            Golden Fern Piercing<br>
+                            3 The Shambles<br>
+                            Bradford-on-Avon<br>
+                            BA15 1JS<br>
+                            United Kingdom<br>
+                            <a href="tel:01225592292">01225 592292</a>
+                        </address>
+                        
+                        <h4><strong><u>Opening Hours</u></strong></h4>
+                        <p><u>Monday:</u> Closed</p>
+                        <p><u>Tuesday:</u> Closed</p>
+                        <p><u>Wednesday:</u> 11am-5pm</p>
+                        <p><u>Thursday:</u> 11am-5pm</p>
+                        <p><u>Friday:</u> 11am-5pm</p>
+                        <p><u>Saturday:</u> 11am-5pm</p>
+                        <p><u>Sunday:</u> 11.30am-3.30pm</p>
+                    </div>
+                </div>
+            </div>
+
+                <section id="map">
+        <h3 class="home-title">Our Location</h3>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2494.3940177789495!2d-2.228515784236832!3d51.34005887961234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487189154f243003%3A0x7d0137a8b417c838!2s3%20The%20Shambles%2C%20Bradford-on-Avon%20BA15%201JS%2C%20UK!5e0!3m2!1sen!2suk!4v1678886400000!5m2!1sen!2suk" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <p>Find us at: 3 The Shambles, Bradford-on-Avon BA15 1JS, UK</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Golden Fern Piercing. All rights reserved.</p>
+    </footer>
+
+    <div id="customPopup" class="popup-container">
+        <div class="popup-content">
+            <span class="close-button" id="closePopup">&times;</span>
+            <h2>Thank You!</h2>
+            <p>Thank you for your enquiry! We aim to reply within 2 business days. Please wait at least that long before contacting us on other platforms or resubmitting the form.
+We appreciate your support.</p>
+            <button id="popupButton" class="pill-gradient-glow-button">Continue</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

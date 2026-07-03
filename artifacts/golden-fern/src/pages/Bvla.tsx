@@ -19,7 +19,7 @@ export function Bvla() {
           <h1 className="text-4xl font-bold font-serif mb-4">Why Get Something Custom?</h1>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { src: "/images/BVLA32.webp", alt: "Custom Statement", text: "Statement pieces are often as individual as the wearer, celebrate that uniqueness by picking something that was ethically made and created especially for you." },
+              { src: "/images/BVLA32.webp", alt: "Custom Statement", text: "Statement pieces are often as individual as the wearer, celebrate that uniqueness by buying something that was ethically made and created especially for you." },
               { src: "/images/three.jpg", alt: "Perfect Timing", text: "Sometimes your dream piece is too big for a fresh piercing, custom order allows us to pierce with simpler jewellery, giving your piercing time to settle and mature while your jewellery is meticulously made." },
               { src: "/images/BVLA33.webp", alt: "Color Palettes", text: "You're able to explore more colour palettes and combinations than are readily available in studio whilst using pieces in the cabinets for frame of reference on size or colours." },
             ].map((item, i) => (
@@ -70,7 +70,7 @@ export function Bvla() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/BVLA27.webp" 
+            src="/images/BVLA26.webp" 
             alt="Care and Maintenance" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
           />
@@ -84,7 +84,7 @@ export function Bvla() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
           <img 
-            src="/images/BVLA29.webp" 
+            src="/images/BVLA27.webp" 
             alt="Expert Advice" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
           />
@@ -97,7 +97,7 @@ export function Bvla() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/BVLA31.webp" 
+            src="/images/BVLA28.webp" 
             alt="Care Requirements" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
           />
@@ -112,8 +112,8 @@ export function Bvla() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
           <img 
-            src="/images/BVLA26.webp" 
-            alt="Flashes" 
+            src="/images/BVLA29.webp" 
+            alt="Favourite Gemstones" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
           />
           <div className="w-full md:w-1/2 space-y-4">
@@ -125,7 +125,21 @@ export function Bvla() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/BVLA28.webp" 
+            src="/images/BVLA30.webp" 
+            alt="Flashes" 
+            className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
+          />
+          <div className="w-full md:w-1/2 space-y-4">
+            <p className="text-lg font-serif">Labradorite (yellow pear with gold rays) and Rainbow Moonstone (pear gem with blue tones) are two perfect examples of this. Both of these captivating gems belong to the feldspar family and possess a unique characteristic: they throw out striking 'flashes' of colour when viewed from specific angles.</p>
+            <p className="text-lg font-serif">It can sometimes be more challenging to locate these flashes if the piece is small, as there's less opportunity for light play and refraction. For this reason, we would generally suggest choosing gems like these at sizes 2mm and above. The pieces shown here are in a 4mm x 2.5mm pear cut, showcasing their beauty effectively.</p>
+          </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn delay={0.05}>
+        <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
+          <img 
+            src="/images/BVLA31.webp" 
             alt="Book Design Appointment" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
           />

@@ -34,12 +34,12 @@ export function Faqs() {
           <p>Discussing and pricing your jewellery in the studio is never a problem, and we're always happy to help work towards your budget, ensuring the core principle remains a safely executed piercing. Please be aware that our minimum fee is non-negotiable and will be clearly outlined before any consent forms are filled out, procedures begin, or payment is processed. You are, of course, under no obligation to proceed with a piercing should you change your mind – only a booking fee would be charged in such an instance.</p>
           <p><strong>A piercing procedure is broken down into a few separate costs:</strong></p>
           <ul className="list-disc pl-6 space-y-2">
-            <li><strong>Piercing fee:</strong> this is the service charge to safely and expertly perform the piercing you require and varies from £20-£45 depending on location.</li>
-            <li><strong>Decorative choices:</strong> (optional) vary from £20 to upwards of £1,000 as many are made from precious metals and gemstones. We have a huge array of styles, designs, colours and shapes suited to all budgets. Pricing is discussed verbally, visually and in writing prior to commitment.</li>
+            <li><strong>Piercing fee:</strong> this is the service charge to safely and expertly perform the piercing you require and varies from £35-£45 depending on location.</li>
+            <li><strong>Decorative choices:</strong> (optional) vary from £25 to upwards of £1,000 as many are made from precious metals and gemstones. We have a huge array of styles, designs, colours and shapes suited to all budgets. Pricing is discussed verbally, visually and in writing prior to commitment.</li>
             <li><strong>Sterile saline:</strong> aftercare (suggested but optional) £8.50-£12</li>
           </ul>
           <p>Other procedures such as jewellery removal or changeover, tapering an existing piercing open or stretching have a a £5-£15 procedure fee.</p>
-          <p>Minimum cost for most popular piercings made with non-decorative jewellery will likely be £70-£90 though any and all pricing is finalised verbally, visually and in writing before committing to the total on the day so no shocks or accidental overspends. Figures on this page represent a guide and not a contractual confirmation of total. Transaction receipts and breakdowns are provided digitally as well as the totalled amount noted on your consent form.</p>
+          <p>Minimum cost for most popular piercings made with non-decorative jewellery will likely be £75-£90 though any and all pricing is finalised verbally, visually and in writing before committing to the total on the day so no shocks or accidental overspends. Figures on this page represent a guide and not a contractual confirmation of total. Transaction receipts and breakdowns are provided digitally as well as the totalled amount noted on your consent form.</p>
           <p>Payment can be made via cash, most debit/credit cards (not AmEx), bank transfer or split over several of those methods for your convenience.</p>
         </div>
       )
@@ -126,8 +126,8 @@ export function Faqs() {
       content: (
         <div className="space-y-4">
           <ul className="list-disc pl-6 space-y-2">
-            <li><strong>No Minimum</strong> for lobe piercings only.</li>
-            <li><strong>14+</strong> for several other options.</li>
+            <li><strong>8</strong> for lobe piercings only.</li>
+            <li><strong>16</strong> for several other options.</li>
             <li><strong>18+</strong> for the full array of other piercings.</li>
           </ul>
           <p>Please see Booking Policies for a detailed breakdown of these age brackets and what is required.</p>
@@ -155,7 +155,7 @@ export function Faqs() {
       id: "parking",
       title: "Where Can I Park?",
       content: (
-        <p>Bath is a beautiful, quaint, English city with a lively centre and although there is on-street parking, it's seldom available and driving around can be quite time consuming. We advise parking at either the Podium Car Park below Waitrose or the Cattle Market Car Park and take the idyllic 5 minute walk where you can view Bath Abbey before crossing the iconic Pultney Bridge to our location on Argyle Street. After crossing the bridge over the river, we are on the left hand side and are #6.</p>
+        <p>Bradford-on-Avon is a beautiful, quaint, English town with a lively centre. Much like nearby Bath, there is seldom on-street parking and driving around can be quite time consuming. We advise parking at either the Train station or St Margaret's Hall (next to station) and take the idyllic 5 minute walk over the River Avon (look left for swans) to our studio on The Shambles. After crossing the bridge over the river, turn left at the roundabout, walking up the narrow pavement then turn right at the large, gold post box, next to The Dandy Lion (pub), we are #3, directly opposite Opticians and there is a large logo displayed on the door.</p>
       )
     },
     {

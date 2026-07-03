@@ -18,14 +18,14 @@ export function About() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/jason.jpg" 
-            alt="Jason Bio" 
+            src="/images/jess.jpg" 
+            alt="Jess Bio" 
             className="w-full md:w-1/3 rounded-xl shadow-md object-cover aspect-[3/4]"
           />
           <div className="w-full md:w-2/3 space-y-4">
             <h2 className="text-3xl font-bold font-serif mb-4">Nice To Meet You</h2>
             <p className="text-lg font-serif leading-relaxed">
-              My name's Jason and I've been piercing since 2012. I started my career in Ireland where I spent 5 years. In 2015 I was awarded the Al D scholarship and have been a volunteer for the annual Association of Professional Piercers conference in Las Vegas ever since which is where I met Jess in 2017, who's now my fiancée. I also became an APP member in 2017 and a member of the UKAPP in 2018. I strive to continually work in the safest most efficient way possibly whilst always bringing the quality people deserve. In my spare time you can find me throwing myself down a hill on a mountain bike which as strange as it sounds, it's one of the ways that helps me wind down and stay grounded. I'm also a super keen cook so outside of mountain biking, one of my other favourite things to do is cook incredible foods from around the world.
+              My name's Jess. I've been piercing since 2012, awarded the prestigious Al D. scholarship to APP conference in Las Vegas in 2017 where I've been invited to return to volunteer every year since and met Jason who is now my fiancé. I strived to become APP member and UKAPP member and met that target in Jan 2020. I am First Aid & CPR trained and Trauma Informed. As of early 2021, I introduced my own line of handmade 18 karat body jewellery to our collection of quality jewellery we are proud to offer at Golden Fern, our sister studio in Bradford-on-Avon. I love natural history including geology and gemology as well as nature documentaries and designing jewellery. Oh, and dogs!
             </p>
           </div>
         </section>
@@ -34,14 +34,14 @@ export function About() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
           <img 
-            src="/images/jess.jpg" 
-            alt="Jess Bio" 
+            src="/images/jason.jpg" 
+            alt="Jason Bio" 
             className="w-full md:w-1/3 rounded-xl shadow-md object-cover aspect-[3/4]"
           />
           <div className="w-full md:w-2/3 space-y-4">
             <h2 className="text-3xl font-bold font-serif mb-4">Our Second Piercer</h2>
             <p className="text-lg font-serif leading-relaxed">
-              My name's Jess. I've been piercing since 2012, awarded the prestigious Al D. scholarship to APP conference in Las Vegas in 2017 where I've been invited to return to volunteer every year since and met Jason who is now my fiancé. I strived to become APP member and UKAPP member and met that target in Jan 2020. I am First Aid & CPR trained and Trauma Informed. As of early 2021, I introduced my own line of handmade 18 karat body jewellery to our collection of quality jewellery we are proud to offer at Golden Fern, our sister studio in Bradford-on-Avon. I love natural history including geology and gemology as well as nature documentaries and designing jewellery. Oh, and dogs!
+              My name's Jason and I've been piercing since 2012. I started my career in Ireland where I spent 5 years. In 2015 I was awarded the Al D scholarship and have been a volunteer for the annual Association of Professional Piercers conference in Las Vegas ever since which is where I met Jess in 2017, who's now my fiancée. I also became an APP member in 2017 and a member of the UKAPP in 2018. I strive to continually work in the safest most efficient way possibly whilst always bringing the quality people deserve. In my spare time you can find me throwing myself down a hill on a mountain bike which as strange as it sounds, it's one of the ways that helps me wind down and stay grounded. I'm also a super keen cook so outside of mountain biking, one of my other favourite things to do is cook incredible foods from around the world.
             </p>
           </div>
         </section>

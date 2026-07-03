@@ -38,7 +38,7 @@ export function Aftercare() {
             </div>
 
             <div>
-              <p className="font-bold text-lg mb-2"><u>Week 2-4</u> - Healing.</p>
+              <p className="font-bold text-lg mb-2"><u>Week 2-4</u> - Settling.</p>
               <ul className="list-disc pl-6 space-y-2 text-lg">
                 <li>Clear/yellowish 'crusties' will form and harden if they are not regularly washed and cleaned away.</li>
                 <li>Do NOT pick at them, soak first (sterile saline or warm, running water) to soften build-up then running water should dislodge them.</li>
@@ -132,7 +132,7 @@ export function Aftercare() {
           <div>
             <h3 className="text-2xl font-bold border-b border-foreground/10 pb-2 mt-12">Didn't Find Your Answer?</h3>
             <p className="text-lg pb-8 mt-4">
-              Please use the <Link href="/contact" className="font-bold underline">Contact Us</Link> page's form listed to send an enquiry.
+              Please use the <Link href="/contact" className="font-bold underline">Contact Us</Link> page's form or the social media accounts listed to send an enquiry (do not do both).
             </p>
           </div>
         </FadeIn>

@@ -40,7 +40,7 @@ export function Contact() {
           Accept: "application/json"
         },
         body: JSON.stringify({
-          access_key: "f9e7957c-f481-4cc0-a137-e551347e74cf", // TODO: replace with Golden Fern's own Web3Forms access key
+          access_key: "38d2b800-a54a-4d02-b50d-a6b8a4c75283",
           ...values
         })
       });
@@ -147,11 +147,11 @@ export function Contact() {
                 <h4 className="font-serif text-xl font-bold underline mb-4">Our studio is located at:</h4>
                 <address className="not-italic text-lg font-serif leading-relaxed">
                   Golden Fern Piercing<br />
-                  6 Argyle Street<br />
-                  Bath<br />
-                  BA2 4BA<br />
+                  3 The Shambles<br />
+                  Bradford-on-Avon<br />
+                  BA15 1JS<br />
                   United Kingdom<br />
-                  <a href="tel:01225251026" className="text-primary hover:text-foreground no-underline mt-2 inline-block">01225 251026</a>
+                  <a href="tel:01225592292" className="text-primary hover:text-foreground no-underline mt-2 inline-block">01225 592292</a>
                 </address>
               </div>
               
@@ -160,11 +160,11 @@ export function Contact() {
                 <ul className="space-y-2 text-lg font-serif">
                   <li><strong className="underline">Monday:</strong> Closed</li>
                   <li><strong className="underline">Tuesday:</strong> Closed</li>
-                  <li><strong className="underline">Wednesday:</strong> 10am-5pm</li>
-                  <li><strong className="underline">Thursday:</strong> 10am-5pm</li>
-                  <li><strong className="underline">Friday:</strong> 10am-5pm</li>
-                  <li><strong className="underline">Saturday:</strong> 10am-5pm</li>
-                  <li><strong className="underline">Sunday:</strong> 11am-4pm</li>
+                  <li><strong className="underline">Wednesday:</strong> 11am-5pm</li>
+                  <li><strong className="underline">Thursday:</strong> 11am-5pm</li>
+                  <li><strong className="underline">Friday:</strong> 11am-5pm</li>
+                  <li><strong className="underline">Saturday:</strong> 11am-5pm</li>
+                  <li><strong className="underline">Sunday:</strong> 11.30am-3.30pm</li>
                 </ul>
               </div>
             </div>
@@ -178,7 +178,7 @@ export function Contact() {
           <h3 className="text-3xl font-bold font-serif mb-6">Our Location</h3>
           <div className="w-full rounded-xl overflow-hidden shadow-md aspect-video max-h-[450px]">
             <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2490.0675507591127!2d-2.359760423937073!3d51.38343651975244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48718112613f29ef%3A0xe75092bc5807ac90!2s6%20Argyle%20St%2C%20Bathwick%2C%20Bath%20BA2%204BA!5e0!3m2!1sen!2suk!4v1752674251404!5m2!1sen!2suk" 
+              src="https://www.google.com/maps?q=3+The+Shambles,+Bradford-on-Avon,+BA15+1JS,+UK&output=embed" 
               className="w-full h-full border-0" 
               allowFullScreen 
               loading="lazy" 
@@ -186,7 +186,7 @@ export function Contact() {
               title="Google Maps Location for Golden Fern Piercing"
             />
           </div>
-          <p className="mt-4 text-base text-foreground/80 font-serif">Find us at: 6 Argyle St, Bathwick, Bath, BA2 4BA, UK</p>
+          <p className="mt-4 text-base text-foreground/80 font-serif">Find us at: 3 The Shambles, Bradford-on-Avon, BA15 1JS, UK</p>
         </section>
       </FadeIn>
 

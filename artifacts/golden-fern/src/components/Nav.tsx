@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { SiInstagram, SiFacebook } from "react-icons/si";
 import { Menu, X } from "lucide-react";
-import logoSrc from "@assets/logo_1780124857507.jpg";
+
+const logoSrc = "/images/logo.jpg";
 
 const NAV_BG = "#526545";
 const LINK_COLOR = "#fffae7";
@@ -82,7 +83,7 @@ export function Nav() {
               <SiInstagram className="w-5 h-5 hover:scale-110 transition-transform" />
             </a>
             <a
-              href="https://www.facebook.com/profile.php?id=61577137506030"
+              href="https://www.facebook.com/GoldenFernPiercing/?locale=en_GB"
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook"
@@ -136,7 +137,7 @@ export function Nav() {
               <SiInstagram className="w-8 h-8" />
             </a>
             <a
-              href="https://www.facebook.com/profile.php?id=61577137506030"
+              href="https://www.facebook.com/GoldenFernPiercing/?locale=en_GB"
               target="_blank"
               rel="noreferrer"
               aria-label="Facebook"

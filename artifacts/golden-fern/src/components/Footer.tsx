@@ -4,13 +4,13 @@ import { Link } from "wouter";
 // Update these to match your actual opening hours.
 // null = closed all day; { open, close } = 24-hour decimal (e.g. 17.5 = 17:30)
 const HOURS: Record<number, { open: number; close: number } | null> = {
-  0: { open: 11, close: 16 },   // Sunday
-  1: null,                      // Monday – closed
-  2: null,                      // Tuesday – closed
-  3: { open: 10, close: 17 },   // Wednesday
-  4: { open: 10, close: 17 },   // Thursday
-  5: { open: 10, close: 17 },   // Friday
-  6: { open: 10, close: 17 },   // Saturday
+  0: { open: 11.5, close: 15.5 }, // Sunday
+  1: null,                        // Monday – closed
+  2: null,                        // Tuesday – closed
+  3: { open: 11, close: 17 },     // Wednesday
+  4: { open: 11, close: 17 },     // Thursday
+  5: { open: 11, close: 17 },     // Friday
+  6: { open: 11, close: 17 },     // Saturday
 };
 
 function fmt(h: number) {
@@ -63,7 +63,7 @@ export function Footer() {
             © {new Date().getFullYear()} Golden Fern Piercing. All rights reserved.
           </p>
           <Link href="/contact" className="text-sm text-white/50 hover:text-white/90 transition-colors no-underline">
-            Bath, UK · Contact us
+            Bradford-on-Avon, UK · Contact us
           </Link>
         </div>
       </div>

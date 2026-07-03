@@ -7,8 +7,8 @@ import { FadeIn } from "@/components/FadeIn";
 export function Home() {
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
 
-  const homeCarouselImages = Array.from({ length: 9 }).map(
-    (_, i) => `/images/home${i + 1}.jpg`
+  const homeCarouselImages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 13].map(
+    (i) => `/images/home${i}.jpg`
   );
 
   const collections = [
@@ -33,7 +33,7 @@ export function Home() {
           <div className="flex flex-col md:flex-row items-center gap-12 w-full max-w-5xl mx-auto">
             <div className="flex-1 flex flex-col items-center text-center space-y-8">
               <p className="font-serif text-lg leading-relaxed m-0 max-w-md">
-                Welcome to Golden Fern Piercing, Bath's destination for exquisite and safe body piercing. We're dedicated to providing a relaxed and professional experience where we believe a piercing is more than just jewellery – it's an expression.
+                Welcome to Golden Fern Piercing, Bradford-on-Avon's destination for safe and exquisite body piercing. We're dedicated to providing a relaxed and professional experience and believe a piercing is more than just jewellery, it's self-expression. Whether it be a child's first lobe piercings or a complete overhaul into a new era, we enjoy helping you feel more 'you'.
               </p>
               <Link href="/booking" className="pill-btn text-lg py-4 px-10">
                 Book Now
@@ -43,7 +43,7 @@ export function Home() {
             <div className="flex-1 w-full max-w-md">
               <img 
                 src="/images/shopinterior.jpg" 
-                alt="Golden Fern Studio Interior" 
+                alt="Welcome Image" 
                 className="w-full h-auto rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
               />
             </div>

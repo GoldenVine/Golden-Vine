@@ -12,6 +12,8 @@ interface InstagramMediaItem {
   thumbnailUrl: string | null;
   permalink: string;
   timestamp: string;
+  likeCount: number | null;
+  commentsCount: number | null;
 }
 
 interface RawMediaItem {
@@ -22,6 +24,8 @@ interface RawMediaItem {
   thumbnail_url?: string;
   permalink: string;
   timestamp: string;
+  like_count?: number;
+  comments_count?: number;
 }
 
 let currentToken: string | undefined = process.env.INSTAGRAM_ACCESS_TOKEN;
@@ -59,7 +63,8 @@ async function fetchFeedFromInstagram(): Promise<InstagramMediaItem[]> {
 
   await refreshTokenIfNeeded();
 
-  const fields = "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp";
+  const fields =
+    "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp,like_count,comments_count";
   const url = `${GRAPH_API_BASE}/me/media?fields=${fields}&access_token=${encodeURIComponent(currentToken)}&limit=12`;
 
   const res = await fetch(url);
@@ -78,6 +83,8 @@ async function fetchFeedFromInstagram(): Promise<InstagramMediaItem[]> {
     thumbnailUrl: item.thumbnail_url ?? null,
     permalink: item.permalink,
     timestamp: item.timestamp,
+    likeCount: item.like_count ?? null,
+    commentsCount: item.comments_count ?? null,
   }));
 }
 

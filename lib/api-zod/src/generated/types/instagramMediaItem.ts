@@ -15,4 +15,6 @@ export interface InstagramMediaItem {
   thumbnailUrl?: string | null;
   permalink: string;
   timestamp: Date;
+  likeCount?: number | null;
+  commentsCount?: number | null;
 }

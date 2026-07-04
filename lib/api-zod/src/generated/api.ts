@@ -29,7 +29,9 @@ export const GetInstagramFeedResponse = zod.object({
   "mediaUrl": zod.string(),
   "thumbnailUrl": zod.string().nullish(),
   "permalink": zod.string(),
-  "timestamp": zod.coerce.date()
+  "timestamp": zod.coerce.date(),
+  "likeCount": zod.number().nullish(),
+  "commentsCount": zod.number().nullish()
 }))
 })
 

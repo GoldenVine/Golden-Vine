@@ -82,6 +82,12 @@ components:
         timestamp:
           type: string
           format: date-time
+        likeCount:
+          type: integer
+          nullable: true
+        commentsCount:
+          type: integer
+          nullable: true
       required:
         - id
         - mediaType

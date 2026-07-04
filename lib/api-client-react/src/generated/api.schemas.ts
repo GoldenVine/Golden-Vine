@@ -30,6 +30,8 @@ export interface InstagramMediaItem {
   thumbnailUrl?: string | null;
   permalink: string;
   timestamp: string;
+  likeCount?: number | null;
+  commentsCount?: number | null;
 }
 
 export interface InstagramFeedResponse {

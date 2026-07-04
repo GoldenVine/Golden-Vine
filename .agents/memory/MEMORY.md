@@ -1,0 +1,1 @@
+- [Instagram feed widget](instagram-feed-widget.md) — chose official Graph API (server-side, token stored as secret) over SnapWidget/Elfsight to avoid free-tier view caps and forced upgrades.

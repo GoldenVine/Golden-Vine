@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: instagram
+    description: Instagram feed operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /instagram/feed:
+    get:
+      operationId: getInstagramFeed
+      tags: [instagram]
+      summary: Get Instagram feed
+      description: Returns recent Instagram media for the configured account, cached server-side
+      responses:
+        "200":
+          description: Recent Instagram media
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InstagramFeedResponse"
+        "503":
+          description: Instagram feed not configured or unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +54,47 @@ components:
           type: string
       required:
         - status
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+    InstagramMediaItem:
+      type: object
+      properties:
+        id:
+          type: string
+        caption:
+          type: string
+          nullable: true
+        mediaType:
+          type: string
+          enum: [IMAGE, VIDEO, CAROUSEL_ALBUM]
+        mediaUrl:
+          type: string
+        thumbnailUrl:
+          type: string
+          nullable: true
+        permalink:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+      required:
+        - id
+        - mediaType
+        - mediaUrl
+        - permalink
+        - timestamp
+    InstagramFeedResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/InstagramMediaItem"
+      required:
+        - items
 

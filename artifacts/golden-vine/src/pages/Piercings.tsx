@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Carousel } from "@/components/Carousel";
 import { FadeIn } from "@/components/FadeIn";
+import { InstagramFeed } from "@/components/InstagramFeed";
 
 export function Piercings() {
   const piercingImages = Array.from({ length: 9 }).map(
@@ -55,6 +56,8 @@ export function Piercings() {
           <p>Our design experts are ready to help you create custom jewellery that perfectly complements your individual style and unique anatomy.</p>
         </section>
       </FadeIn>
+
+      <InstagramFeed />
 
     </div>
   );

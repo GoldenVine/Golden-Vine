@@ -7,11 +7,8 @@
   BASE_PATH = "/"
   CI = "true"
 
-[[redirects]]
-  from = "/api/*"
-  to = "https://38fdc6ae-2f53-416d-b552-35236ef1d59c-00-umihdqojsdh9.riker.replit.dev/api/:splat"
-  status = 200
-  force = true
+[functions]
+  directory = "netlify/functions"
 
 [[redirects]]
   from = "/*"

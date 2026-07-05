@@ -1,7 +1,23 @@
-import { useGetInstagramFeed } from "@workspace/api-client-react";
+import { useQuery } from "@tanstack/react-query";
 import { SiInstagram } from "react-icons/si";
 import { FaHeart, FaComment } from "react-icons/fa";
 import { FadeIn } from "@/components/FadeIn";
+
+interface InstagramMediaItem {
+  id: string;
+  caption: string | null;
+  mediaType: "IMAGE" | "VIDEO" | "CAROUSEL_ALBUM";
+  mediaUrl: string;
+  thumbnailUrl: string | null;
+  permalink: string;
+  timestamp: string;
+  likeCount: number | null;
+  commentsCount: number | null;
+}
+
+interface InstagramFeedResponse {
+  items: InstagramMediaItem[];
+}
 
 function formatCount(count: number): string {
   if (count >= 1000) {
@@ -10,9 +26,19 @@ function formatCount(count: number): string {
   return String(count);
 }
 
+async function fetchInstagramFeed(): Promise<InstagramFeedResponse> {
+  const res = await fetch("/.netlify/functions/instagram");
+  if (!res.ok) {
+    throw new Error(`Instagram feed request failed with status ${res.status}`);
+  }
+  return res.json();
+}
+
 export function InstagramFeed() {
-  const { data, isLoading, isError } = useGetInstagramFeed({
-    query: { retry: false, queryKey: ["instagram-feed"] },
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["instagram-feed"],
+    queryFn: fetchInstagramFeed,
+    retry: false,
   });
 
   if (isLoading || isError || !data || data.items.length === 0) {

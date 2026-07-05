@@ -1,0 +1,19 @@
+[build]
+  command = "pnpm install --frozen-lockfile && pnpm --filter @workspace/golden-vine run build"
+  publish = "artifacts/golden-vine/dist/public"
+
+[build.environment]
+  PORT = "3000"
+  BASE_PATH = "/"
+  CI = "true"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://38fdc6ae-2f53-416d-b552-35236ef1d59c-00-umihdqojsdh9.riker.replit.dev/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

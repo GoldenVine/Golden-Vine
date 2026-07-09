@@ -1,8 +1,14 @@
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
 
 export function About() {
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12">
+      <Seo
+        title="About Us"
+        description="Meet the team at Golden Vine Piercing, Bath. Experienced, passionate piercers dedicated to safe, beautiful work and a welcoming studio environment."
+        path="/about"
+      />
       
       <FadeIn>
         <section className="text-center mb-16">

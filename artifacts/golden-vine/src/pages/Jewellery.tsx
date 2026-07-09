@@ -1,8 +1,14 @@
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
 
 export function Jewellery() {
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12">
+      <Seo
+        title="Jewellery Collection"
+        description="Explore our premium jewellery collection at Golden Vine Piercing in Bath. High-quality implant-grade materials, unique designs, and BVLA pieces."
+        path="/jewellery"
+      />
       
       <FadeIn>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">

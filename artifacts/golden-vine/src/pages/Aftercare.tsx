@@ -1,15 +1,22 @@
 import { Link } from "wouter";
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
 
 export function Aftercare() {
   return (
     <div className="w-full animate-in fade-in duration-500">
+      <Seo
+        title="Piercing Aftercare Advice"
+        description="Expert piercing aftercare guidance from Golden Vine Piercing in Bath. Healing timelines, cleaning routines, and tips for all piercing types."
+        path="/aftercare"
+      />
       <section className="section-cream max-w-4xl mx-auto space-y-8 font-serif">
         <FadeIn>
           <div className="w-full mb-8 rounded-xl overflow-hidden shadow-md">
+            <h1 className="sr-only">Piercing Aftercare Guide</h1>
             <img 
               src="/images/info.jpg" 
-              alt="Piercing Aftercare Tips" 
+              alt="Piercing aftercare guide — Golden Vine Piercing, Bath" 
               className="w-full h-auto object-cover"
             />
           </div>

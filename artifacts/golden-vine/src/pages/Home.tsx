@@ -3,6 +3,29 @@ import { Link } from "wouter";
 import { Carousel } from "@/components/Carousel";
 import { Lightbox } from "@/components/Lightbox";
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
+
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "HealthAndBeautyBusiness",
+  name: "Golden Vine Piercing",
+  description: "Bath's destination for safe and exquisite body piercing. Professional piercing studio offering fresh and healed piercings, premium jewellery, and expert aftercare.",
+  url: "https://goldenvinepiercing.co.uk",
+  image: "https://goldenvinepiercing.co.uk/opengraph.jpg",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "6 Argyle Street",
+    addressLocality: "Bath",
+    postalCode: "BA2 4BA",
+    addressCountry: "GB",
+  },
+  telephone: "01225251026",
+  priceRange: "££",
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Wednesday","Thursday","Friday","Saturday"], opens: "10:00", closes: "17:00" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Sunday"], opens: "11:00", closes: "16:00" },
+  ],
+};
 
 export function Home() {
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
@@ -19,6 +42,12 @@ export function Home() {
 
   return (
     <div className="flex flex-col w-full animate-in fade-in duration-500">
+      <Seo
+        title="Precision Body Piercing in Bath"
+        description="Golden Vine Piercing — Bath's destination for safe, professional body piercing. Fresh and healed piercings, premium jewellery, and expert aftercare."
+        path="/"
+        jsonLd={localBusinessSchema}
+      />
       
       <div className="-mx-4 md:-mx-8 mb-12">
         <Carousel images={homeCarouselImages} autoAdvance={true} interval={3000} peekMode={true} />

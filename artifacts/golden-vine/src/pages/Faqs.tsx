@@ -1,5 +1,6 @@
 import { AccordionSection } from "@/components/AccordionSection";
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
 
 export function Faqs() {
   const faqItems = [
@@ -169,6 +170,11 @@ export function Faqs() {
 
   return (
     <div className="w-full animate-in fade-in duration-500 pb-12">
+      <Seo
+        title="Piercing FAQs"
+        description="Answers to common questions about getting pierced at Golden Vine Piercing in Bath — healing, jewellery, booking, aftercare, and more."
+        path="/faqs"
+      />
       <FadeIn>
         <section className="section-cream max-w-5xl mx-auto py-12 px-4 sm:px-12 text-center">
           <h1 className="text-4xl font-bold font-serif mb-10 pb-4 border-b-2 border-foreground/20 inline-block">

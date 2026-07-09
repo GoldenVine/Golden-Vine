@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -63,6 +64,11 @@ export function Contact() {
 
   return (
     <div className="w-full animate-in fade-in duration-500 pb-12">
+      <Seo
+        title="Contact Us"
+        description="Get in touch with Golden Vine Piercing in Bath. Send a message, find us at 6 Argyle Street, or reach us on social media."
+        path="/contact"
+      />
       
       <FadeIn>
         <h1 className="text-4xl md:text-5xl font-bold font-serif text-center mb-12">Contact Us</h1>

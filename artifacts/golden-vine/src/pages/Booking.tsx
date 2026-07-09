@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Lightbox } from "@/components/Lightbox";
 import { AccordionSection } from "@/components/AccordionSection";
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
 
 export function Booking() {
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
@@ -125,6 +126,11 @@ export function Booking() {
 
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12 pb-12">
+      <Seo
+        title="Book a Piercing"
+        description="Book a piercing appointment at Golden Vine Piercing in Bath. Read our policies, pricing, and availability before booking online."
+        path="/booking"
+      />
       
       <FadeIn>
         <section className="flex flex-col md:flex-row justify-center gap-6 max-w-5xl mx-auto">

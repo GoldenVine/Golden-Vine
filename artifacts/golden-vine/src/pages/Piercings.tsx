@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Carousel } from "@/components/Carousel";
 import { FadeIn } from "@/components/FadeIn";
 import { InstagramFeed } from "@/components/InstagramFeed";
+import { Seo } from "@/components/Seo";
 
 export function Piercings() {
   const piercingImages = Array.from({ length: 9 }).map(
@@ -10,6 +11,11 @@ export function Piercings() {
 
   return (
     <div className="flex flex-col animate-in fade-in duration-500 w-full space-y-12">
+      <Seo
+        title="Piercing Services"
+        description="Professional body piercing at Golden Vine Piercing, Bath. Fresh and healed ear, nose, and body piercings performed with the highest standards of safety."
+        path="/piercings"
+      />
       
       <FadeIn>
         <div className="section-cream max-w-5xl mx-auto w-full">

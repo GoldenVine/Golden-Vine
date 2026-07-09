@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { FadeIn } from "@/components/FadeIn";
+import { Seo } from "@/components/Seo";
 
 export function Bvla() {
   const bvlaGallery = [
@@ -13,6 +14,11 @@ export function Bvla() {
 
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12">
+      <Seo
+        title="BVLA Custom Jewellery"
+        description="Discover BVLA custom body jewellery at Golden Vine Piercing, Bath. Commission hand-crafted, one-of-a-kind pieces in precious metals and gemstones."
+        path="/bvla"
+      />
       
       <FadeIn>
         <section className="section-cream text-center space-y-10">

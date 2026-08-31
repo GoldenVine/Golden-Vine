@@ -27,10 +27,22 @@ import { Booking } from "@/pages/Booking";
 import { Faqs } from "@/pages/Faqs";
 import { About } from "@/pages/About";
 import { Contact } from "@/pages/Contact";
+import { Consent } from "@/pages/Consent";
 
 const queryClient = new QueryClient();
 
 function Router() {
+  const [location] = useLocation();
+
+  if (location === "/consent") {
+    return (
+      <>
+        <ScrollToTop />
+        <Consent />
+      </>
+    );
+  }
+
   return (
     <div className="pt-24 md:pt-36 flex flex-col min-h-screen">
       <ScrollToTop />

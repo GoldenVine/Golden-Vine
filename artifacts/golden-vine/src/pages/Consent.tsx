@@ -115,6 +115,27 @@ const referralOptions = ["Facebook", "Instagram", "Google", "Family / Friends", 
 const formEndpoint = import.meta.env.BASE_URL || "/";
 const MAX_ID_UPLOAD_BYTES = 7 * 1024 * 1024;
 const EASY_READ_STORAGE_KEY = "golden-vine-easy-read";
+const consentPolicies = [
+  ["risks", "Risks & duress", "I understand that known and unknown risks can lead to injury, including infection, scarring, keloids, and allergic reactions. Having been informed of the potential risks associated with getting a piercing, I still wish to proceed and freely accept all risks that may arise. I confirm that I am voluntarily getting a piercing without duress."],
+  ["release", "Release", "I give full consent to the Artist and Studio to perform the piercing named above. I waive and release, to the fullest extent permitted by law, the Artist and Studio from all liability whatsoever for any claim or cause I may have for personal injury, including direct or consequential damage caused by not following aftercare instructions or by trauma from outside sources after the initial procedure."],
+  ["questions", "Questions", "The Artist and the Studio have given me ample opportunity to ask any and all questions about the piercing procedure, and they have been answered to my total satisfaction."],
+  ["aftercare", "Aftercare", "I confirm that I have been given instructions on the care of my piercing while it is healing. I understand and will follow them without deviation. I acknowledge that a piercing may become infected, particularly if I do not follow the instructions."],
+  ["changes", "Permanent change", "I acknowledge that piercing will result in a permanent change to my appearance and that my skin may not be restored to its pre-piercing condition, even after jewellery is removed."],
+  ["document", "This document", "I acknowledge that I have had adequate opportunity to read and understand this document, that it was not presented to me at the last minute, and that I understand I am signing a legal contract."],
+  ["downsizing", "Downsizing", "I understand that my piercing(s) will initially be fitted with a larger or longer piece of jewellery to allow for natural swelling. Smaller or shorter jewellery will likely, but not always, need to be fitted during healing. This downsize is ultimately optional but important for safe healing. Labrets are £15 each, and I am entitled to a free fitting fee on piercings carried out at Golden Vine. I understand that leaving this too long or deciding against it may have detrimental effects on my piercings’ health."],
+] as const;
+const healthQuestions = [
+  ["bloodborne", "Do you have any bloodborne pathogens, transmittable diseases, or recent illnesses?", "It is okay if you do; we ask for our safety and the safety of others."],
+  ["eating", "Have you eaten in the past four hours?", "It is not always necessary, but eating beforehand can help increase your blood sugar levels."],
+  ["intoxication", "Are you under the influence of narcotics or alcohol?", ""],
+  ["pregnancy", "Are you pregnant or breastfeeding?", ""],
+] as const;
+const sensitivityQuestions = [
+  ["latex", "Allergy or sensitivity to latex?", ""],
+  ["chlorhexidine", "Allergy or sensitivity to chlorhexidine gluconate?", "Found in products such as Corsodyl mouthwash."],
+  ["iodine", "Allergy or sensitivity to iodine?", "If you are allergic to iodine, you may also be allergic to soy sauce."],
+  ["aluminium", "Allergy or sensitivity to aluminium?", "Found in some antiperspirant deodorants."],
+] as const;
 
 function readEasyReadPreference() {
   try {
@@ -355,27 +376,15 @@ function DetailsStep({
 }
 
 function HealthStep({ values, errors, updateValue }: { values: FormValues; errors: FieldErrors; updateValue: <K extends keyof FormValues>(key: K, value: FormValues[K]) => void }) {
-  const questions = [
-    ["bloodborne", "Do you have any bloodborne pathogens, transmittable diseases, or recent illnesses?", "It is okay if you do; we ask for our safety and the safety of others.", ["No", "Yes"]],
-    ["eating", "Have you eaten in the past four hours?", "It is not always necessary, but eating beforehand can help increase your blood sugar levels.", ["Yes", "No"]],
-    ["intoxication", "Are you under the influence of narcotics or alcohol?", "", ["No", "Yes"]],
-    ["pregnancy", "Are you pregnant or breastfeeding?", "", ["No", "Yes"]],
-  ] as const;
-  const sensitivities = [
-    ["latex", "Allergy or sensitivity to latex?", ""],
-    ["chlorhexidine", "Allergy or sensitivity to chlorhexidine gluconate?", "Found in products such as Corsodyl mouthwash."],
-    ["iodine", "Allergy or sensitivity to iodine?", "If you are allergic to iodine, you may also be allergic to soy sauce."],
-    ["aluminium", "Allergy or sensitivity to aluminium?", "Found in some antiperspirant deodorants."],
-  ] as const;
   return <section className="ns-section" aria-labelledby="health-heading">
     <SectionHeading index="02 / 04" title="Your wellbeing comes first." />
     <p className="ns-section-intro" id="health-heading">Answer honestly and privately. These questions help your piercer adapt the appointment or recommend another time if needed.</p>
     <div className="ns-notice"><Sparkles size={17} /><span>This is not medical advice or a diagnosis. If you are unsure how a condition or medication may affect piercing, please speak with a qualified healthcare professional before your appointment.</span></div>
-    <div className="ns-card ns-card-pad"><div className="ns-grid">{questions.map(([name, title, hint, options]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={values[name]} options={options as unknown as string[]} onChange={(value) => updateValue(name, value)} error={errors[name]} /></fieldset>)}</div></div>
+     <div className="ns-card ns-card-pad"><div className="ns-grid">{healthQuestions.map(([name, title, hint]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={values[name]} options={name === "eating" ? ["Yes", "No"] : ["No", "Yes"]} onChange={(value) => updateValue(name, value)} error={errors[name]} /></fieldset>)}</div></div>
     <div className="ns-card ns-card-pad"><div className="ns-grid">
       <div className="ns-field"><FieldLabel htmlFor="medicalConditions" hint="optional">Medical conditions, medications, or anything we should know</FieldLabel><textarea className="ns-textarea" id="medicalConditions" name="medicalConditions" value={values.medicalConditions} onChange={(event) => updateValue("medicalConditions", event.target.value)} placeholder="Include lupus, autoimmune conditions, heart or blood pressure conditions, blood thinners, haemophilia, epilepsy, diabetes, infections, psoriasis, impetigo, or anything else relevant." /></div>
       <div className="ns-field"><FieldLabel htmlFor="allergies" hint="optional">Other allergies or sensitivities</FieldLabel><textarea className="ns-textarea" id="allergies" name="allergies" value={values.allergies} onChange={(event) => updateValue("allergies", event.target.value)} placeholder="Tell us about metals, adhesives, medicines, or other allergies." /></div>
-      {sensitivities.map(([name, title, hint]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={values[name]} options={["No", "Yes", "I’m not sure"]} onChange={(value) => updateValue(name, value)} error={errors[name]} /></fieldset>)}
+       {sensitivityQuestions.map(([name, title, hint]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={values[name]} options={["No", "Yes", "I’m not sure"]} onChange={(value) => updateValue(name, value)} error={errors[name]} /></fieldset>)}
       <label className="ns-checkline"><input type="checkbox" name="medicalConditionsAcknowledged" value="Yes" checked={values.medicalConditionsAcknowledged} onChange={(event) => updateValue("medicalConditionsAcknowledged", event.target.checked)} aria-invalid={Boolean(errors.medicalConditionsAcknowledged)} /><span><strong>I have disclosed any medical condition, medication, skin condition, infection, or healing concern</strong> that could affect this procedure. If a doctor has prescribed preventive antibiotics for an invasive procedure, I have followed that advice and told my piercer.</span></label><ErrorText message={errors.medicalConditionsAcknowledged} />
     </div></div>
     <div className="ns-notice"><AlertCircle size={17} /><span>For your safety, studio staff may pause or refuse a service if you appear unfit to proceed, including if you are intoxicated, unwell, or unable to give informed consent.</span></div>
@@ -397,20 +406,11 @@ function ConsentStep({
   idInputRef: React.RefObject<HTMLInputElement | null>;
   cameraInputRef: React.RefObject<HTMLInputElement | null>;
 }) {
-  const policies = [
-    ["risks", "Risks & duress", "I understand that known and unknown risks can lead to injury, including infection, scarring, keloids, and allergic reactions. Having been informed of the potential risks associated with getting a piercing, I still wish to proceed and freely accept all risks that may arise. I confirm that I am voluntarily getting a piercing without duress."],
-    ["release", "Release", "I give full consent to the Artist and Studio to perform the piercing named above. I waive and release, to the fullest extent permitted by law, the Artist and Studio from all liability whatsoever for any claim or cause I may have for personal injury, including direct or consequential damage caused by not following aftercare instructions or by trauma from outside sources after the initial procedure."],
-    ["questions", "Questions", "The Artist and the Studio have given me ample opportunity to ask any and all questions about the piercing procedure, and they have been answered to my total satisfaction."],
-    ["aftercare", "Aftercare", "I confirm that I have been given instructions on the care of my piercing while it is healing. I understand and will follow them without deviation. I acknowledge that a piercing may become infected, particularly if I do not follow the instructions."],
-    ["changes", "Permanent change", "I acknowledge that piercing will result in a permanent change to my appearance and that my skin may not be restored to its pre-piercing condition, even after jewellery is removed."],
-    ["document", "This document", "I acknowledge that I have had adequate opportunity to read and understand this document, that it was not presented to me at the last minute, and that I understand I am signing a legal contract."],
-    ["downsizing", "Downsizing", "I understand that my piercing(s) will initially be fitted with a larger or longer piece of jewellery to allow for natural swelling. Smaller or shorter jewellery will likely, but not always, need to be fitted during healing. This downsize is ultimately optional but important for safe healing. Labrets are £15 each, and I am entitled to a free fitting fee on piercings carried out at Golden Vine. I understand that leaving this too long or deciding against it may have detrimental effects on my piercings’ health."],
-  ] as const;
   return <section className="ns-section" aria-labelledby="consent-heading">
     <SectionHeading index="03 / 04" title="Read, then make it yours." />
     <p className="ns-section-intro" id="consent-heading">Consent should feel informed, never rushed. Please read each point carefully. Photography is optional; every other acknowledgment is required.</p>
     <div className="ns-card ns-card-pad"><div className="ns-policy-list">
-      {policies.map(([key, title, copy]) => <div className="ns-policy-item" key={key}><h3 className="ns-policy-title">{title}</h3><p className="ns-policy-copy">{copy}</p><label className="ns-checkline"><input type="checkbox" name={key} value="Yes" checked={values[key]} onChange={(event) => updateValue(key, event.target.checked)} aria-invalid={Boolean(errors[key])} /><span><strong>I acknowledge this.</strong></span></label><ErrorText message={errors[key]} /></div>)}
+       {consentPolicies.map(([key, title, copy]) => <div className="ns-policy-item" key={key}><h3 className="ns-policy-title">{title}</h3><p className="ns-policy-copy">{copy}</p><label className="ns-checkline"><input type="checkbox" name={key} value="Yes" checked={values[key]} onChange={(event) => updateValue(key, event.target.checked)} aria-invalid={Boolean(errors[key])} /><span><strong>I acknowledge this.</strong></span></label><ErrorText message={errors[key]} /></div>)}
       <div className="ns-policy-item"><h3 className="ns-policy-title">Photography</h3><p className="ns-policy-copy">I consent to having pictures of my piercing taken, release all rights to photographs taken of me, and give consent in advance to their reproduction in print or electronic form.</p><ChoiceGroup name="photography" value={values.photography} options={["Yes, I consent", "No, thank you"]} onChange={(value) => updateValue("photography", value)} /></div>
     </div></div>
     <div className="ns-notice"><FileCheck2 size={17} /><span>If any provision, section, subsection, clause, or phrase of this release is found to be unenforceable or invalid, that portion will be severed. The remainder of this contract will be construed as though the unenforceable portion had never been included.</span></div>
@@ -466,18 +466,130 @@ function loadEmailJs(): Promise<EmailJsClient> {
   });
 }
 
-async function sendClientConfirmation(values: FormValues) {
+function pdfSafe(value: string) {
+  return value
+    .replace(/[’‘]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/—/g, "-")
+    .replace(/…/g, "...")
+    .replace(/£/g, "GBP ");
+}
+
+async function createConsentPdf(values: FormValues, signature: string, idFileCount: number) {
+  const { jsPDF } = await import("jspdf");
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 46;
+  const contentWidth = pageWidth - margin * 2;
+  let y = margin;
+
+  const addText = (text: string, size = 10, weight: "normal" | "bold" = "normal", gap = 8) => {
+    doc.setFont("helvetica", weight);
+    doc.setFontSize(size);
+    doc.setTextColor(41, 57, 62);
+    const lines = doc.splitTextToSize(pdfSafe(text || "Not provided"), contentWidth) as string[];
+    const lineHeight = size * 1.4;
+    for (const line of lines) {
+      if (y > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    }
+    y += gap;
+  };
+
+  const addSection = (title: string) => {
+    if (y > pageHeight - 100) {
+      doc.addPage();
+      y = margin;
+    }
+    y += 8;
+    doc.setDrawColor(180, 166, 126);
+    doc.setLineWidth(.8);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 23;
+    addText(title, 15, "bold", 10);
+  };
+
+  const addField = (label: string, value: string) => {
+    addText(label, 9, "bold", 2);
+    addText(value, 11, "normal", 7);
+  };
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(23);
+  doc.setTextColor(35, 52, 58);
+  doc.text("Golden Vine Piercing", margin, y);
+  y += 27;
+  addText("Participant copy of consent form", 15, "normal", 4);
+  addText(`Submitted ${new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })}`, 9, "normal", 14);
+
+  addSection("Your details");
+  addField("Full name", values.fullName);
+  addField("Date of birth", values.dateOfBirth);
+  addField("Address", `${values.address} · ${values.postcode}`);
+  addField("Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`);
+  addField("Practitioner", values.practitioner === "Guest Piercer" ? `${values.guestPractitionerName} (Guest Piercer)` : values.practitioner);
+  addField("Body piercing", values.piercingArea);
+  addField("How you heard about us", values.referrals.length ? values.referrals.join(", ") : "Not provided");
+  addField("Legal age declaration", values.legalAgeDeclaration ? "Confirmed" : "Not confirmed");
+  if (values.guardianName) addField("Parent / legal guardian", `${values.guardianName} · ${values.guardianRelationship}`);
+
+  addSection("Health & safety");
+  for (const [key, title] of healthQuestions) addField(title, values[key]);
+  for (const [key, title] of sensitivityQuestions) addField(title, values[key]);
+  addField("Medical conditions, medications, or anything to know", values.medicalConditions);
+  addField("Other allergies or sensitivities", values.allergies);
+  addField("Health disclosure acknowledgement", values.medicalConditionsAcknowledged ? "Confirmed" : "Not confirmed");
+
+  addSection("Consent acknowledgements");
+  for (const [key, title, copy] of consentPolicies) {
+    addText(title, 11, "bold", 3);
+    addText(copy, 10, "normal", 2);
+    addText(`Acknowledged: ${values[key] ? "Yes" : "No"}`, 10, "bold", 9);
+  }
+  addText("Photography", 11, "bold", 3);
+  addText("I consent to having pictures of my piercing taken, release all rights to photographs taken of me, and give consent in advance to their reproduction in print or electronic form.", 10, "normal", 2);
+  addText(`Photography choice: ${values.photography || "Not chosen"}`, 10, "bold", 9);
+  addText("If any provision, section, subsection, clause, or phrase of this release is found to be unenforceable or invalid, that portion will be severed. The remainder of this contract will be construed as though the unenforceable portion had never been included.", 9, "normal", 10);
+
+  addSection("Signature and documents");
+  addField("Handwritten signature", signature ? "Captured below" : "Missing");
+  if (signature) {
+    if (y > pageHeight - 130) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.addImage(signature, "PNG", margin, y, 210, 78);
+    y += 92;
+  }
+  addField("Government-issued photo ID", idFileCount ? `${idFileCount} image${idFileCount === 1 ? "" : "s"} submitted with the secure studio record` : "Not provided (optional)");
+  addText("This participant copy includes the completed answers and signature. Any ID images remain attached to the secure studio submission and are not copied into this confirmation email.", 9, "normal", 0);
+
+  return {
+    data: doc.output("datauristring"),
+    name: `golden-vine-consent-${(values.fullName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "copy")}.pdf`,
+  };
+}
+
+async function sendClientConfirmation(values: FormValues, signature: string, idFileCount: number) {
   const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
   const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
   if (!serviceId || !templateId || !publicKey) return "unconfigured" as const;
   const emailjs = await loadEmailJs();
+  const consentPdf = await createConsentPdf(values, signature, idFileCount);
   await emailjs.send(serviceId, templateId, {
     to_email: values.email,
     to_name: values.fullName,
     reply_to: values.email,
     form_name: "Golden Vine Piercing consent form",
     submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }),
+    consent_pdf: consentPdf.data,
+    consent_pdf_filename: consentPdf.name,
   }, publicKey);
   return "sent" as const;
 }
@@ -622,7 +734,7 @@ export function Consent() {
       const response = await fetch(formEndpoint, { method: "POST", body: data });
       if (!response.ok) throw new Error("Netlify could not receive your form. Please try again.");
       try {
-        setEmailStatus(await sendClientConfirmation(values));
+         setEmailStatus(await sendClientConfirmation(values, signature, idFiles.length));
       } catch {
         setEmailStatus("failed");
       }

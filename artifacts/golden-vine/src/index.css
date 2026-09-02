@@ -249,6 +249,66 @@
 
 .ns-header-note svg { color: #668877; }
 
+.ns-accessibility-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .42);
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.ns-accessibility-toggle.is-active {
+  border-color: rgba(102, 136, 119, .62);
+  background: rgba(215, 225, 217, .7);
+  color: #466c57;
+}
+
+.ns-shell.is-easy-read {
+  --ink: #17272e;
+  --ink-soft: #294850;
+  --line: #aeb9b5;
+}
+
+.ns-shell.is-easy-read .ns-title {
+  max-width: 820px;
+  font-size: clamp(52px, 8vw, 92px);
+  letter-spacing: -.025em;
+  line-height: 1.04;
+}
+
+.ns-shell.is-easy-read .ns-intro-copy,
+.ns-shell.is-easy-read .ns-section-intro,
+.ns-shell.is-easy-read .ns-policy-copy,
+.ns-shell.is-easy-read .ns-success-copy {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.ns-shell.is-easy-read .ns-section-title { font-size: 36px; }
+.ns-shell.is-easy-read .ns-label { font-size: 12px; }
+.ns-shell.is-easy-read .ns-legend { font-size: 15px; }
+.ns-shell.is-easy-read .ns-option,
+.ns-shell.is-easy-read .ns-checkline { font-size: 15px; line-height: 1.65; }
+.ns-shell.is-easy-read .ns-option { min-height: 60px; padding: 10px 16px; }
+.ns-shell.is-easy-read .ns-option input,
+.ns-shell.is-easy-read .ns-checkline input { width: 21px; height: 21px; }
+.ns-shell.is-easy-read .ns-option input { margin-top: 0; }
+.ns-shell.is-easy-read .ns-input,
+.ns-shell.is-easy-read .ns-select { height: 56px; font-size: 15px; }
+.ns-shell.is-easy-read .ns-textarea { font-size: 15px; }
+.ns-shell.is-easy-read .ns-card-pad { padding: 30px; }
+.ns-shell.is-easy-read .ns-button { min-height: 54px; font-size: 13px; }
+.ns-shell.is-easy-read .ns-progress-item { font-size: 13px; }
+.ns-shell.is-easy-read .ns-progress-number { width: 34px; height: 34px; flex-basis: 34px; font-size: 13px; }
+
 .ns-main {
   padding: 65px 0 150px;
 }
@@ -589,6 +649,7 @@
   .ns-header-inner, .ns-main { width: min(100% - 28px, 1180px); }
   .ns-header-inner { min-height: 66px; }
   .ns-header-note span { display: none; }
+  .ns-accessibility-toggle { padding: 0 9px; letter-spacing: .04em; }
   .ns-main { padding: 45px 0 90px; }
   .ns-intro-art { right: -100px; width: 220px; height: 220px; opacity: .16; }
   .ns-title { font-size: clamp(42px, 14vw, 60px); }
@@ -600,4 +661,6 @@
   .ns-button-row .ns-button { flex: 1; }
   .ns-review-row { grid-template-columns: 1fr; gap: 4px; }
   .ns-canvas { height: 125px; }
+  .ns-shell.is-easy-read .ns-title { font-size: clamp(48px, 15vw, 68px); }
+  .ns-shell.is-easy-read .ns-card-pad { padding: 22px; }
 }

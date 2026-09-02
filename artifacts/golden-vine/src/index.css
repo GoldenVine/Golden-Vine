@@ -156,6 +156,7 @@
     var(--paper);
   color: var(--ink);
   font-family: var(--app-font-sans);
+   overflow-x: hidden;
 }
 
 .ns-shell *,
@@ -519,7 +520,7 @@
 .ns-option-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ns-option, .ns-checkline { display: flex; align-items: flex-start; gap: 10px; color: var(--ink-soft); font-size: 12px; line-height: 1.55; }
 .ns-option { align-items: center; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; }
-.ns-option label { cursor: pointer; }
+.ns-option { cursor: pointer; }
 .ns-checkline { cursor: pointer; }
 .ns-checkline input, .ns-option input { accent-color: var(--ink); margin-top: 3px; flex: 0 0 auto; }
 .ns-policy-list { display: grid; gap: 25px; }

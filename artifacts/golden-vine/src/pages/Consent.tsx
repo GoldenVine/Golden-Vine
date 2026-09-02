@@ -154,10 +154,10 @@ function ChoiceGroup({
       <div className="ns-option-grid" role="radiogroup" aria-label={name}>
         {options.map((option) => {
           const id = `${name}-${option.toLowerCase().replaceAll(" ", "-").replaceAll("’", "")}`;
-          return <div className="ns-option" key={option}>
+          return <label className="ns-option" htmlFor={id} key={option}>
             <input id={id} name={name} type="radio" value={option} checked={value === option} onChange={() => onChange(option)} />
-            <label htmlFor={id}>{option}</label>
-          </div>;
+            <span>{option}</span>
+          </label>;
         })}
       </div>
       <ErrorText message={error} />
@@ -603,7 +603,7 @@ export function Consent() {
       {emailStatus === "failed" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>
     </section></main> : <main className="ns-main">
-      <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/logo.jpg")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
+      <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.jpg")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
       <div className="ns-flow"><Progress step={step} /><form ref={formRef} className="ns-form" name="consent" method="POST" action={formEndpoint} data-netlify="true" encType="multipart/form-data" onSubmit={submit} noValidate><input type="hidden" name="form-name" value="consent" /><input type="hidden" name="bot-field" value="" aria-hidden="true" />
         {step === 0 ? <DetailsStep values={values} errors={errors} toggleReferral={toggleReferral} updateValue={updateValue} isPractitionerLocked={isPractitionerLocked} setIsPractitionerLocked={setIsPractitionerLocked} /> : null}
         {step === 1 ? <HealthStep values={values} errors={errors} updateValue={updateValue} /> : null}

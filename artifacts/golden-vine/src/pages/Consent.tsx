@@ -13,6 +13,7 @@ import {
   ArrowRight,
   Camera,
   Check,
+  Eye,
   FileCheck2,
   LockKeyhole,
   Paperclip,
@@ -113,6 +114,28 @@ const stepNames = ["Your details", "Health & safety", "Consent & ID", "Review"];
 const referralOptions = ["Facebook", "Instagram", "Google", "Family / Friends", "Other"];
 const formEndpoint = import.meta.env.BASE_URL || "/";
 const MAX_ID_UPLOAD_BYTES = 7 * 1024 * 1024;
+const EASY_READ_STORAGE_KEY = "golden-vine-easy-read";
+
+function readEasyReadPreference() {
+  try {
+    const stored = window.localStorage.getItem(EASY_READ_STORAGE_KEY);
+    if (stored === "on" || stored === "off") return stored === "on";
+  } catch {
+    // Fall through to the first-party cookie.
+  }
+  const cookie = document.cookie.split("; ").find((entry) => entry.startsWith(`${EASY_READ_STORAGE_KEY}=`))?.split("=")[1];
+  return cookie === "on" ? true : cookie === "off" ? false : null;
+}
+
+function saveEasyReadPreference(enabled: boolean) {
+  const value = enabled ? "on" : "off";
+  try {
+    window.localStorage.setItem(EASY_READ_STORAGE_KEY, value);
+  } catch {
+    // The cookie below remains available if localStorage is blocked.
+  }
+  document.cookie = `${EASY_READ_STORAGE_KEY}=${value}; path=/; max-age=31536000; SameSite=Lax`;
+}
 
 function getAge(dateOfBirth: string) {
   if (!dateOfBirth) return null;
@@ -268,9 +291,12 @@ function SectionHeading({ index, title }: { index: string; title: string }) {
   return <div className="ns-section-heading"><h2 className="ns-section-title">{title}</h2><span className="ns-section-index">{index}</span></div>;
 }
 
-function Header() {
+function Header({ easyRead, onToggleEasyRead, isAutomatic }: { easyRead: boolean; onToggleEasyRead: () => void; isAutomatic: boolean }) {
   return <header className="ns-header"><div className="ns-header-inner">
     <div className="ns-wordmark"><span className="ns-mark" aria-hidden="true" /><span className="ns-wordmark-text">Golden Vine Piercing</span></div>
+    <button className={`ns-accessibility-toggle ${easyRead ? "is-active" : ""}`} type="button" aria-pressed={easyRead} onClick={onToggleEasyRead} title={isAutomatic ? "Easy-read mode is on for landscape. Tap to turn it off." : "Toggle easy-read mode"}>
+      <Eye size={15} /><span>Easy-read {easyRead ? "on" : "off"}</span>
+    </button>
     <div className="ns-header-note"><ShieldCheck size={15} /><span>Private, considered, yours</span></div>
   </div></header>;
 }
@@ -469,9 +495,26 @@ export function Consent() {
   const [confirmationCode, setConfirmationCode] = useState("");
   const [fileError, setFileError] = useState("");
   const [isPractitionerLocked, setIsPractitionerLocked] = useState(false);
+  const [isLandscapeCoarse, setIsLandscapeCoarse] = useState(false);
+  const [easyReadPreference, setEasyReadPreference] = useState<boolean | null>(readEasyReadPreference);
   const formRef = useRef<HTMLFormElement>(null);
   const idInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(orientation: landscape) and (pointer: coarse)");
+    const updateOrientation = () => setIsLandscapeCoarse(mediaQuery.matches);
+    updateOrientation();
+    mediaQuery.addEventListener("change", updateOrientation);
+    return () => mediaQuery.removeEventListener("change", updateOrientation);
+  }, []);
+
+  const easyRead = easyReadPreference ?? isLandscapeCoarse;
+  const toggleEasyRead = () => {
+    const next = !easyRead;
+    setEasyReadPreference(next);
+    saveEasyReadPreference(next);
+  };
 
   const updateValue = <K extends keyof FormValues>(key: K, value: FormValues[K]) => {
     setValues((current) => ({ ...current, [key]: value }));
@@ -592,9 +635,9 @@ export function Consent() {
     }
   };
 
-  return <div className="ns-shell">
+  return <div className={`ns-shell ${easyRead ? "is-easy-read" : ""}`}>
     <Seo title="Consent form" description="Complete your Golden Vine Piercing consent form before your appointment." path="/consent" />
-    <Header />
+    <Header easyRead={easyRead} onToggleEasyRead={toggleEasyRead} isAutomatic={easyReadPreference === null && isLandscapeCoarse} />
     {submitted ? <main className="ns-main"><section className="ns-success" aria-live="polite">
       <div className="ns-success-mark"><Check size={31} strokeWidth={2.3} /></div><p className="ns-kicker">Received by Golden Vine</p><h1 className="ns-success-title">You’re all set.</h1>
       <p className="ns-success-copy">Thank you for taking the time to share this with us. Your consent form has been securely received by the studio team, and we’ll talk through everything again when you arrive.</p>

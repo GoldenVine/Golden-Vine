@@ -433,9 +433,6 @@ function ReviewStep({
   confirmationCode,
   confirmationCodeError,
   onConfirmationCodeChange,
-  onDownloadCopy,
-  isDownloading,
-  downloadError,
 }: {
   values: FormValues;
   signature: string;
@@ -443,9 +440,6 @@ function ReviewStep({
   confirmationCode: string;
   confirmationCodeError?: string;
   onConfirmationCodeChange: (value: string) => void;
-  onDownloadCopy: () => void;
-  isDownloading: boolean;
-  downloadError?: string;
 }) {
   const rows = [
     ["Name", values.fullName], ["Address", `${values.address} · ${values.postcode}`], ["Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`],
@@ -453,7 +447,7 @@ function ReviewStep({
     ["Guardian", values.guardianName ? `${values.guardianName} · ${values.guardianRelationship}` : "Not required"], ["Health screening", "Complete — answers shared with your piercer"],
     ["Photography", values.photography || "Not chosen"], ["Signature", signature ? "Captured" : "Missing"], ["Photo ID", idFiles.length ? `${idFiles.length} photo${idFiles.length === 1 ? "" : "s"} attached` : "Not provided (optional)"],
   ];
-  return <section className="ns-section" aria-labelledby="review-heading"><SectionHeading index="04 / 04" title="A final look together." /><p className="ns-section-intro" id="review-heading">Please check the details below. You can use Previous to make any changes before submitting.</p><div className="ns-review">{rows.map(([label, value]) => <div className="ns-review-row" key={label}><span className="ns-review-label">{label}</span><span className="ns-review-value">{value || "Not provided"}</span></div>)}</div><div className="ns-notice"><FileCheck2 size={17} /><span>When you submit, your answers, handwritten signature, and ID photos will be sent securely to Golden Vine through Netlify Forms.</span></div><div className="ns-card ns-card-pad ns-confirmation-code"><div className="ns-field"><FieldLabel htmlFor="confirmation-code">Final confirmation code</FieldLabel><p className="ns-policy-copy">Enter the four-digit code provided by Golden Vine to confirm that you have reviewed everything above.</p><input className="ns-input ns-code-input" id="confirmation-code" inputMode="numeric" autoComplete="off" maxLength={4} pattern="[0-9]{4}" value={confirmationCode} onChange={(event) => onConfirmationCodeChange(event.target.value.replace(/\D/g, "").slice(0, 4))} aria-invalid={Boolean(confirmationCodeError)} aria-describedby="confirmation-code-help" /><span className="ns-label-hint" id="confirmation-code-help">This code is not saved with your consent form.</span><ErrorText message={confirmationCodeError} />{confirmationCode === "1111" ? <div className="ns-download-wrap"><button type="button" className="ns-button ns-button-download" onClick={onDownloadCopy} disabled={isDownloading}><Download size={15} />{isDownloading ? "Preparing your copy…" : "Download a copy of this form"}</button><p className="ns-download-note">On iPad, the PDF may open in a new tab. Use Share, then Save to Files.</p><ErrorText message={downloadError} /></div> : null}</div></div></section>;
+  return <section className="ns-section" aria-labelledby="review-heading"><SectionHeading index="04 / 04" title="A final look together." /><p className="ns-section-intro" id="review-heading">Please check the details below. You can use Previous to make any changes before submitting.</p><div className="ns-review">{rows.map(([label, value]) => <div className="ns-review-row" key={label}><span className="ns-review-label">{label}</span><span className="ns-review-value">{value || "Not provided"}</span></div>)}</div><div className="ns-notice"><FileCheck2 size={17} /><span>When you submit, your answers, handwritten signature, and ID photos will be sent securely to Golden Vine through Netlify Forms.</span></div><div className="ns-card ns-card-pad ns-confirmation-code"><div className="ns-field"><FieldLabel htmlFor="confirmation-code">Final confirmation code</FieldLabel><p className="ns-policy-copy">Enter the four-digit code provided by Golden Vine to confirm that you have reviewed everything above.</p><input className="ns-input ns-code-input" id="confirmation-code" inputMode="numeric" autoComplete="off" maxLength={4} pattern="[0-9]{4}" value={confirmationCode} onChange={(event) => onConfirmationCodeChange(event.target.value.replace(/\D/g, "").slice(0, 4))} aria-invalid={Boolean(confirmationCodeError)} aria-describedby="confirmation-code-help" /><span className="ns-label-hint" id="confirmation-code-help">This code is not saved with your consent form.</span><ErrorText message={confirmationCodeError} /></div></div></section>;
 }
 
 function pdfSafe(value: string) {
@@ -465,7 +459,36 @@ function pdfSafe(value: string) {
     .replace(/£/g, "GBP ");
 }
 
-function createConsentPdf(values: FormValues, signature: string, idFileCount: number) {
+function fileToPdfImage(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("The ID photo could not be read."));
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = () => reject(new Error("The ID photo could not be prepared for download."));
+      image.onload = () => {
+        const maxDimension = 1800;
+        const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+        canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+        const context = canvas.getContext("2d");
+        if (!context) {
+          reject(new Error("The ID photo could not be prepared for download."));
+          return;
+        }
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", .88));
+      };
+      image.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function createConsentPdf(values: FormValues, signature: string, idFiles: IdFile[]) {
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
@@ -506,6 +529,15 @@ function createConsentPdf(values: FormValues, signature: string, idFileCount: nu
   const addField = (label: string, value: string) => {
     addText(label, 9, "bold", 2);
     addText(value, 11, "normal", 7);
+  };
+
+  const addImage = (dataUrl: string, width: number, height: number) => {
+    if (y + height > pageHeight - margin) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.addImage(dataUrl, "JPEG", margin, y, width, height);
+    y += height + 14;
   };
 
   doc.setFont("helvetica", "bold");
@@ -555,8 +587,20 @@ function createConsentPdf(values: FormValues, signature: string, idFileCount: nu
     doc.addImage(signature, "PNG", margin, y, 210, 78);
     y += 92;
   }
-  addField("Government-issued photo ID", idFileCount ? `${idFileCount} image${idFileCount === 1 ? "" : "s"} submitted with the secure studio record` : "Not provided (optional)");
-  addText("This downloaded copy includes the completed answers and signature. Any ID images remain attached to the secure studio submission and are not included in this download.", 9, "normal", 0);
+  addField("Government-issued photo ID", idFiles.length ? `${idFiles.length} image${idFiles.length === 1 ? "" : "s"} submitted with the secure studio record` : "Not provided (optional)");
+  if (idFiles.length) {
+    addText("ID images included in this downloaded copy because they were provided with the consent form. They are not emailed through EmailJS.", 9, "normal", 8);
+    for (const [index, item] of idFiles.entries()) {
+      const imageData = await fileToPdfImage(item.file);
+      const imageProperties = doc.getImageProperties(imageData);
+      const width = Math.min(contentWidth, 430);
+      const height = width * (imageProperties.height / imageProperties.width);
+      addText(`ID image ${index + 1} — ${item.name}`, 9, "bold", 4);
+      addImage(imageData, width, height);
+    }
+  } else {
+    addText("This downloaded copy includes the completed answers and signature. No ID images were provided.", 9, "normal", 0);
+  }
 
   return {
     blob: doc.output("blob"),
@@ -564,8 +608,8 @@ function createConsentPdf(values: FormValues, signature: string, idFileCount: nu
   };
 }
 
-function downloadConsentCopy(values: FormValues, signature: string, idFileCount: number) {
-  const { blob, name } = createConsentPdf(values, signature, idFileCount);
+async function downloadConsentCopy(values: FormValues, signature: string, idFiles: IdFile[]) {
+  const { blob, name } = await createConsentPdf(values, signature, idFiles);
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -668,6 +712,7 @@ export function Consent() {
   const [emailStatus, setEmailStatus] = useState<"sent" | "unconfigured" | "failed" | null>(null);
   const [confirmationCode, setConfirmationCode] = useState("");
   const [isDownloadingCopy, setIsDownloadingCopy] = useState(false);
+  const [downloadReady, setDownloadReady] = useState(false);
   const [downloadError, setDownloadError] = useState("");
   const [fileError, setFileError] = useState("");
   const [isPractitionerLocked, setIsPractitionerLocked] = useState(false);
@@ -691,11 +736,12 @@ export function Consent() {
     setEasyReadPreference(next);
     saveEasyReadPreference(next);
   };
-  const handleDownloadCopy = () => {
+  const handleDownloadCopy = async () => {
     setDownloadError("");
     setIsDownloadingCopy(true);
     try {
-      downloadConsentCopy(values, signature, idFiles.length);
+      await downloadConsentCopy(values, signature, idFiles);
+      setDownloadReady(true);
     } catch (error) {
       console.error("The consent copy could not be downloaded.", error);
       setDownloadError("We couldn’t prepare the download. Please try again.");
@@ -815,8 +861,9 @@ export function Consent() {
          console.error("The client confirmation email failed.", error);
          setEmailStatus("failed");
        }
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+       setSubmitted(true);
+       window.scrollTo({ top: 0, behavior: "smooth" });
+       void handleDownloadCopy();
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
@@ -829,10 +876,16 @@ export function Consent() {
     <Header easyRead={easyRead} onToggleEasyRead={toggleEasyRead} isAutomatic={easyReadPreference === null && isLandscapeCoarse} />
     {submitted ? <main className="ns-main"><section className="ns-success" aria-live="polite">
       <div className="ns-success-mark"><Check size={31} strokeWidth={2.3} /></div><p className="ns-kicker">Received by Golden Vine</p><h1 className="ns-success-title">You’re all set.</h1>
-      <p className="ns-success-copy">Thank you for taking the time to share this with us. Your consent form has been securely received by the studio team, and we’ll talk through everything again when you arrive.</p>
+       <p className="ns-success-copy">Thank you for taking the time to share this with us. Your consent form has been securely received by the studio team, and we’ll talk through everything again when you arrive.</p>
       {emailStatus === "sent" ? <p className="ns-confirmation-note">A confirmation copy has also been sent to {values.email}.</p> : null}
       {emailStatus === "unconfigured" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       {emailStatus === "failed" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
+       <div className="ns-download-confirmation">
+         <p className="ns-download-heading">{isDownloadingCopy ? "Preparing your consent copy…" : downloadReady ? "Your consent copy has been downloaded." : "Your consent copy is ready to download."}</p>
+         <button type="button" className="ns-button ns-button-download" onClick={() => void handleDownloadCopy()} disabled={isDownloadingCopy}><Download size={15} />{isDownloadingCopy ? "Preparing your copy…" : "Download another copy"}</button>
+         <p className="ns-download-note">Your downloaded copy includes any ID photos you provided. On iPad, if the PDF opens in a new tab, use Share, then Save to Files.</p>
+         <ErrorText message={downloadError} />
+       </div>
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>
     </section></main> : <main className="ns-main">
       <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.jpg")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
@@ -840,7 +893,7 @@ export function Consent() {
         {step === 0 ? <DetailsStep values={values} errors={errors} toggleReferral={toggleReferral} updateValue={updateValue} isPractitionerLocked={isPractitionerLocked} setIsPractitionerLocked={setIsPractitionerLocked} /> : null}
         {step === 1 ? <HealthStep values={values} errors={errors} updateValue={updateValue} /> : null}
         {step === 2 ? <ConsentStep values={values} errors={errors} updateValue={updateValue} signature={signature} setSignature={setSignature} idFiles={idFiles} fileError={fileError} readFile={readFile} removeFile={removeFile} idInputRef={idInputRef} cameraInputRef={cameraInputRef} /> : null}
-         {step === 3 ? <ReviewStep values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} onDownloadCopy={handleDownloadCopy} isDownloading={isDownloadingCopy} downloadError={downloadError} /> : null}
+         {step === 3 ? <ReviewStep values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} /> : null}
         {submitError ? <div className="ns-submit-error" role="alert"><AlertCircle size={17} />{submitError}</div> : null}
         <div className="ns-actions"><div className="ns-actions-note"><LockKeyhole size={14} /> Saved only when you submit</div><div className="ns-button-row">{step > 0 ? <button className="ns-button ns-button-quiet" type="button" onClick={() => goToStep((step - 1) as Step)}><ArrowLeft size={15} /> Previous</button> : <span />}{step < 3 ? <button className="ns-button ns-button-primary" type="button" onClick={() => goToStep((step + 1) as Step)}>Continue <ArrowRight size={15} /></button> : <button className="ns-button ns-button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending securely…" : "Submit consent"}{!isSubmitting ? <Check size={15} /> : null}</button>}</div></div>
         <p className="ns-privacy">Privacy note: your details, signature, and optional ID images are sent securely to Golden Vine through Netlify Forms. This form is not medical advice; please speak to a qualified healthcare professional about health concerns.</p>

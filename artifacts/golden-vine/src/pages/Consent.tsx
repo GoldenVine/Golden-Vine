@@ -13,6 +13,7 @@ import {
   ArrowRight,
   Camera,
   Check,
+  Download,
   Eye,
   FileCheck2,
   LockKeyhole,
@@ -24,6 +25,7 @@ import {
   Upload,
   X,
 } from "lucide-react";
+import { jsPDF } from "jspdf";
 import { Seo } from "@/components/Seo";
 
 type Step = 0 | 1 | 2 | 3;
@@ -431,6 +433,9 @@ function ReviewStep({
   confirmationCode,
   confirmationCodeError,
   onConfirmationCodeChange,
+  onDownloadCopy,
+  isDownloading,
+  downloadError,
 }: {
   values: FormValues;
   signature: string;
@@ -438,6 +443,9 @@ function ReviewStep({
   confirmationCode: string;
   confirmationCodeError?: string;
   onConfirmationCodeChange: (value: string) => void;
+  onDownloadCopy: () => void;
+  isDownloading: boolean;
+  downloadError?: string;
 }) {
   const rows = [
     ["Name", values.fullName], ["Address", `${values.address} · ${values.postcode}`], ["Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`],
@@ -445,7 +453,128 @@ function ReviewStep({
     ["Guardian", values.guardianName ? `${values.guardianName} · ${values.guardianRelationship}` : "Not required"], ["Health screening", "Complete — answers shared with your piercer"],
     ["Photography", values.photography || "Not chosen"], ["Signature", signature ? "Captured" : "Missing"], ["Photo ID", idFiles.length ? `${idFiles.length} photo${idFiles.length === 1 ? "" : "s"} attached` : "Not provided (optional)"],
   ];
-  return <section className="ns-section" aria-labelledby="review-heading"><SectionHeading index="04 / 04" title="A final look together." /><p className="ns-section-intro" id="review-heading">Please check the details below. You can use Previous to make any changes before submitting.</p><div className="ns-review">{rows.map(([label, value]) => <div className="ns-review-row" key={label}><span className="ns-review-label">{label}</span><span className="ns-review-value">{value || "Not provided"}</span></div>)}</div><div className="ns-notice"><FileCheck2 size={17} /><span>When you submit, your answers, handwritten signature, and ID photos will be sent securely to Golden Vine through Netlify Forms.</span></div><div className="ns-card ns-card-pad ns-confirmation-code"><div className="ns-field"><FieldLabel htmlFor="confirmation-code">Final confirmation code</FieldLabel><p className="ns-policy-copy">Enter the four-digit code provided by Golden Vine to confirm that you have reviewed everything above.</p><input className="ns-input ns-code-input" id="confirmation-code" inputMode="numeric" autoComplete="off" maxLength={4} pattern="[0-9]{4}" value={confirmationCode} onChange={(event) => onConfirmationCodeChange(event.target.value.replace(/\D/g, "").slice(0, 4))} aria-invalid={Boolean(confirmationCodeError)} aria-describedby="confirmation-code-help" /><span className="ns-label-hint" id="confirmation-code-help">This code is not saved with your consent form.</span><ErrorText message={confirmationCodeError} /></div></div></section>;
+  return <section className="ns-section" aria-labelledby="review-heading"><SectionHeading index="04 / 04" title="A final look together." /><p className="ns-section-intro" id="review-heading">Please check the details below. You can use Previous to make any changes before submitting.</p><div className="ns-review">{rows.map(([label, value]) => <div className="ns-review-row" key={label}><span className="ns-review-label">{label}</span><span className="ns-review-value">{value || "Not provided"}</span></div>)}</div><div className="ns-notice"><FileCheck2 size={17} /><span>When you submit, your answers, handwritten signature, and ID photos will be sent securely to Golden Vine through Netlify Forms.</span></div><div className="ns-card ns-card-pad ns-confirmation-code"><div className="ns-field"><FieldLabel htmlFor="confirmation-code">Final confirmation code</FieldLabel><p className="ns-policy-copy">Enter the four-digit code provided by Golden Vine to confirm that you have reviewed everything above.</p><input className="ns-input ns-code-input" id="confirmation-code" inputMode="numeric" autoComplete="off" maxLength={4} pattern="[0-9]{4}" value={confirmationCode} onChange={(event) => onConfirmationCodeChange(event.target.value.replace(/\D/g, "").slice(0, 4))} aria-invalid={Boolean(confirmationCodeError)} aria-describedby="confirmation-code-help" /><span className="ns-label-hint" id="confirmation-code-help">This code is not saved with your consent form.</span><ErrorText message={confirmationCodeError} />{confirmationCode === "1111" ? <div className="ns-download-wrap"><button type="button" className="ns-button ns-button-download" onClick={onDownloadCopy} disabled={isDownloading}><Download size={15} />{isDownloading ? "Preparing your copy…" : "Download a copy of this form"}</button><p className="ns-download-note">On iPad, the PDF may open in a new tab. Use Share, then Save to Files.</p><ErrorText message={downloadError} /></div> : null}</div></div></section>;
+}
+
+function pdfSafe(value: string) {
+  return value
+    .replace(/[’‘]/g, "'")
+    .replace(/[“”]/g, '"')
+    .replace(/—/g, "-")
+    .replace(/…/g, "...")
+    .replace(/£/g, "GBP ");
+}
+
+function createConsentPdf(values: FormValues, signature: string, idFileCount: number) {
+  const doc = new jsPDF({ unit: "pt", format: "a4" });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 46;
+  const contentWidth = pageWidth - margin * 2;
+  let y = margin;
+
+  const addText = (text: string, size = 10, weight: "normal" | "bold" = "normal", gap = 8) => {
+    doc.setFont("helvetica", weight);
+    doc.setFontSize(size);
+    doc.setTextColor(41, 57, 62);
+    const lines = doc.splitTextToSize(pdfSafe(text || "Not provided"), contentWidth) as string[];
+    const lineHeight = size * 1.4;
+    for (const line of lines) {
+      if (y > pageHeight - margin - lineHeight) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    }
+    y += gap;
+  };
+
+  const addSection = (title: string) => {
+    if (y > pageHeight - 100) {
+      doc.addPage();
+      y = margin;
+    }
+    y += 8;
+    doc.setDrawColor(180, 166, 126);
+    doc.setLineWidth(.8);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 23;
+    addText(title, 15, "bold", 10);
+  };
+
+  const addField = (label: string, value: string) => {
+    addText(label, 9, "bold", 2);
+    addText(value, 11, "normal", 7);
+  };
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(23);
+  doc.setTextColor(35, 52, 58);
+  doc.text("Golden Vine Piercing", margin, y);
+  y += 27;
+  addText("Participant copy of consent form", 15, "normal", 4);
+  addText(`Submitted ${new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })}`, 9, "normal", 14);
+
+  addSection("Your details");
+  addField("Full name", values.fullName);
+  addField("Date of birth", values.dateOfBirth);
+  addField("Address", `${values.address} · ${values.postcode}`);
+  addField("Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`);
+  addField("Practitioner", values.practitioner === "Guest Piercer" ? `${values.guestPractitionerName} (Guest Piercer)` : values.practitioner);
+  addField("Body piercing", values.piercingArea);
+  addField("How you heard about us", values.referrals.length ? values.referrals.join(", ") : "Not provided");
+  addField("Legal age declaration", values.legalAgeDeclaration ? "Confirmed" : "Not confirmed");
+  if (values.guardianName) addField("Parent / legal guardian", `${values.guardianName} · ${values.guardianRelationship}`);
+
+  addSection("Health & safety");
+  for (const [key, title] of healthQuestions) addField(title, values[key]);
+  for (const [key, title] of sensitivityQuestions) addField(title, values[key]);
+  addField("Medical conditions, medications, or anything to know", values.medicalConditions);
+  addField("Other allergies or sensitivities", values.allergies);
+  addField("Health disclosure acknowledgement", values.medicalConditionsAcknowledged ? "Confirmed" : "Not confirmed");
+
+  addSection("Consent acknowledgements");
+  for (const [key, title, copy] of consentPolicies) {
+    addText(title, 11, "bold", 3);
+    addText(copy, 10, "normal", 2);
+    addText(`Acknowledged: ${values[key] ? "Yes" : "No"}`, 10, "bold", 9);
+  }
+  addText("Photography", 11, "bold", 3);
+  addText("I consent to having pictures of my piercing taken, release all rights to photographs taken of me, and give consent in advance to their reproduction in print or electronic form.", 10, "normal", 2);
+  addText(`Photography choice: ${values.photography || "Not chosen"}`, 10, "bold", 9);
+  addText("If any provision, section, subsection, clause, or phrase of this release is found to be unenforceable or invalid, that portion will be severed. The remainder of this contract will be construed as though the unenforceable portion had never been included.", 9, "normal", 10);
+
+  addSection("Signature and documents");
+  addField("Handwritten signature", signature ? "Captured below" : "Missing");
+  if (signature) {
+    if (y > pageHeight - 130) {
+      doc.addPage();
+      y = margin;
+    }
+    doc.addImage(signature, "PNG", margin, y, 210, 78);
+    y += 92;
+  }
+  addField("Government-issued photo ID", idFileCount ? `${idFileCount} image${idFileCount === 1 ? "" : "s"} submitted with the secure studio record` : "Not provided (optional)");
+  addText("This downloaded copy includes the completed answers and signature. Any ID images remain attached to the secure studio submission and are not included in this download.", 9, "normal", 0);
+
+  return {
+    blob: doc.output("blob"),
+    name: `golden-vine-consent-${(values.fullName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "copy")}.pdf`,
+  };
+}
+
+function downloadConsentCopy(values: FormValues, signature: string, idFileCount: number) {
+  const { blob, name } = createConsentPdf(values, signature, idFileCount);
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = name;
+  link.rel = "noopener";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 type EmailJsClient = { send: (serviceId: string, templateId: string, params: Record<string, string>, publicKey: string) => Promise<unknown> };
@@ -538,6 +667,8 @@ export function Consent() {
   const [submitted, setSubmitted] = useState(false);
   const [emailStatus, setEmailStatus] = useState<"sent" | "unconfigured" | "failed" | null>(null);
   const [confirmationCode, setConfirmationCode] = useState("");
+  const [isDownloadingCopy, setIsDownloadingCopy] = useState(false);
+  const [downloadError, setDownloadError] = useState("");
   const [fileError, setFileError] = useState("");
   const [isPractitionerLocked, setIsPractitionerLocked] = useState(false);
   const [isLandscapeCoarse, setIsLandscapeCoarse] = useState(false);
@@ -559,6 +690,18 @@ export function Consent() {
     const next = !easyRead;
     setEasyReadPreference(next);
     saveEasyReadPreference(next);
+  };
+  const handleDownloadCopy = () => {
+    setDownloadError("");
+    setIsDownloadingCopy(true);
+    try {
+      downloadConsentCopy(values, signature, idFiles.length);
+    } catch (error) {
+      console.error("The consent copy could not be downloaded.", error);
+      setDownloadError("We couldn’t prepare the download. Please try again.");
+    } finally {
+      setIsDownloadingCopy(false);
+    }
   };
 
   const updateValue = <K extends keyof FormValues>(key: K, value: FormValues[K]) => {
@@ -697,7 +840,7 @@ export function Consent() {
         {step === 0 ? <DetailsStep values={values} errors={errors} toggleReferral={toggleReferral} updateValue={updateValue} isPractitionerLocked={isPractitionerLocked} setIsPractitionerLocked={setIsPractitionerLocked} /> : null}
         {step === 1 ? <HealthStep values={values} errors={errors} updateValue={updateValue} /> : null}
         {step === 2 ? <ConsentStep values={values} errors={errors} updateValue={updateValue} signature={signature} setSignature={setSignature} idFiles={idFiles} fileError={fileError} readFile={readFile} removeFile={removeFile} idInputRef={idInputRef} cameraInputRef={cameraInputRef} /> : null}
-        {step === 3 ? <ReviewStep values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} /> : null}
+         {step === 3 ? <ReviewStep values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} onDownloadCopy={handleDownloadCopy} isDownloading={isDownloadingCopy} downloadError={downloadError} /> : null}
         {submitError ? <div className="ns-submit-error" role="alert"><AlertCircle size={17} />{submitError}</div> : null}
         <div className="ns-actions"><div className="ns-actions-note"><LockKeyhole size={14} /> Saved only when you submit</div><div className="ns-button-row">{step > 0 ? <button className="ns-button ns-button-quiet" type="button" onClick={() => goToStep((step - 1) as Step)}><ArrowLeft size={15} /> Previous</button> : <span />}{step < 3 ? <button className="ns-button ns-button-primary" type="button" onClick={() => goToStep((step + 1) as Step)}>Continue <ArrowRight size={15} /></button> : <button className="ns-button ns-button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending securely…" : "Submit consent"}{!isSubmitting ? <Check size={15} /> : null}</button>}</div></div>
         <p className="ns-privacy">Privacy note: your details, signature, and optional ID images are sent securely to Golden Vine through Netlify Forms. This form is not medical advice; please speak to a qualified healthcare professional about health concerns.</p>

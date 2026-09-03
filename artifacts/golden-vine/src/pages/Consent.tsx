@@ -603,7 +603,9 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
   }
 
   return {
-    blob: doc.output("blob"),
+    // Keep the PDF bytes and filename, but present the blob as a generic
+    // downloadable file so Safari does not open its PDF preview viewer.
+    blob: new Blob([doc.output("arraybuffer")], { type: "application/octet-stream" }),
     name: `golden-vine-consent-${(values.fullName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "copy")}.pdf`,
   };
 }

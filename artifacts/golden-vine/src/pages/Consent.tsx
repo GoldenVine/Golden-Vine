@@ -711,9 +711,6 @@ export function Consent() {
   const [submitted, setSubmitted] = useState(false);
   const [emailStatus, setEmailStatus] = useState<"sent" | "unconfigured" | "failed" | null>(null);
   const [confirmationCode, setConfirmationCode] = useState("");
-  const [isDownloadingCopy, setIsDownloadingCopy] = useState(false);
-  const [downloadReady, setDownloadReady] = useState(false);
-  const [downloadError, setDownloadError] = useState("");
   const [fileError, setFileError] = useState("");
   const [isPractitionerLocked, setIsPractitionerLocked] = useState(false);
   const [isLandscapeCoarse, setIsLandscapeCoarse] = useState(false);
@@ -736,17 +733,11 @@ export function Consent() {
     setEasyReadPreference(next);
     saveEasyReadPreference(next);
   };
-  const handleDownloadCopy = async () => {
-    setDownloadError("");
-    setIsDownloadingCopy(true);
+  const downloadCopyAutomatically = async () => {
     try {
       await downloadConsentCopy(values, signature, idFiles);
-      setDownloadReady(true);
     } catch (error) {
       console.error("The consent copy could not be downloaded.", error);
-      setDownloadError("We couldn’t prepare the download. Please try again.");
-    } finally {
-      setIsDownloadingCopy(false);
     }
   };
 
@@ -863,7 +854,7 @@ export function Consent() {
        }
        setSubmitted(true);
        window.scrollTo({ top: 0, behavior: "smooth" });
-       void handleDownloadCopy();
+       void downloadCopyAutomatically();
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
@@ -880,12 +871,6 @@ export function Consent() {
       {emailStatus === "sent" ? <p className="ns-confirmation-note">A confirmation copy has also been sent to {values.email}.</p> : null}
       {emailStatus === "unconfigured" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       {emailStatus === "failed" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
-       <div className="ns-download-confirmation">
-         <p className="ns-download-heading">{isDownloadingCopy ? "Preparing your consent copy…" : downloadReady ? "Your consent copy has been downloaded." : "Your consent copy is ready to download."}</p>
-         <button type="button" className="ns-button ns-button-download" onClick={() => void handleDownloadCopy()} disabled={isDownloadingCopy}><Download size={15} />{isDownloadingCopy ? "Preparing your copy…" : "Download another copy"}</button>
-         <p className="ns-download-note">Your downloaded copy includes any ID photos you provided. On iPad, if the PDF opens in a new tab, use Share, then Save to Files.</p>
-         <ErrorText message={downloadError} />
-       </div>
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>
     </section></main> : <main className="ns-main">
       <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.jpg")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>

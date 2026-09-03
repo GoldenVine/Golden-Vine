@@ -1,5 +1,5 @@
 [build]
-  command = "pnpm install --no-frozen-lockfile && pnpm --filter @workspace/golden-vine run build"
+  command = "CI=false pnpm install --no-frozen-lockfile && pnpm --filter @workspace/golden-vine run build"
   publish = "artifacts/golden-vine/dist/public"
   functions = "netlify/functions"
 

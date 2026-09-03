@@ -13,6 +13,7 @@ import {
   ArrowRight,
   Camera,
   Check,
+  Download,
   Eye,
   FileCheck2,
   LockKeyhole,
@@ -448,24 +449,6 @@ function ReviewStep({
   return <section className="ns-section" aria-labelledby="review-heading"><SectionHeading index="04 / 04" title="A final look together." /><p className="ns-section-intro" id="review-heading">Please check the details below. You can use Previous to make any changes before submitting.</p><div className="ns-review">{rows.map(([label, value]) => <div className="ns-review-row" key={label}><span className="ns-review-label">{label}</span><span className="ns-review-value">{value || "Not provided"}</span></div>)}</div><div className="ns-notice"><FileCheck2 size={17} /><span>When you submit, your answers, handwritten signature, and ID photos will be sent securely to Golden Vine through Netlify Forms.</span></div><div className="ns-card ns-card-pad ns-confirmation-code"><div className="ns-field"><FieldLabel htmlFor="confirmation-code">Final confirmation code</FieldLabel><p className="ns-policy-copy">Enter the four-digit code provided by Golden Vine to confirm that you have reviewed everything above.</p><input className="ns-input ns-code-input" id="confirmation-code" inputMode="numeric" autoComplete="off" maxLength={4} pattern="[0-9]{4}" value={confirmationCode} onChange={(event) => onConfirmationCodeChange(event.target.value.replace(/\D/g, "").slice(0, 4))} aria-invalid={Boolean(confirmationCodeError)} aria-describedby="confirmation-code-help" /><span className="ns-label-hint" id="confirmation-code-help">This code is not saved with your consent form.</span><ErrorText message={confirmationCodeError} /></div></div></section>;
 }
 
-type EmailJsClient = { send: (serviceId: string, templateId: string, params: Record<string, string>, publicKey: string) => Promise<unknown> };
-
-function loadEmailJs(): Promise<EmailJsClient> {
-  const existing = (window as Window & { emailjs?: EmailJsClient }).emailjs;
-  if (existing) return Promise.resolve(existing);
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-    script.async = true;
-    script.onload = () => {
-      const emailjs = (window as Window & { emailjs?: EmailJsClient }).emailjs;
-      emailjs ? resolve(emailjs) : reject(new Error("Email confirmation is unavailable."));
-    };
-    script.onerror = () => reject(new Error("Email confirmation is unavailable."));
-    document.head.appendChild(script);
-  });
-}
-
 function pdfSafe(value: string) {
   return value
     .replace(/[’‘]/g, "'")
@@ -571,27 +554,20 @@ async function createConsentPdf(values: FormValues, signature: string, idFileCou
 
   return {
     data: doc.output("datauristring"),
-    name: `golden-vine-consent-${(values.fullName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "copy")}.pdf`,
+    name: `Golden-Vine-Consent-Form-${(values.fullName.trim().replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|-$/g, "") || "Client")}-${new Date().toISOString().slice(0, 10)}.pdf`,
   };
 }
 
-async function sendClientConfirmation(values: FormValues, signature: string, idFileCount: number) {
-  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-  if (!serviceId || !templateId || !publicKey) return "unconfigured" as const;
-  const emailjs = await loadEmailJs();
-  const consentPdf = await createConsentPdf(values, signature, idFileCount);
-  await emailjs.send(serviceId, templateId, {
-    to_email: values.email,
-    to_name: values.fullName,
-    reply_to: values.email,
-    form_name: "Golden Vine Piercing consent form",
-    submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }),
-    consent_pdf: consentPdf.data,
-    consent_pdf_filename: consentPdf.name,
-  }, publicKey);
-  return "sent" as const;
+type ConsentPdf = Awaited<ReturnType<typeof createConsentPdf>>;
+
+function downloadConsentPdf(pdf: ConsentPdf) {
+  const link = document.createElement("a");
+  link.href = pdf.data;
+  link.download = pdf.name;
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
 }
 
 export function Consent() {
@@ -603,7 +579,8 @@ export function Consent() {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [emailStatus, setEmailStatus] = useState<"sent" | "unconfigured" | "failed" | null>(null);
+  const [consentPdf, setConsentPdf] = useState<ConsentPdf | null>(null);
+  const [pdfError, setPdfError] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
   const [fileError, setFileError] = useState("");
   const [isPractitionerLocked, setIsPractitionerLocked] = useState(false);
@@ -734,9 +711,11 @@ export function Consent() {
       const response = await fetch(formEndpoint, { method: "POST", body: data });
       if (!response.ok) throw new Error("Netlify could not receive your form. Please try again.");
       try {
-         setEmailStatus(await sendClientConfirmation(values, signature, idFiles.length));
+        const pdf = await createConsentPdf(values, signature, idFiles.length);
+        setConsentPdf(pdf);
+        downloadConsentPdf(pdf);
       } catch {
-        setEmailStatus("failed");
+        setPdfError("Your form was submitted successfully, but your personal PDF could not be prepared automatically. Please contact the studio if you need a copy.");
       }
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -752,10 +731,9 @@ export function Consent() {
     <Header easyRead={easyRead} onToggleEasyRead={toggleEasyRead} isAutomatic={easyReadPreference === null && isLandscapeCoarse} />
     {submitted ? <main className="ns-main"><section className="ns-success" aria-live="polite">
       <div className="ns-success-mark"><Check size={31} strokeWidth={2.3} /></div><p className="ns-kicker">Received by Golden Vine</p><h1 className="ns-success-title">You’re all set.</h1>
-      <p className="ns-success-copy">Thank you for taking the time to share this with us. Your consent form has been securely received by the studio team, and we’ll talk through everything again when you arrive.</p>
-      {emailStatus === "sent" ? <p className="ns-confirmation-note">A confirmation copy has also been sent to {values.email}.</p> : null}
-      {emailStatus === "unconfigured" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
-      {emailStatus === "failed" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
+      <p className="ns-success-copy">Thank you for taking the time to share this with us. Your consent form has been successfully submitted to Netlify Forms and securely received by the studio team.</p>
+      {consentPdf ? <div className="ns-download-card"><p><Download size={17} /> Your personal copy has been downloaded to your device.</p><button className="ns-button ns-button-primary ns-download-button" type="button" onClick={() => downloadConsentPdf(consentPdf)}><Download size={15} /> Download Copy Again</button></div> : null}
+      {pdfError ? <p className="ns-confirmation-note" role="alert">{pdfError}</p> : null}
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>
     </section></main> : <main className="ns-main">
       <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.jpg")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
@@ -765,7 +743,7 @@ export function Consent() {
         {step === 2 ? <ConsentStep values={values} errors={errors} updateValue={updateValue} signature={signature} setSignature={setSignature} idFiles={idFiles} fileError={fileError} readFile={readFile} removeFile={removeFile} idInputRef={idInputRef} cameraInputRef={cameraInputRef} /> : null}
         {step === 3 ? <ReviewStep values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} /> : null}
         {submitError ? <div className="ns-submit-error" role="alert"><AlertCircle size={17} />{submitError}</div> : null}
-        <div className="ns-actions"><div className="ns-actions-note"><LockKeyhole size={14} /> Saved only when you submit</div><div className="ns-button-row">{step > 0 ? <button className="ns-button ns-button-quiet" type="button" onClick={() => goToStep((step - 1) as Step)}><ArrowLeft size={15} /> Previous</button> : <span />}{step < 3 ? <button className="ns-button ns-button-primary" type="button" onClick={() => goToStep((step + 1) as Step)}>Continue <ArrowRight size={15} /></button> : <button className="ns-button ns-button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending securely…" : "Submit consent"}{!isSubmitting ? <Check size={15} /> : null}</button>}</div></div>
+        <div className="ns-actions"><div className="ns-actions-note"><LockKeyhole size={14} /> Saved only when you submit</div><div className="ns-button-row">{step > 0 ? <button className="ns-button ns-button-quiet" type="button" onClick={() => goToStep((step - 1) as Step)}><ArrowLeft size={15} /> Previous</button> : <span />}{step < 3 ? <button className="ns-button ns-button-primary" type="button" onClick={() => goToStep((step + 1) as Step)}>Continue <ArrowRight size={15} /></button> : <button className="ns-button ns-button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting & preparing copy…" : "Submit consent"}{!isSubmitting ? <Check size={15} /> : null}</button>}</div></div>
         <p className="ns-privacy">Privacy note: your details, signature, and optional ID images are sent securely to Golden Vine through Netlify Forms. This form is not medical advice; please speak to a qualified healthcare professional about health concerns.</p>
       </form></div>
     </main>}

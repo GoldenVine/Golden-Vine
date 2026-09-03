@@ -508,7 +508,6 @@ async function sendClientConfirmation(values: FormValues) {
   const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
   const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-  const studioEmail = import.meta.env.VITE_EMAILJS_STUDIO_EMAIL;
   if (!serviceId || !templateId || !publicKey) return "unconfigured" as const;
   const emailjs = await loadEmailJs();
   const sharedParams = {
@@ -525,20 +524,6 @@ async function sendClientConfirmation(values: FormValues) {
     to_name: values.fullName,
     recipient_type: "client confirmation",
   }, publicKey);
-  if (!studioEmail) return "sent-client-only" as const;
-  try {
-    await emailjs.send(serviceId, templateId, {
-      ...sharedParams,
-      to_email: studioEmail,
-      to_name: "Golden Vine studio",
-      client_name: values.fullName,
-      client_email: values.email,
-      recipient_type: "studio copy",
-    }, publicKey);
-  } catch (error) {
-    console.error("The client confirmation was sent, but the studio copy failed.", error);
-    return "sent-client-only" as const;
-  }
   return "sent" as const;
 }
 
@@ -551,7 +536,7 @@ export function Consent() {
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [emailStatus, setEmailStatus] = useState<"sent" | "sent-client-only" | "unconfigured" | "failed" | null>(null);
+  const [emailStatus, setEmailStatus] = useState<"sent" | "unconfigured" | "failed" | null>(null);
   const [confirmationCode, setConfirmationCode] = useState("");
   const [fileError, setFileError] = useState("");
   const [isPractitionerLocked, setIsPractitionerLocked] = useState(false);
@@ -703,7 +688,6 @@ export function Consent() {
       <div className="ns-success-mark"><Check size={31} strokeWidth={2.3} /></div><p className="ns-kicker">Received by Golden Vine</p><h1 className="ns-success-title">You’re all set.</h1>
       <p className="ns-success-copy">Thank you for taking the time to share this with us. Your consent form has been securely received by the studio team, and we’ll talk through everything again when you arrive.</p>
       {emailStatus === "sent" ? <p className="ns-confirmation-note">A confirmation copy has also been sent to {values.email}.</p> : null}
-      {emailStatus === "sent-client-only" ? <p className="ns-confirmation-note">A confirmation copy has been sent to {values.email}. The studio copy could not be sent automatically.</p> : null}
       {emailStatus === "unconfigured" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       {emailStatus === "failed" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>

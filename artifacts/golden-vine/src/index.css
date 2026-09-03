@@ -633,6 +633,9 @@
 .ns-button-quiet { background: transparent; color: var(--ink); }
 .ns-button-primary { border-color: var(--ink); background: var(--ink); color: var(--paper-light); }
 .ns-button:disabled { cursor: not-allowed; opacity: .6; }
+.ns-download-wrap { display: grid; gap: 8px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
+.ns-button-download { width: fit-content; border-color: #668877; background: #668877; color: white; }
+.ns-download-note { margin: 0; color: #849095; font-size: 10px; line-height: 1.5; }
 .ns-privacy { margin: 24px 0 0; color: #849095; font-size: 10px; line-height: 1.6; }
 .ns-success { max-width: 720px; margin: 0 auto; padding: 72px 0; text-align: center; }
 .ns-success-mark { display: grid; width: 62px; height: 62px; margin: 0 auto 24px; place-items: center; border-radius: 50%; background: #668877; color: white; }
@@ -641,9 +644,6 @@
 .ns-success-copy { max-width: 570px; margin: 24px auto; font-size: 15px; }
 .ns-success .ns-privacy { max-width: 520px; margin: 25px auto 0; }
 .ns-confirmation-note { justify-content: center; max-width: 560px; margin: 0 auto; text-align: left; }
-.ns-download-card { display: grid; gap: 14px; max-width: 560px; margin: 24px auto 0; padding: 18px; border: 1px solid rgba(102, 136, 119, .28); border-radius: 12px; background: rgba(215, 225, 217, .45); }
-.ns-download-card p { display: flex; align-items: center; justify-content: center; gap: 9px; margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.55; }
-.ns-download-button { justify-self: center; }
 .ns-footer { padding: 20px; border-top: 1px solid rgba(35, 52, 58, .12); color: var(--ink-soft); font-size: 11px; text-align: center; }
 
 @keyframes ns-rise {

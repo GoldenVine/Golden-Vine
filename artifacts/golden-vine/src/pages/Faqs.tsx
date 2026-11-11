@@ -200,7 +200,7 @@ export function Faqs() {
     {
       id: "tattoo-aftercare",
       title: "How Do I Look After My New Tattoo?",
-      answer: "Your tattooist will give you aftercare advice at the end of your appointment, tailored to your tattoo. You can also find our tattoo aftercare guidance on the Tattoo Aftercare page, under Aftercare in the menu.",
+      answer: "Your tattooist will give you aftercare advice at the end of your appointment, tailored to your tattoo. You can also find our step-by-step tattoo aftercare guide on the Tattoo Aftercare page, under Aftercare in the menu.",
     },
   ];
 

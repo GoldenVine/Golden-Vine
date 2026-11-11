@@ -14,7 +14,7 @@ const TATTOOISTS = [
     name: "Manuel",
     photo: "/images/manuel.jpg",
     instagram: "manuel.inked" as string | null,
-    bio: "Manuel hails from Colombia and, as you can tell from his work, he is versatile in styles. He's been tattooing for 9 years, and in his downtime he enjoys playing basketball and painting.",
+    bio: "Born in Colombia, Manuel is an artist with a deep passion for art and an extensive journey in the world of tattooing. With 9 years of experience, he's versatile across styles, as you can tell from his work. He's always motivated to give every client a unique and emotional experience, and is committed to a professional result in every piece. In his downtime he enjoys playing basketball and painting.",
     work: ["/images/manuel-work1.jpg", "/images/manuel-work2.jpg", "/images/manuel-work3.jpg"],
   },
   {

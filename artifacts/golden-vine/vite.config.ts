@@ -87,6 +87,10 @@ export default defineConfig({
     },
     dedupe: ["react", "react-dom"],
   },
+  // Bundle everything into the build-time page renderer (see scripts/prerender.mjs)
+  ssr: {
+    noExternal: true,
+  },
   root: path.resolve(import.meta.dirname),
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),

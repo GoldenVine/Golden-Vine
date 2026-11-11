@@ -6,7 +6,7 @@ export function Jewellery() {
     <div className="w-full animate-in fade-in duration-500 space-y-12">
       <Seo
         title="Jewellery Collection"
-        description="Explore our premium jewellery collection at Golden Vine Piercing in Bath. High-quality implant-grade materials, unique designs, and BVLA pieces."
+        description="Explore our premium jewellery collection at Golden Vine in Bath. High-quality implant-grade materials, unique designs, and BVLA pieces."
         path="/jewellery"
       />
       

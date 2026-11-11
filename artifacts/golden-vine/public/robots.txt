@@ -1,2 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /consent
+
+Sitemap: https://goldenvinepiercing.co.uk/sitemap.xml

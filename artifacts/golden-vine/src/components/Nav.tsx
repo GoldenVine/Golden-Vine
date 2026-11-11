@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { SiInstagram, SiFacebook } from "react-icons/si";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import logoSrc from "@assets/logo_1780124857507.jpg";
 
 const NAV_BG = "#526545";
@@ -14,12 +14,25 @@ export function Nav() {
 
   useEffect(() => {
     setIsOpen(false);
+    setAftercareOpen(false);
   }, [location]);
 
-  const links = [
+  const [aftercareOpen, setAftercareOpen] = useState(false);
+
+  type NavLink = { href: string; label: string; children?: { href: string; label: string }[] };
+
+  const links: NavLink[] = [
     { href: "/", label: "Home" },
     { href: "/piercings", label: "Piercings" },
-    { href: "/aftercare", label: "Aftercare" },
+    { href: "/tattooists", label: "Tattooists" },
+    {
+      href: "/aftercare",
+      label: "Aftercare",
+      children: [
+        { href: "/aftercare", label: "Piercing Aftercare" },
+        { href: "/aftercare/tattoo", label: "Tattoo Aftercare" },
+      ],
+    },
     { href: "/jewellery", label: "Jewellery" },
     { href: "/bvla", label: "BVLA Creations" },
     { href: "/booking", label: "Online Booking & Policies" },
@@ -35,7 +48,7 @@ export function Nav() {
         <Link href="/" className="block w-full no-underline" style={{ background: NAV_BG }}>
           <img
             src={logoSrc}
-            alt="Golden Vine Piercing"
+            alt="Golden Vine"
             className="w-full h-[60px] md:h-auto block object-cover"
           />
         </Link>
@@ -52,6 +65,50 @@ export function Nav() {
             const isActive = link.href === "/"
               ? location === "/"
               : location.startsWith(link.href);
+            if (link.children) {
+              return (
+                <div
+                  key={link.href}
+                  className="relative"
+                  onMouseEnter={() => setAftercareOpen(true)}
+                  onMouseLeave={() => setAftercareOpen(false)}
+                >
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded={aftercareOpen}
+                    onClick={() => setAftercareOpen((v) => !v)}
+                    className="font-serif uppercase text-sm font-semibold tracking-wider transition-colors pb-0.5 bg-transparent border-0 border-b-2 cursor-pointer inline-flex items-center gap-1 px-0"
+                    style={{
+                      color: aftercareOpen ? LINK_HOVER : LINK_COLOR,
+                      borderBottomColor: isActive ? "#f0d080" : "transparent",
+                    }}
+                  >
+                    {link.label}
+                    <ChevronDown className={`w-4 h-4 transition-transform ${aftercareOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  <div
+                    className={`absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50 transition-opacity duration-150 ${aftercareOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+                  >
+                    <div
+                      className="rounded-lg shadow-lg py-2 min-w-[200px] flex flex-col"
+                      style={{ background: NAV_BG, border: "1px solid #c9a84c" }}
+                    >
+                      {link.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="font-serif uppercase text-sm font-semibold tracking-wider no-underline px-5 py-2 whitespace-nowrap transition-colors hover:bg-white/10"
+                          style={{ color: location === child.href ? "#f0d080" : LINK_COLOR }}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
             return (
               <Link
                 key={link.href}
@@ -113,17 +170,38 @@ export function Nav() {
         className={`fixed inset-0 w-full h-full z-40 flex flex-col items-center justify-center transition-opacity duration-300 ${isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
         style={{ background: NAV_BG }}
       >
-        <div className="flex flex-col items-center gap-7 w-full px-4 pb-12 overflow-y-auto">
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="font-serif uppercase text-xl font-semibold tracking-wider no-underline text-center w-full"
-              style={{ color: LINK_COLOR }}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="flex flex-col items-center gap-5 w-full max-h-full px-4 pt-20 pb-12 overflow-y-auto">
+          {links.map((link) =>
+            link.children ? (
+              <div key={link.href} className="flex flex-col items-center gap-3 w-full">
+                <span
+                  className="font-serif uppercase text-xl font-semibold tracking-wider text-center w-full"
+                  style={{ color: LINK_COLOR }}
+                >
+                  {link.label}
+                </span>
+                {link.children.map((child) => (
+                  <Link
+                    key={child.href}
+                    href={child.href}
+                    className="font-serif uppercase text-base font-semibold tracking-wider no-underline text-center w-full"
+                    style={{ color: LINK_HOVER }}
+                  >
+                    {child.label}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="font-serif uppercase text-xl font-semibold tracking-wider no-underline text-center w-full"
+                style={{ color: LINK_COLOR }}
+              >
+                {link.label}
+              </Link>
+            )
+          )}
           <div className="flex gap-6 mt-4" style={{ color: LINK_COLOR }}>
             <a
               href="https://www.instagram.com/goldenvinepiercing"

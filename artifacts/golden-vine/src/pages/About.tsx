@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { FadeIn } from "@/components/FadeIn";
 import { Seo } from "@/components/Seo";
 
@@ -6,7 +7,7 @@ export function About() {
     <div className="w-full animate-in fade-in duration-500 space-y-12">
       <Seo
         title="About Us"
-        description="Meet the team at Golden Vine Piercing, Bath. Experienced, passionate piercers dedicated to safe, beautiful work and a welcoming studio environment."
+        description="Meet the team at Golden Vine, Bath. Experienced, passionate piercers and tattooists dedicated to safe, beautiful work and a welcoming studio environment."
         path="/about"
       />
       
@@ -50,6 +51,16 @@ export function About() {
               My name's Jess. I've been piercing since 2012, awarded the prestigious Al D. scholarship to APP conference in Las Vegas in 2017 where I've been invited to return to volunteer every year since and met Jason who is now my fiancé. I strived to become APP member and UKAPP member and met that target in Jan 2020. I am First Aid & CPR trained and Trauma Informed. As of early 2021, I introduced my own line of handmade 18 karat body jewellery to our collection of quality jewellery we are proud to offer at Golden Fern, our sister studio in Bradford-on-Avon. I love natural history including geology and gemology as well as nature documentaries and designing jewellery. Oh, and dogs!
             </p>
           </div>
+        </section>
+      </FadeIn>
+
+      <FadeIn delay={0.05}>
+        <section className="section-cream text-center space-y-4">
+          <h2 className="text-3xl font-bold font-serif">Our Tattooists</h2>
+          <p className="text-lg font-serif leading-relaxed max-w-3xl mx-auto">
+            Golden Vine now offers tattooing too. Meet Manuel and Elina, and see their work, on our{" "}
+            <Link href="/tattooists" className="font-bold underline text-primary">Tattooists</Link> page.
+          </p>
         </section>
       </FadeIn>
 

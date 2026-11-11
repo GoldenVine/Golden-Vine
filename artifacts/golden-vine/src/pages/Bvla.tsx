@@ -16,7 +16,7 @@ export function Bvla() {
     <div className="w-full animate-in fade-in duration-500 space-y-12">
       <Seo
         title="BVLA Custom Jewellery"
-        description="Discover BVLA custom body jewellery at Golden Vine Piercing, Bath. Commission hand-crafted, one-of-a-kind pieces in precious metals and gemstones."
+        description="Discover BVLA custom body jewellery at Golden Vine, Bath. Commission hand-crafted, one-of-a-kind pieces in precious metals and gemstones."
         path="/bvla"
       />
       

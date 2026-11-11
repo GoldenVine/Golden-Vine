@@ -316,7 +316,7 @@ function SectionHeading({ index, title }: { index: string; title: string }) {
 
 function Header({ easyRead, onToggleEasyRead, isAutomatic }: { easyRead: boolean; onToggleEasyRead: () => void; isAutomatic: boolean }) {
   return <header className="ns-header"><div className="ns-header-inner">
-    <div className="ns-wordmark"><span className="ns-mark" aria-hidden="true" /><span className="ns-wordmark-text">Golden Vine Piercing</span></div>
+    <div className="ns-wordmark"><span className="ns-mark" aria-hidden="true" /><span className="ns-wordmark-text">Golden Vine</span></div>
     <button className={`ns-accessibility-toggle ${easyRead ? "is-active" : ""}`} type="button" aria-pressed={easyRead} onClick={onToggleEasyRead} title={isAutomatic ? "Easy-read mode is on for landscape. Tap to turn it off." : "Toggle easy-read mode"}>
       <Eye size={15} /><span>Easy-read {easyRead ? "on" : "off"}</span>
     </button>
@@ -543,7 +543,7 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(23);
   doc.setTextColor(35, 52, 58);
-  doc.text("Golden Vine Piercing", margin, y);
+  doc.text("Golden Vine", margin, y);
   y += 27;
   addText("Participant copy of consent form", 15, "normal", 4);
   addText(`Submitted ${new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })}`, 9, "normal", 14);
@@ -641,7 +641,7 @@ function loadEmailJs(): Promise<EmailJsClient> {
   });
 }
 
-const AFTERCARE_EMAIL_DETAILS = `Golden Vine Piercing aftercare guidance
+const AFTERCARE_EMAIL_DETAILS = `Golden Vine aftercare guidance
 
 This general advice should be tailored during your appointment to your piercing and healing progress.
 
@@ -677,7 +677,7 @@ Genital piercings
 - Avoid exercises that cause discomfort and tight, restrictive clothing during healing.
 - During sexual activity, keep bodily fluids away from the piercing, avoid snags, and stop if there is discomfort.
 
-For tailored advice or a check-up, please contact Golden Vine Piercing.`;
+For tailored advice or a check-up, please contact Golden Vine.`;
 
 async function sendClientConfirmation(values: FormValues) {
   const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
@@ -686,7 +686,7 @@ async function sendClientConfirmation(values: FormValues) {
   if (!serviceId || !templateId || !publicKey) return "unconfigured" as const;
   const emailjs = await loadEmailJs();
   const sharedParams = {
-    form_name: "Golden Vine Piercing consent form",
+    form_name: "Golden Vine consent form",
     submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }),
     piercing_area: values.piercingArea,
     aftercare_details: AFTERCARE_EMAIL_DETAILS,
@@ -865,7 +865,7 @@ export function Consent() {
   };
 
   return <div className={`ns-shell ${easyRead ? "is-easy-read" : ""}`}>
-    <Seo title="Consent form" description="Complete your Golden Vine Piercing consent form before your appointment." path="/consent" />
+    <Seo title="Consent form" description="Complete your Golden Vine consent form before your appointment." path="/consent" noindex />
     <Header easyRead={easyRead} onToggleEasyRead={toggleEasyRead} isAutomatic={easyReadPreference === null && isLandscapeCoarse} />
     {submitted ? <main className="ns-main"><section className="ns-success" aria-live="polite">
       <div className="ns-success-mark"><Check size={31} strokeWidth={2.3} /></div><p className="ns-kicker">Received by Golden Vine</p><h1 className="ns-success-title">You’re all set.</h1>
@@ -886,6 +886,6 @@ export function Consent() {
         <p className="ns-privacy">Privacy note: your details, signature, and optional ID images are sent securely to Golden Vine through Netlify Forms. This form is not medical advice; please speak to a qualified healthcare professional about health concerns.</p>
       </form></div>
     </main>}
-    <footer className="ns-footer">Golden Vine Piercing · Consent & client details</footer>
+    <footer className="ns-footer">Golden Vine · Consent & client details</footer>
   </div>;
 }

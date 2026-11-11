@@ -5,13 +5,15 @@ interface SeoProps {
   description: string;
   path?: string;
   jsonLd?: object;
+  /** Keep this page out of search results (e.g. the consent form). */
+  noindex?: boolean;
 }
 
-const SITE_NAME = "Golden Vine Piercing";
+const SITE_NAME = "Golden Vine";
 const BASE_URL = "https://goldenvinepiercing.co.uk";
 const OG_IMAGE = `${BASE_URL}/opengraph.jpg`;
 
-export function Seo({ title, description, path = "", jsonLd }: SeoProps) {
+export function Seo({ title, description, path = "", jsonLd, noindex }: SeoProps) {
   const fullTitle = `${title} | ${SITE_NAME}`;
   const url = `${BASE_URL}${path}`;
 
@@ -19,6 +21,7 @@ export function Seo({ title, description, path = "", jsonLd }: SeoProps) {
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
+      {noindex && <meta name="robots" content="noindex" />}
       <link rel="canonical" href={url} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
@@ -29,10 +32,7 @@ export function Seo({ title, description, path = "", jsonLd }: SeoProps) {
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={OG_IMAGE} />
       {jsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       )}
     </Helmet>
   );

@@ -7,7 +7,7 @@ export function Aftercare() {
     <div className="w-full animate-in fade-in duration-500">
       <Seo
         title="Piercing Aftercare Advice"
-        description="Expert piercing aftercare guidance from Golden Vine Piercing in Bath. Healing timelines, cleaning routines, and tips for all piercing types."
+        description="Expert piercing aftercare guidance from Golden Vine in Bath. Healing timelines, cleaning routines, and tips for all piercing types."
         path="/aftercare"
       />
       <section className="section-cream max-w-4xl mx-auto space-y-8 font-serif">
@@ -16,10 +16,16 @@ export function Aftercare() {
             <h1 className="sr-only">Piercing Aftercare Guide</h1>
             <img 
               src="/images/info.jpg" 
-              alt="Piercing aftercare guide — Golden Vine Piercing, Bath" 
+              alt="Piercing aftercare guide — Golden Vine, Bath" 
               className="w-full h-auto object-cover"
             />
           </div>
+        </FadeIn>
+
+        <FadeIn>
+          <p className="text-lg text-center">
+            Had a tattoo with us? See our <Link href="/aftercare/tattoo" className="font-bold underline">Tattoo Aftercare</Link> page.
+          </p>
         </FadeIn>
 
         <FadeIn delay={0.05}>

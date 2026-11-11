@@ -21,7 +21,8 @@ export function AccordionSection({ items }: AccordionSectionProps) {
           <AccordionTrigger className="font-serif text-lg font-semibold text-left text-foreground hover:no-underline py-4">
             {item.title}
           </AccordionTrigger>
-          <AccordionContent className="text-base font-sans pb-6 leading-relaxed">
+          {/* forceMount keeps answers in the page (hidden until opened) so search engines can read them */}
+          <AccordionContent forceMount className="text-base font-sans pb-6 leading-relaxed">
             {item.content}
           </AccordionContent>
         </AccordionItem>

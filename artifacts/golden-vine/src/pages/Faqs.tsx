@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { AccordionSection } from "@/components/AccordionSection";
 import { FadeIn } from "@/components/FadeIn";
 import { Seo } from "@/components/Seo";
@@ -8,7 +9,7 @@ export function Faqs() {
       id: "do-i-have-to-book",
       title: "Do I Have To Book?",
       content: (
-        <p>Although appointments are not always essential, we strongly advise booking your visit. This ensures we can dedicate our full attention to you, meticulously prepare and clean our spaces, and manage our schedule effectively to provide the safest and most efficient service. To arrange your appointment, simply go to our Booking & Policies page and scroll down.</p>
+        <p>Although appointments are not always essential, we strongly advise booking your visit. This ensures we can dedicate our full attention to you, meticulously prepare and clean our spaces, and manage our schedule effectively to provide the safest and most efficient service. To arrange a piercing appointment, simply go to our Booking & Policies page and scroll down. Tattoos are booked in person at the studio, see the Tattoo FAQs below.</p>
       )
     },
     {
@@ -18,7 +19,7 @@ export function Faqs() {
         <div className="space-y-4">
           <p>After reading through our Booking Policies, you'll find the <strong>Book Now</strong> section below where you can schedule your visit. If you require assistance or are unsure what to book, please use the Contact Form (available under 'Contact Us') to send your booking request. Please ensure you include the following information:</p>
           <ul className="list-disc pl-6 space-y-2">
-            <li>Procedure you are looking to book (styling session, piercing, shopping, removal, downsize, consultation etc).</li>
+            <li>Procedure you are looking to book (styling session, piercing, shopping, removal, downsize, consultation, tattoo enquiry etc).</li>
             <li>Your availability that correlates with the days listed there and AM or PM preference.</li>
             <li>Any ideas or inspiration you have.</li>
           </ul>
@@ -168,21 +169,88 @@ export function Faqs() {
     }
   ];
 
+  // Tattoo FAQs. Each answer is plain text so it can also be shared with
+  // Google (see faqSchema below). Edit freely as details are confirmed.
+  const tattooFaqs = [
+    {
+      id: "tattoo-how-to-book",
+      title: "How Do I Book A Tattoo?",
+      answer: "Tattoos can't be booked online. Please pop into the studio at 6 Argyle Street, Bath during opening hours, or send us a message through the Contact Us page. Your tattooist will chat through your idea, placement and price before booking you in.",
+    },
+    {
+      id: "tattoo-cost",
+      title: "How Much Does A Tattoo Cost?",
+      answer: "Every tattoo is priced individually, depending on its size, level of detail, placement and how long it will take. Your tattooist will give you a price once they've discussed your idea with you, before anything is booked.",
+    },
+    {
+      id: "tattoo-age",
+      title: "How Old Do I Need To Be To Get A Tattoo?",
+      answer: "You must be 18 or over to get a tattoo. This is UK law and there are no exceptions, even with a parent or guardian's permission. Please bring government-issued photo ID, such as a passport or driving licence, to your appointment.",
+    },
+    {
+      id: "tattoo-design",
+      title: "Can I Bring My Own Design Or Ideas?",
+      answer: "Yes, please do! Bring reference pictures, sketches or anything that inspires you. Your tattooist will work with you to create a design that suits you, your chosen placement and their style.",
+    },
+    {
+      id: "tattoo-prepare",
+      title: "How Should I Prepare For My Tattoo Appointment?",
+      answer: "Get a good night's sleep, eat a proper meal beforehand and stay hydrated. Avoid alcohol for at least 24 hours before your appointment, and wear comfortable clothing that gives easy access to the area being tattooed. Please let us know about any medical conditions, allergies or medication before your appointment.",
+    },
+    {
+      id: "tattoo-aftercare",
+      title: "How Do I Look After My New Tattoo?",
+      answer: "Your tattooist will give you aftercare advice at the end of your appointment, tailored to your tattoo. You can also find our tattoo aftercare guidance on the Tattoo Aftercare page, under Aftercare in the menu.",
+    },
+    {
+      id: "tattoo-artists",
+      title: "Who Are Your Tattooists?",
+      answer: "Our tattooists are Manuel and Elina. You can find out more about them, and see examples of their work, on our Tattooists page.",
+    },
+  ];
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: tattooFaqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.title,
+      acceptedAnswer: { "@type": "Answer", text: faq.answer },
+    })),
+  };
+
+  const tattooFaqItems = tattooFaqs.map((faq) => ({
+    id: faq.id,
+    title: faq.title,
+    content: <p>{faq.answer}</p>,
+  }));
+
   return (
     <div className="w-full animate-in fade-in duration-500 pb-12">
       <Seo
-        title="Piercing FAQs"
-        description="Answers to common questions about getting pierced at Golden Vine Piercing in Bath — healing, jewellery, booking, aftercare, and more."
+        title="Piercing & Tattoo FAQs"
+        description="Answers to common questions about getting pierced or tattooed at Golden Vine in Bath — booking, pricing, age limits, jewellery, aftercare, and more."
         path="/faqs"
+        jsonLd={faqSchema}
       />
       <FadeIn>
         <section className="section-cream max-w-5xl mx-auto py-12 px-4 sm:px-12 text-center">
           <h1 className="text-4xl font-bold font-serif mb-10 pb-4 border-b-2 border-foreground/20 inline-block">
             FAQs
           </h1>
+          <h2 className="text-3xl font-bold font-serif mb-6">Piercing FAQs</h2>
           <div className="text-left w-full mx-auto">
             <AccordionSection items={faqItems} />
           </div>
+
+          <h2 id="tattoo-faqs" className="text-3xl font-bold font-serif mt-16 mb-6">Tattoo FAQs</h2>
+          <div className="text-left w-full mx-auto">
+            <AccordionSection items={tattooFaqItems} />
+          </div>
+          <p className="mt-8 text-lg font-serif">
+            Want to know more about tattooing at Golden Vine? Visit our{" "}
+            <Link href="/tattooists" className="font-bold underline">Tattooists</Link> page.
+          </p>
         </section>
       </FadeIn>
     </div>

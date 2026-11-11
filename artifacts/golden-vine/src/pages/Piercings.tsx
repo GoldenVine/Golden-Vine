@@ -13,7 +13,7 @@ export function Piercings() {
     <div className="flex flex-col animate-in fade-in duration-500 w-full space-y-12">
       <Seo
         title="Piercing Services"
-        description="Professional body piercing at Golden Vine Piercing, Bath. Fresh and healed ear, nose, and body piercings performed with the highest standards of safety."
+        description="Professional body piercing at Golden Vine, Bath. Fresh and healed ear, nose, and body piercings performed with the highest standards of safety."
         path="/piercings"
       />
       

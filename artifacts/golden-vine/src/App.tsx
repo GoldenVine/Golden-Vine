@@ -21,6 +21,8 @@ function ScrollToTop() {
 import { Home } from "@/pages/Home";
 import { Piercings } from "@/pages/Piercings";
 import { Aftercare } from "@/pages/Aftercare";
+import { Tattooists } from "@/pages/Tattooists";
+import { TattooAftercare } from "@/pages/TattooAftercare";
 import { Jewellery } from "@/pages/Jewellery";
 import { Bvla } from "@/pages/Bvla";
 import { Booking } from "@/pages/Booking";
@@ -51,6 +53,8 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/piercings" component={Piercings} />
+          <Route path="/tattooists" component={Tattooists} />
+          <Route path="/aftercare/tattoo" component={TattooAftercare} />
           <Route path="/aftercare" component={Aftercare} />
           <Route path="/jewellery" component={Jewellery} />
           <Route path="/bvla" component={Bvla} />
@@ -67,12 +71,18 @@ function Router() {
   );
 }
 
-function App() {
+interface AppProps {
+  /** Used only when pre-rendering pages at build time. */
+  ssrPath?: string;
+  helmetContext?: object;
+}
+
+function App({ ssrPath, helmetContext }: AppProps = {}) {
   return (
-    <HelmetProvider>
+    <HelmetProvider context={helmetContext}>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")} ssrPath={ssrPath}>
             <Router />
           </WouterRouter>
           <Toaster />

@@ -175,7 +175,7 @@ export function Faqs() {
     {
       id: "tattoo-how-to-book",
       title: "How Do I Book A Tattoo?",
-      answer: "Tattoos can't be booked online. Please pop into the studio at 6 Argyle Street, Bath during opening hours, or send us a message through the Contact Us page. Your tattooist will chat through your idea, placement and price before booking you in.",
+      answer: "Tattoos can't be booked online. Please pop into the studio, or send us a message through the Contact Us page. Your tattooist will chat through your idea, placement and price before booking you in.",
     },
     {
       id: "tattoo-cost",
@@ -201,11 +201,6 @@ export function Faqs() {
       id: "tattoo-aftercare",
       title: "How Do I Look After My New Tattoo?",
       answer: "Your tattooist will give you aftercare advice at the end of your appointment, tailored to your tattoo. You can also find our tattoo aftercare guidance on the Tattoo Aftercare page, under Aftercare in the menu.",
-    },
-    {
-      id: "tattoo-artists",
-      title: "Who Are Your Tattooists?",
-      answer: "Our tattooists are Manuel and Elina. You can find out more about them, and see examples of their work, on our Tattooists page.",
     },
   ];
 

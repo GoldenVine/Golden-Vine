@@ -32,7 +32,7 @@ export function Booking() {
       content: (
         <div className="space-y-4">
           <p><strong>Tattoos can't be booked online.</strong> The online booking system below is for piercing and jewellery appointments only.</p>
-          <p>To book a tattoo, please <strong>pop into the studio</strong> at 6 Argyle Street during opening hours, or send us a message through the <Link href="/contact" className="font-bold underline">Contact Us</Link> page and we'll get back to you.</p>
+          <p>To book a tattoo, please <strong>pop into the studio</strong>, or send us a message through the <Link href="/contact" className="font-bold underline">Contact Us</Link> page and we'll get back to you.</p>
           <p>Bring along any ideas, reference pictures and where on your body you'd like the tattoo. Your tattooist will talk you through the design, size, placement and price before anything is booked in.</p>
           <p>You must be <strong>18 or over</strong> to get a tattoo (this is UK law, with no exceptions, even with a parent's permission), and you'll need to bring government-issued photo ID to your appointment.</p>
           <p>You can find out more about our tattooists on the <Link href="/tattooists" className="font-bold underline">Tattooists</Link> page.</p>

@@ -13,8 +13,8 @@ const TATTOOISTS = [
     id: "manuel",
     name: "Manuel",
     photo: "/images/manuel.jpg",
-    instagram: null as string | null,
-    bio: "Manuel is joining the Golden Vine team soon. A full introduction, including his style and experience, is coming shortly.",
+    instagram: "manuel.inked" as string | null,
+    bio: "Manuel hails from Colombia and, as you can tell from his work, he is versatile in styles. He's been tattooing for 9 years, and in his downtime he enjoys playing basketball and painting.",
     work: ["/images/manuel-work1.jpg", "/images/manuel-work2.jpg", "/images/manuel-work3.jpg"],
   },
   {
@@ -22,7 +22,7 @@ const TATTOOISTS = [
     name: "Elina",
     photo: "/images/elina.jpg",
     instagram: "evilinatattooing" as string | null,
-    bio: "Elina is joining the Golden Vine team soon. A full introduction, including her style and experience, is coming shortly. In the meantime, you can see more of her work on Instagram.",
+    bio: "Elina has been tattooing for 9 years and is also a graphic designer with a diploma in Graphic Art. She has tattooed all over the world, including Thailand, Germany and Egypt, as well as here in the UK. She loves creating unique custom sketches built around your ideas, so don't hesitate to get in touch.",
     work: ["/images/elina-work1.jpg", "/images/elina-work2.jpg", "/images/elina-work3.jpg"],
   },
 ];

@@ -764,12 +764,14 @@ export function Consent() {
     setEasyReadPreference(next);
     saveEasyReadPreference(next);
   };
-  const downloadCopyAutomatically = async () => {
+  // Emails the PDF to the studio inbox. If that fails, the success screen
+  // offers a manual download as a fallback.
+  const sendStudioCopy = async () => {
     let pdf: { blob: Blob; name: string };
     try {
-      pdf = await downloadConsentCopy(values, signature, idFiles);
+      pdf = await createConsentPdf(values, signature, idFiles);
     } catch (error) {
-      console.error("The consent copy could not be downloaded.", error);
+      console.error("The consent copy could not be created.", error);
       setArchiveStatus("failed");
       return;
     }
@@ -894,7 +896,7 @@ export function Consent() {
        }
        setSubmitted(true);
        window.scrollTo({ top: 0, behavior: "smooth" });
-       void downloadCopyAutomatically();
+       void sendStudioCopy();
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
@@ -913,7 +915,8 @@ export function Consent() {
       {emailStatus === "failed" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>
       {archiveStatus === "sent" ? <p className="ns-privacy">Studio copy saved.</p> : null}
-      {archiveStatus === "failed" ? <p className="ns-privacy">Studio note: the emailed copy didn’t go through. Please keep the downloaded PDF.</p> : null}
+      {archiveStatus === "failed" || archiveStatus === "unconfigured" ? <p className="ns-privacy">Studio note: the emailed copy didn’t go through.{" "}
+        <button type="button" className="underline font-semibold" onClick={() => void downloadConsentCopy(values, signature, idFiles).catch((error) => console.error("The consent copy could not be downloaded.", error))}>Download a copy instead</button></p> : null}
     </section></main> : <main className="ns-main">
       <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.webp")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
       <div className="ns-flow"><Progress step={step} /><form ref={formRef} className="ns-form" name="consent" method="POST" action={formEndpoint} data-netlify="true" encType="multipart/form-data" onSubmit={submit} noValidate><input type="hidden" name="form-name" value="consent" /><input type="hidden" name="bot-field" value="" aria-hidden="true" />

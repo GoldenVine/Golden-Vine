@@ -23,7 +23,7 @@ const piercingHtml = `<div style="font-family: Georgia, 'Times New Roman', serif
   </div>
 
   <!-- Aftercare: unchanged -->
-  <p>Attached is your release form for your body piercing</p>
+  <p>Thank you for completing your consent form.</p>
 
   <p>Here are some aftercare instructions. Please contact us if you have questions.</p>
 
@@ -134,7 +134,7 @@ const piercingHtml = `<div style="font-family: Georgia, 'Times New Roman', serif
 const piercingText = `Loved your visit? We'd be so grateful if you could take a minute to leave us a review. It really helps a small studio like ours.
 Leave us a Google review: https://search.google.com/local/writereview?placeid=ChIJ25j32ueBcUgRGxnGvuBqpSw
 
-Attached is your release form for your body piercing
+Thank you for completing your consent form.
 
 Here are some aftercare instructions. Please contact us if you have questions.
 

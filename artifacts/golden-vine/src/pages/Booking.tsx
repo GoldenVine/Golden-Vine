@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 import { Lightbox } from "@/components/Lightbox";
 import { AccordionSection } from "@/components/AccordionSection";
 import { FadeIn } from "@/components/FadeIn";
@@ -19,12 +20,25 @@ export function Booking() {
   }, []);
 
   const bookingImages = [
-    "/images/booking1.jpg",
-    "/images/booking2.jpg",
-    "/images/booking3.jpg",
+    "/images/booking1.webp",
+    "/images/booking2.webp",
+    "/images/booking3.webp",
   ];
 
   const policyItems = [
+    {
+      id: "booking-a-tattoo",
+      title: "Booking A Tattoo",
+      content: (
+        <div className="space-y-4">
+          <p><strong>Tattoos can't be booked online.</strong> The online booking system below is for piercing and jewellery appointments only.</p>
+          <p>To book a tattoo, please <strong>pop into the studio</strong>, or send us a message through the <Link href="/contact" className="font-bold underline">Contact Us</Link> page and we'll get back to you.</p>
+          <p>Bring along any ideas, reference pictures and where on your body you'd like the tattoo. Your tattooist will talk you through the design, size, placement and price before anything is booked in.</p>
+          <p>You must be <strong>18 or over</strong> to get a tattoo (this is UK law, with no exceptions, even with a parent's permission), and you'll need to bring government-issued photo ID to your appointment.</p>
+          <p>You can find out more about our tattooists on the <Link href="/tattooists" className="font-bold underline">Tattooists</Link> page.</p>
+        </div>
+      )
+    },
     {
       id: "minimum-cost",
       title: "Minimum Cost & Payment",
@@ -127,8 +141,8 @@ export function Booking() {
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12 pb-12">
       <Seo
-        title="Book a Piercing"
-        description="Book a piercing appointment at Golden Vine Piercing in Bath. Read our policies, pricing, and availability before booking online."
+        title="Book a Piercing or Tattoo"
+        description="Book a piercing appointment online at Golden Vine in Bath, or find out how to book a tattoo in the studio. Read our policies and pricing before booking."
         path="/booking"
       />
       
@@ -161,7 +175,12 @@ export function Booking() {
             <AccordionSection items={policyItems} />
           </div>
 
-          <div className="mt-16 flex justify-center">
+          <p className="mt-16 text-lg font-serif">
+            Online booking is for <strong>piercing appointments only</strong>. To book a tattoo, please visit the studio or{" "}
+            <Link href="/contact" className="font-bold underline">contact us</Link>.
+          </p>
+
+          <div className="mt-6 flex justify-center">
             <a 
               id="Setmore_button_iframe" 
               href="https://goldenvine.setmore.com" 
@@ -169,7 +188,7 @@ export function Booking() {
               rel="noreferrer"
               className="pill-btn text-xl px-12 py-5"
             >
-              Book Now
+              Book a Piercing
             </a>
           </div>
         </section>

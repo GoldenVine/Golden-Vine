@@ -6,14 +6,14 @@ export function Jewellery() {
     <div className="w-full animate-in fade-in duration-500 space-y-12">
       <Seo
         title="Jewellery Collection"
-        description="Explore our premium jewellery collection at Golden Vine Piercing in Bath. High-quality implant-grade materials, unique designs, and BVLA pieces."
+        description="Explore our premium jewellery collection at Golden Vine in Bath. High-quality implant-grade materials, unique designs, and BVLA pieces."
         path="/jewellery"
       />
       
       <FadeIn>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/ourcollection.jpg" 
+            src="/images/ourcollection.webp" 
             alt="Our Jewellery Collection" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover aspect-square"
           />
@@ -30,7 +30,7 @@ export function Jewellery() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
           <img 
-            src="/images/premiummaterials.jpg" 
+            src="/images/premiummaterials.webp" 
             alt="Premium Jewellery Materials" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover aspect-square"
           />
@@ -53,7 +53,7 @@ export function Jewellery() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/uniquedesigns.jpg" 
+            src="/images/uniquedesigns.webp" 
             alt="Stylish Jewellery Designs" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover aspect-square"
           />
@@ -72,9 +72,9 @@ export function Jewellery() {
           <h4 className="text-3xl font-bold font-serif inline-block border-b-2 border-primary/20 pb-2">Some Highlights of Quality Jewellery</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { src: "/images/mirrorpolish.jpg", alt: "Mirror Finish Polish", title: "Mirror Finish Polish", desc: "All jewellery is free from flaws (including hallmarks) and warrantied against defects." },
-              { src: "/images/verifiablematerials.jpg", alt: "Verifiable Materials", title: "Verifiable Materials", desc: "Ethically sourced materials that are traceable to origin. Safe for initial piercing and daily wear forever." },
-              { src: "/images/three.jpg", alt: "Custom Made Options", title: "Custom Made Options", desc: "Talented hands are able to add a personal touch. The piece above is an example of this - eleven peach topaz gems added to signify a date to the jewellery." },
+              { src: "/images/mirrorpolish.webp", alt: "Mirror Finish Polish", title: "Mirror Finish Polish", desc: "All jewellery is free from flaws (including hallmarks) and warrantied against defects." },
+              { src: "/images/verifiablematerials.webp", alt: "Verifiable Materials", title: "Verifiable Materials", desc: "Ethically sourced materials that are traceable to origin. Safe for initial piercing and daily wear forever." },
+              { src: "/images/three.webp", alt: "Custom Made Options", title: "Custom Made Options", desc: "Talented hands are able to add a personal touch. The piece above is an example of this - eleven peach topaz gems added to signify a date to the jewellery." },
             ].map((item, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <div className="space-y-4">

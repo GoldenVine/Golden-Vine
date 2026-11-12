@@ -4,19 +4,19 @@ import { Seo } from "@/components/Seo";
 
 export function Bvla() {
   const bvlaGallery = [
-    "/images/BVLA7.jpg",
-    "/images/BVLA5.jpg",
-    "/images/BVLA12.jpg",
-    "/images/BVLA3.jpg",
-    "/images/BVLA2.jpg",
-    "/images/BVLA14.jpg",
+    "/images/BVLA7.webp",
+    "/images/BVLA5.webp",
+    "/images/BVLA12.webp",
+    "/images/BVLA3.webp",
+    "/images/BVLA2.webp",
+    "/images/BVLA14.webp",
   ];
 
   return (
     <div className="w-full animate-in fade-in duration-500 space-y-12">
       <Seo
         title="BVLA Custom Jewellery"
-        description="Discover BVLA custom body jewellery at Golden Vine Piercing, Bath. Commission hand-crafted, one-of-a-kind pieces in precious metals and gemstones."
+        description="Discover BVLA custom body jewellery at Golden Vine, Bath. Commission hand-crafted, one-of-a-kind pieces in precious metals and gemstones."
         path="/bvla"
       />
       
@@ -26,7 +26,7 @@ export function Bvla() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { src: "/images/BVLA32.webp", alt: "Custom Statement", text: "Statement pieces are often as individual as the wearer, celebrate that uniqueness by picking something that was ethically made and created especially for you." },
-              { src: "/images/three.jpg", alt: "Perfect Timing", text: "Sometimes your dream piece is too big for a fresh piercing, custom order allows us to pierce with simpler jewellery, giving your piercing time to settle and mature while your jewellery is meticulously made." },
+              { src: "/images/three.webp", alt: "Perfect Timing", text: "Sometimes your dream piece is too big for a fresh piercing, custom order allows us to pierce with simpler jewellery, giving your piercing time to settle and mature while your jewellery is meticulously made." },
               { src: "/images/BVLA33.webp", alt: "Color Palettes", text: "You're able to explore more colour palettes and combinations than are readily available in studio whilst using pieces in the cabinets for frame of reference on size or colours." },
             ].map((item, i) => (
               <FadeIn key={i} delay={i * 0.1}>
@@ -43,7 +43,7 @@ export function Bvla() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/uniquedesigns.jpg" 
+            src="/images/uniquedesigns.webp" 
             alt="Interested in getting something made" 
             className="w-full md:w-1/2 rounded-xl shadow-md object-cover"
           />

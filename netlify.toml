@@ -18,7 +18,9 @@
   status = 404
   force = true
 
+# Pages that were pre-rendered are served directly; anything else gets the
+# plain app shell (spa.html) and is drawn by the browser as before.
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/spa.html"
   status = 200

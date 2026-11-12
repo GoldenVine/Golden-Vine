@@ -66,7 +66,7 @@ export function Contact() {
     <div className="w-full animate-in fade-in duration-500 pb-12">
       <Seo
         title="Contact Us"
-        description="Get in touch with Golden Vine Piercing in Bath. Send a message, find us at 6 Argyle Street, or reach us on social media."
+        description="Get in touch with Golden Vine in Bath. Send a message, find us at 6 Argyle Street, or reach us on social media."
         path="/contact"
       />
       
@@ -152,7 +152,7 @@ export function Contact() {
               <div>
                 <h4 className="font-serif text-xl font-bold underline mb-4">Our studio is located at:</h4>
                 <address className="not-italic text-lg font-serif leading-relaxed">
-                  Golden Vine Piercing<br />
+                  Golden Vine<br />
                   6 Argyle Street<br />
                   Bath<br />
                   BA2 4BA<br />
@@ -189,7 +189,7 @@ export function Contact() {
               allowFullScreen 
               loading="lazy" 
               referrerPolicy="no-referrer-when-downgrade"
-              title="Google Maps Location for Golden Vine Piercing"
+              title="Google Maps Location for Golden Vine"
             />
           </div>
           <p className="mt-4 text-base text-foreground/80 font-serif">Find us at: 6 Argyle St, Bathwick, Bath, BA2 4BA, UK</p>

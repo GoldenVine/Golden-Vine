@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { FadeIn } from "@/components/FadeIn";
 import { Seo } from "@/components/Seo";
 
@@ -6,7 +7,7 @@ export function About() {
     <div className="w-full animate-in fade-in duration-500 space-y-12">
       <Seo
         title="About Us"
-        description="Meet the team at Golden Vine Piercing, Bath. Experienced, passionate piercers dedicated to safe, beautiful work and a welcoming studio environment."
+        description="Meet the team at Golden Vine, Bath. Experienced, passionate piercers and tattooists dedicated to safe, beautiful work and a welcoming studio environment."
         path="/about"
       />
       
@@ -14,7 +15,7 @@ export function About() {
         <section className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold font-serif mb-8">About Us</h1>
           <img 
-            src="/images/us.jpg" 
+            src="/images/us.webp" 
             alt="About Us Banner" 
             className="w-full max-w-5xl mx-auto rounded-xl shadow-lg object-cover"
           />
@@ -24,7 +25,7 @@ export function About() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/jason.jpg" 
+            src="/images/jason.webp" 
             alt="Jason Bio" 
             className="w-full md:w-1/3 rounded-xl shadow-md object-cover aspect-[3/4]"
           />
@@ -40,7 +41,7 @@ export function About() {
       <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row-reverse items-center gap-10">
           <img 
-            src="/images/jess.jpg" 
+            src="/images/jess.webp" 
             alt="Jess Bio" 
             className="w-full md:w-1/3 rounded-xl shadow-md object-cover aspect-[3/4]"
           />
@@ -54,9 +55,19 @@ export function About() {
       </FadeIn>
 
       <FadeIn delay={0.05}>
+        <section className="section-cream text-center space-y-4">
+          <h2 className="text-3xl font-bold font-serif">Our Tattooists</h2>
+          <p className="text-lg font-serif leading-relaxed max-w-3xl mx-auto">
+            Golden Vine now offers tattooing too. Meet Manuel and Elina, and see their work, on our{" "}
+            <Link href="/tattooists" className="font-bold underline text-primary">Tattooists</Link> page.
+          </p>
+        </section>
+      </FadeIn>
+
+      <FadeIn delay={0.05}>
         <section className="section-cream flex flex-col md:flex-row items-center gap-10">
           <img 
-            src="/images/ed.jpg" 
+            src="/images/ed.webp" 
             alt="International Colleague Ed" 
             className="w-full md:w-1/3 rounded-xl shadow-md object-cover aspect-square"
           />

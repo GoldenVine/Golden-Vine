@@ -60,7 +60,7 @@ export function Footer() {
 
         <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-8">
           <p className="font-serif m-0 text-sm text-white/70">
-            © {new Date().getFullYear()} Golden Vine Piercing. All rights reserved.
+            © {new Date().getFullYear()} Golden Vine. All rights reserved.
           </p>
           <Link href="/contact" className="text-sm text-white/50 hover:text-white/90 transition-colors no-underline">
             Bath, UK · Contact us

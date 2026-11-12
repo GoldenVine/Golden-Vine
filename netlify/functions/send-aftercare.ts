@@ -47,9 +47,10 @@ export const handler = async (event: HandlerEvent): Promise<HandlerResponse> => 
   if (event.httpMethod !== "POST") return json(405, { error: "Method not allowed" });
   if (!hostAllowed(event.headers)) return json(403, { error: "Not allowed" });
 
-  const from = process.env.STUDIO_EMAIL;
-  const pass = process.env.STUDIO_EMAIL_PASSWORD;
-  const host = process.env.STUDIO_SMTP_HOST || "smtp.ionos.co.uk";
+  // Trim stray spaces or line breaks picked up when pasting into Netlify.
+  const from = process.env.STUDIO_EMAIL?.trim();
+  const pass = process.env.STUDIO_EMAIL_PASSWORD?.replace(/^\s+|\s+$/g, "");
+  const host = process.env.STUDIO_SMTP_HOST?.trim() || "smtp.ionos.co.uk";
   if (!from || !pass) return json(503, { error: "Aftercare email is not set up yet" });
 
   let payload: { formType?: string; email?: string; name?: string; botField?: string };

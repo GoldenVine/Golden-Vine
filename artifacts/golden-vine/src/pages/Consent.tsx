@@ -651,82 +651,16 @@ async function emailStudioCopy(pdf: { blob: Blob; name: string }, values: FormVa
   return "sent" as const;
 }
 
-type EmailJsClient = { send: (serviceId: string, templateId: string, params: Record<string, string>, publicKey: string) => Promise<unknown> };
-
-function loadEmailJs(): Promise<EmailJsClient> {
-  const existing = (window as Window & { emailjs?: EmailJsClient }).emailjs;
-  if (existing) return Promise.resolve(existing);
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-    script.async = true;
-    script.onload = () => {
-      const emailjs = (window as Window & { emailjs?: EmailJsClient }).emailjs;
-      emailjs ? resolve(emailjs) : reject(new Error("Email confirmation is unavailable."));
-    };
-    script.onerror = () => reject(new Error("Email confirmation is unavailable."));
-    document.head.appendChild(script);
+// Sends the client their aftercare email from the studio address
+// (see netlify/functions/send-aftercare.ts).
+async function sendClientConfirmation(values: FormValues, formType: "piercing" | "tattoo" = "piercing") {
+  const response = await fetch("/.netlify/functions/send-aftercare", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ formType, email: values.email.trim(), name: values.fullName.trim() }),
   });
-}
-
-const AFTERCARE_EMAIL_DETAILS = `Golden Vine aftercare guidance
-
-This general advice should be tailored during your appointment to your piercing and healing progress.
-
-Week 1 — inflammation
-- Swelling, redness, light bleeding, and clear or yellowish fluid can be expected.
-- Clean gently with sterile saline twice daily OR soak in warm running water while showering once daily — not both.
-- Do not use homemade salt water; use a sterile saline wound wash.
-- Do not use cotton buds or cotton pads because loose fibres can irritate the piercing. Sterile non-woven gauze soaked with saline is suitable.
-- Keep physical contact to a minimum. Soak any build-up and let it soften and dislodge rather than picking or twisting.
-
-Weeks 2–4 — healing
-- Clear or yellowish crusties can form. Do not pick them.
-- Soak with sterile saline or warm running water to soften build-up, then let running water dislodge it.
-- If softened build-up does not come away with saturated gauze, leave it and try again the next day.
-- Please schedule the free one-month check-up.
-
-Months 2–4
-- Redness may reduce before the piercing is healed. Continue your daily cleaning routine.
-- Downsizing may be needed around months 3–4 as swelling settles. There is no service fee for downsizing; you pay only for any new jewellery.
-
-During healing
-- Avoid sleeping on the piercing, snags, fiddling, unnecessary jewellery changes, and excessive cleaning.
-- Stay hydrated, eat well, and contact Golden Vine rather than waiting if you have questions or concerns.
-
-Oral piercings
-- Reduce smoking, vaping, and alcohol, including alcohol-based mouthwash, for as long as possible.
-- Cold drinks and ice can help with early swelling. Brush twice daily with a new toothbrush, avoid whitening toothpaste, and rinse with cool water.
-- Choose soft, non-spicy food at a comfortable temperature while swollen. Rinse with cold bottled water after meals, snacks, and drinks.
-- Do not play with the jewellery. Downsizing at 2–4 weeks helps minimise oral damage.
-
-Genital piercings
-- Clean with warm running water only; saline can affect pH. Soak twice daily for the first two weeks, then once daily unless extra cleaning is needed.
-- Avoid exercises that cause discomfort and tight, restrictive clothing during healing.
-- During sexual activity, keep bodily fluids away from the piercing, avoid snags, and stop if there is discomfort.
-
-For tailored advice or a check-up, please contact Golden Vine.`;
-
-async function sendClientConfirmation(values: FormValues) {
-  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-  if (!serviceId || !templateId || !publicKey) return "unconfigured" as const;
-  const emailjs = await loadEmailJs();
-  const sharedParams = {
-    form_name: "Golden Vine consent form",
-    submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }),
-    piercing_area: values.piercingArea,
-    aftercare_details: AFTERCARE_EMAIL_DETAILS,
-    aftercare_url: "https://www.goldenvinepiercing.co.uk/aftercare",
-    reply_to: values.email,
-  };
-  await emailjs.send(serviceId, templateId, {
-    ...sharedParams,
-    to_email: values.email,
-    to_name: values.fullName,
-    recipient_type: "client confirmation",
-  }, publicKey);
+  if (response.status === 503) return "unconfigured" as const;
+  if (!response.ok) throw new Error(`Aftercare email failed (${response.status})`);
   return "sent" as const;
 }
 

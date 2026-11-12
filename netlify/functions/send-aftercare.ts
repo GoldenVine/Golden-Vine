@@ -82,7 +82,9 @@ export const handler = async (event: HandlerEvent): Promise<HandlerResponse> => 
     });
   } catch (error) {
     console.error("Aftercare email failed", error);
-    return json(502, { error: "The aftercare email could not be sent" });
+    // Report only the error type (e.g. EAUTH = wrong password), never details.
+    const code = (error as { code?: string }).code || "UNKNOWN";
+    return json(502, { error: "The aftercare email could not be sent", code });
   }
 
   return json(200, { ok: true });

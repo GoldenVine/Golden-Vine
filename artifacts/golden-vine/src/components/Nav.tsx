@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { SiInstagram, SiFacebook } from "react-icons/si";
 import { Menu, X, ChevronDown } from "lucide-react";
-import logoSrc from "@assets/logo_1780124857507.jpg";
+import logoSrc from "@assets/logo_banner.webp";
 
 const NAV_BG = "#526545";
 const LINK_COLOR = "#fffae7";

@@ -12,18 +12,18 @@ const TATTOOISTS = [
   {
     id: "manuel",
     name: "Manuel",
-    photo: "/images/manuel.jpg",
+    photo: "/images/manuel.webp",
     instagram: "manuel.inked" as string | null,
     bio: "Born in Colombia, Manuel is an artist with a deep passion for art and an extensive journey in the world of tattooing. With 9 years of experience, he's versatile across styles, as you can tell from his work. He's always motivated to give every client a unique and emotional experience, and is committed to a professional result in every piece. In his downtime he enjoys playing basketball and painting.",
-    work: ["/images/manuel-work1.jpg", "/images/manuel-work2.jpg", "/images/manuel-work3.jpg"],
+    work: ["/images/manuel-work1.webp", "/images/manuel-work2.webp", "/images/manuel-work3.webp"],
   },
   {
     id: "elina",
     name: "Elina",
-    photo: "/images/elina.jpg",
+    photo: "/images/elina.webp",
     instagram: "evilinatattooing" as string | null,
     bio: "Elina has been tattooing for 9 years and is also a graphic designer with a diploma in Graphic Art. She has tattooed all over the world, including Thailand, Germany and Egypt, as well as here in the UK. She loves creating unique custom sketches built around your ideas, so don't hesitate to get in touch.",
-    work: ["/images/elina-work1.jpg", "/images/elina-work2.jpg", "/images/elina-work3.jpg"],
+    work: ["/images/elina-work1.webp", "/images/elina-work2.webp", "/images/elina-work3.webp"],
   },
 ];
 

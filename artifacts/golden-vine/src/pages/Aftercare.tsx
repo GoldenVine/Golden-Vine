@@ -15,7 +15,7 @@ export function Aftercare() {
           <div className="w-full mb-8 rounded-xl overflow-hidden shadow-md">
             <h1 className="sr-only">Piercing Aftercare Guide</h1>
             <img 
-              src="/images/info.jpg" 
+              src="/images/info.webp" 
               alt="Piercing aftercare guide — Golden Vine, Bath" 
               className="w-full h-auto object-cover"
             />

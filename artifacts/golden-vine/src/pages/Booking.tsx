@@ -20,9 +20,9 @@ export function Booking() {
   }, []);
 
   const bookingImages = [
-    "/images/booking1.jpg",
-    "/images/booking2.jpg",
-    "/images/booking3.jpg",
+    "/images/booking1.webp",
+    "/images/booking2.webp",
+    "/images/booking3.webp",
   ];
 
   const policyItems = [

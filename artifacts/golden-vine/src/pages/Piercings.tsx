@@ -6,7 +6,7 @@ import { Seo } from "@/components/Seo";
 
 export function Piercings() {
   const piercingImages = Array.from({ length: 9 }).map(
-    (_, i) => `/images/piercings${i + 1}.jpg`
+    (_, i) => `/images/piercings${i + 1}.webp`
   );
 
   return (

@@ -38,35 +38,35 @@ export function Home() {
   const [lightboxImg, setLightboxImg] = useState<string | null>(null);
 
   // Carousel slides, in order. Tattooist photos are mixed in among the
-  // piercing photos — replace home-tattoo1.jpg to home-tattoo4.jpg with your own.
+  // piercing photos — replace home-tattoo1.webp to home-tattoo4.webp with your own.
   const homeCarouselImages = [
-    "/images/home1.jpg",
-    "/images/home-tattoo1.jpg",
-    "/images/home2.jpg",
-    "/images/home3.jpg",
-    "/images/home4.jpg",
-    "/images/home-tattoo2.jpg",
-    "/images/home5.jpg",
-    "/images/home6.jpg",
-    "/images/home-tattoo3.jpg",
-    "/images/home7.jpg",
-    "/images/home8.jpg",
-    "/images/home-tattoo4.jpg",
-    "/images/home9.jpg",
+    "/images/home1.webp",
+    "/images/home-tattoo1.webp",
+    "/images/home2.webp",
+    "/images/home3.webp",
+    "/images/home4.webp",
+    "/images/home-tattoo2.webp",
+    "/images/home5.webp",
+    "/images/home6.webp",
+    "/images/home-tattoo3.webp",
+    "/images/home7.webp",
+    "/images/home8.webp",
+    "/images/home-tattoo4.webp",
+    "/images/home9.webp",
   ];
 
   // "New Additions" tiles: first row is jewellery, the next two rows are
-  // tattoo photos — replace tattoo-new1.jpg to tattoo-new6.jpg with your own.
+  // tattoo photos — replace tattoo-new1.webp to tattoo-new6.webp with your own.
   const newAdditions = [
-    "/images/home10.jpg",
-    "/images/home11.jpg",
-    "/images/home12.jpg",
-    "/images/tattoo-new1.jpg",
-    "/images/tattoo-new2.jpg",
-    "/images/tattoo-new3.jpg",
-    "/images/tattoo-new4.jpg",
-    "/images/tattoo-new5.jpg",
-    "/images/tattoo-new6.jpg",
+    "/images/home10.webp",
+    "/images/home11.webp",
+    "/images/home12.webp",
+    "/images/tattoo-new1.webp",
+    "/images/tattoo-new2.webp",
+    "/images/tattoo-new3.webp",
+    "/images/tattoo-new4.webp",
+    "/images/tattoo-new5.webp",
+    "/images/tattoo-new6.webp",
   ];
 
   return (
@@ -100,7 +100,7 @@ export function Home() {
             
             <div className="flex-1 w-full max-w-md">
               <img 
-                src="/images/shopinterior.jpg" 
+                src="/images/shopinterior.webp" 
                 alt="Golden Vine Studio Interior" 
                 className="w-full h-auto rounded-xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
               />

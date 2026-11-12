@@ -10,7 +10,7 @@ interface SeoProps {
 }
 
 const SITE_NAME = "Golden Vine";
-const BASE_URL = "https://goldenvinepiercing.co.uk";
+const BASE_URL = "https://www.goldenvinepiercing.co.uk";
 const OG_IMAGE = `${BASE_URL}/opengraph.jpg`;
 
 export function Seo({ title, description, path = "", jsonLd, noindex }: SeoProps) {

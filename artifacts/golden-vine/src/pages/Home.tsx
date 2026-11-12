@@ -11,8 +11,8 @@ const localBusinessSchema = {
   name: "Golden Vine",
   alternateName: "Golden Vine Piercing",
   description: "Bath's destination for safe and exquisite body piercing and tattooing. Professional piercing and tattoo studio offering fresh and healed piercings, custom tattoos, premium jewellery, and expert aftercare.",
-  url: "https://goldenvinepiercing.co.uk",
-  image: "https://goldenvinepiercing.co.uk/opengraph.jpg",
+  url: "https://www.goldenvinepiercing.co.uk",
+  image: "https://www.goldenvinepiercing.co.uk/opengraph.jpg",
   address: {
     "@type": "PostalAddress",
     streetAddress: "6 Argyle Street",

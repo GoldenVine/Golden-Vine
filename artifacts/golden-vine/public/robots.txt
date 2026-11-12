@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /consent
 
-Sitemap: https://goldenvinepiercing.co.uk/sitemap.xml
+Sitemap: https://www.goldenvinepiercing.co.uk/sitemap.xml

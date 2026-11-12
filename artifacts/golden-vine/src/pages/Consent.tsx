@@ -690,7 +690,7 @@ async function sendClientConfirmation(values: FormValues) {
     submitted_at: new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }),
     piercing_area: values.piercingArea,
     aftercare_details: AFTERCARE_EMAIL_DETAILS,
-    aftercare_url: "https://goldenvinepiercing.co.uk/aftercare",
+    aftercare_url: "https://www.goldenvinepiercing.co.uk/aftercare",
     reply_to: values.email,
   };
   await emailjs.send(serviceId, templateId, {

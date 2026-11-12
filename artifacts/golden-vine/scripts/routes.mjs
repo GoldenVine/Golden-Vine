@@ -1,6 +1,6 @@
 // Every public page on the site. Used to build the sitemap and to pre-render
 // pages. Add new pages here when you add them to src/App.tsx.
-export const SITE_URL = "https://goldenvinepiercing.co.uk";
+export const SITE_URL = "https://www.goldenvinepiercing.co.uk";
 
 export const ROUTES = [
   { path: "/", priority: "1.0" },

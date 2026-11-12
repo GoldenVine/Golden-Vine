@@ -467,7 +467,7 @@ function fileToPdfImage(file: File) {
       const image = new Image();
       image.onerror = () => reject(new Error("The ID photo could not be prepared for download."));
       image.onload = () => {
-        const maxDimension = 1800;
+        const maxDimension = 1400;
         const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
         const canvas = document.createElement("canvas");
         canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
@@ -480,7 +480,7 @@ function fileToPdfImage(file: File) {
         context.fillStyle = "#ffffff";
         context.fillRect(0, 0, canvas.width, canvas.height);
         context.drawImage(image, 0, 0, canvas.width, canvas.height);
-        resolve(canvas.toDataURL("image/jpeg", .88));
+        resolve(canvas.toDataURL("image/jpeg", .82));
       };
       image.src = String(reader.result);
     };
@@ -589,7 +589,7 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
   }
   addField("Government-issued photo ID", idFiles.length ? `${idFiles.length} image${idFiles.length === 1 ? "" : "s"} submitted with the secure studio record` : "Not provided (optional)");
   if (idFiles.length) {
-    addText("ID images included in this downloaded copy because they were provided with the consent form. They are not emailed through EmailJS.", 9, "normal", 8);
+    addText("ID images are included in this studio copy because they were provided with the consent form. They are never sent to the client.", 9, "normal", 8);
     for (const [index, item] of idFiles.entries()) {
       const imageData = await fileToPdfImage(item.file);
       const imageProperties = doc.getImageProperties(imageData);
@@ -611,7 +611,8 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
 }
 
 async function downloadConsentCopy(values: FormValues, signature: string, idFiles: IdFile[]) {
-  const { blob, name } = await createConsentPdf(values, signature, idFiles);
+  const pdf = await createConsentPdf(values, signature, idFiles);
+  const { blob, name } = pdf;
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -621,6 +622,33 @@ async function downloadConsentCopy(values: FormValues, signature: string, idFile
   link.click();
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  return pdf;
+}
+
+// Emails the finished PDF to the studio's storage inbox (see
+// netlify/functions/consent-archive.ts). formType lets a future tattoo
+// consent form reuse the same route.
+async function emailStudioCopy(pdf: { blob: Blob; name: string }, values: FormValues, formType: "piercing" | "tattoo" = "piercing") {
+  const pdfBase64 = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("The studio copy could not be prepared."));
+    reader.onload = () => resolve(String(reader.result).replace(/^data:[^,]+,/, ""));
+    reader.readAsDataURL(pdf.blob);
+  });
+  const response = await fetch("/.netlify/functions/consent-archive", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      formType,
+      clientName: values.fullName.trim(),
+      submittedAt: new Date().toLocaleString("en-GB", { timeZone: "Europe/London" }),
+      fileName: pdf.name,
+      pdfBase64,
+    }),
+  });
+  if (response.status === 503) return "unconfigured" as const;
+  if (!response.ok) throw new Error(`Studio copy email failed (${response.status})`);
+  return "sent" as const;
 }
 
 type EmailJsClient = { send: (serviceId: string, templateId: string, params: Record<string, string>, publicKey: string) => Promise<unknown> };
@@ -712,6 +740,7 @@ export function Consent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [emailStatus, setEmailStatus] = useState<"sent" | "unconfigured" | "failed" | null>(null);
+  const [archiveStatus, setArchiveStatus] = useState<"sent" | "unconfigured" | "failed" | null>(null);
   const [confirmationCode, setConfirmationCode] = useState("");
   const [fileError, setFileError] = useState("");
   const [isPractitionerLocked, setIsPractitionerLocked] = useState(false);
@@ -735,11 +764,22 @@ export function Consent() {
     setEasyReadPreference(next);
     saveEasyReadPreference(next);
   };
-  const downloadCopyAutomatically = async () => {
+  // Emails the PDF to the studio inbox. If that fails, the success screen
+  // offers a manual download as a fallback.
+  const sendStudioCopy = async () => {
+    let pdf: { blob: Blob; name: string };
     try {
-      await downloadConsentCopy(values, signature, idFiles);
+      pdf = await createConsentPdf(values, signature, idFiles);
     } catch (error) {
-      console.error("The consent copy could not be downloaded.", error);
+      console.error("The consent copy could not be created.", error);
+      setArchiveStatus("failed");
+      return;
+    }
+    try {
+      setArchiveStatus(await emailStudioCopy(pdf, values));
+    } catch (error) {
+      console.error("The studio copy could not be emailed.", error);
+      setArchiveStatus("failed");
     }
   };
 
@@ -856,7 +896,7 @@ export function Consent() {
        }
        setSubmitted(true);
        window.scrollTo({ top: 0, behavior: "smooth" });
-       void downloadCopyAutomatically();
+       void sendStudioCopy();
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
@@ -874,6 +914,9 @@ export function Consent() {
       {emailStatus === "unconfigured" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       {emailStatus === "failed" ? <p className="ns-confirmation-note">Your form is safely with the studio. We’ll confirm any appointment details with you directly.</p> : null}
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>
+      {archiveStatus === "sent" ? <p className="ns-privacy">Studio copy saved.</p> : null}
+      {archiveStatus === "failed" || archiveStatus === "unconfigured" ? <p className="ns-privacy">Studio note: the emailed copy didn’t go through.{" "}
+        <button type="button" className="underline font-semibold" onClick={() => void downloadConsentCopy(values, signature, idFiles).catch((error) => console.error("The consent copy could not be downloaded.", error))}>Download a copy instead</button></p> : null}
     </section></main> : <main className="ns-main">
       <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.webp")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
       <div className="ns-flow"><Progress step={step} /><form ref={formRef} className="ns-form" name="consent" method="POST" action={formEndpoint} data-netlify="true" encType="multipart/form-data" onSubmit={submit} noValidate><input type="hidden" name="form-name" value="consent" /><input type="hidden" name="bot-field" value="" aria-hidden="true" />

@@ -22,7 +22,7 @@ const STEPS = [
   },
   {
     title: "Watch What You Eat",
-    text: "Avoid irritating foods, such as spicy food, for 15 days.",
+    text: "Avoid irritating foods for 15 days.",
   },
   {
     title: "No Alcohol",

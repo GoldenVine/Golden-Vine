@@ -84,8 +84,15 @@ export const handler = async (event: HandlerEvent): Promise<HandlerResponse> => 
   } catch (error) {
     console.error("Aftercare email failed", error);
     // Report only the error type (e.g. EAUTH = wrong password), never details.
-    const code = (error as { code?: string }).code || "UNKNOWN";
-    return json(502, { error: "The aftercare email could not be sent", code });
+    const err = error as { code?: string; response?: string };
+    // The mail server's reply (e.g. "535 Authentication credentials invalid")
+    // never contains the password, so it is safe to return for diagnosis.
+    return json(502, {
+      error: "The aftercare email could not be sent",
+      code: err.code || "UNKNOWN",
+      server: (err.response || "").slice(0, 200),
+      sender: from,
+    });
   }
 
   return json(200, { ok: true });

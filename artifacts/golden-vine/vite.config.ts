@@ -50,8 +50,8 @@ const netlifyConsentFormPlugin = {
       <input type="hidden" name="form-name" value="consent" />
       <input name="bot-field" />
       ${inputs}
-      <input type="file" name="signature" />
-      <input type="file" name="id-photo" multiple />
+      <input type="text" name="signature-captured" />
+      <input type="text" name="id-photos-provided" />
     </form>
   </body>
 </html>`;

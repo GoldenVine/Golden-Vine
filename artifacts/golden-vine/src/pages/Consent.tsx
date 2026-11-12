@@ -813,14 +813,16 @@ export function Consent() {
     try {
       const data = new FormData(formRef.current || undefined);
       appendValues(data);
-      if (signature) {
-        const signatureBlob = await (await fetch(signature)).blob();
-        data.set("signature", new File([signatureBlob], "handwritten-signature.png", { type: "image/png" }));
-      }
+      // The signature and ID photos travel only in the PDF emailed to the
+      // studio inbox. They are not uploaded to Netlify Forms, whose free file
+      // storage is small and would suspend the whole site if exceeded.
+      data.delete("signature");
       data.delete("id-photo");
       data.delete("id-photo-camera");
-      idFiles.forEach((item) => data.append("id-photo", item.file, item.name));
-      const response = await fetch(formEndpoint, { method: "POST", body: data });
+      data.set("id-photos-provided", idFiles.length ? `${idFiles.length} (in emailed PDF)` : "None");
+      const body = new URLSearchParams();
+      data.forEach((value, key) => { if (typeof value === "string") body.append(key, value); });
+      const response = await fetch(formEndpoint, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body });
       if (!response.ok) throw new Error("Netlify could not receive your form. Please try again.");
        try {
          setEmailStatus(await sendClientConfirmation(values));
@@ -853,7 +855,7 @@ export function Consent() {
         <button type="button" className="underline font-semibold" onClick={() => void downloadConsentCopy(values, signature, idFiles).catch((error) => console.error("The consent copy could not be downloaded.", error))}>Download a copy instead</button></p> : null}
     </section></main> : <main className="ns-main">
       <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.webp")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
-      <div className="ns-flow"><Progress step={step} /><form ref={formRef} className="ns-form" name="consent" method="POST" action={formEndpoint} data-netlify="true" encType="multipart/form-data" onSubmit={submit} noValidate><input type="hidden" name="form-name" value="consent" /><input type="hidden" name="bot-field" value="" aria-hidden="true" />
+      <div className="ns-flow"><Progress step={step} /><form ref={formRef} className="ns-form" name="consent" method="POST" action={formEndpoint} data-netlify="true" onSubmit={submit} noValidate><input type="hidden" name="form-name" value="consent" /><input type="hidden" name="bot-field" value="" aria-hidden="true" />
         {step === 0 ? <DetailsStep values={values} errors={errors} toggleReferral={toggleReferral} updateValue={updateValue} isPractitionerLocked={isPractitionerLocked} setIsPractitionerLocked={setIsPractitionerLocked} /> : null}
         {step === 1 ? <HealthStep values={values} errors={errors} updateValue={updateValue} /> : null}
         {step === 2 ? <ConsentStep values={values} errors={errors} updateValue={updateValue} signature={signature} setSignature={setSignature} idFiles={idFiles} fileError={fileError} readFile={readFile} removeFile={removeFile} idInputRef={idInputRef} cameraInputRef={cameraInputRef} /> : null}

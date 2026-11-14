@@ -715,3 +715,7 @@
 .ns-price-input { position: relative; }
 .ns-price-input > span { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--ink-soft); pointer-events: none; }
 .ns-price-input .ns-input { padding-left: 32px; }
+
+/* Privacy notice lists */
+.privacy-notice ul { list-style: disc; padding-left: 1.5rem; display: grid; gap: .4rem; }
+.privacy-notice a { text-decoration: underline; }

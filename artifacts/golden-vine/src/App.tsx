@@ -30,6 +30,7 @@ import { Faqs } from "@/pages/Faqs";
 import { About } from "@/pages/About";
 import { Contact } from "@/pages/Contact";
 import { Consent } from "@/pages/Consent";
+import { Privacy } from "@/pages/Privacy";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ function Router() {
           <Route path="/aftercare" component={Aftercare} />
           <Route path="/jewellery" component={Jewellery} />
           <Route path="/bvla" component={Bvla} />
+          <Route path="/privacy" component={Privacy} />
           <Route path="/booking" component={Booking} />
           <Route path="/faqs" component={Faqs} />
           <Route path="/about" component={About} />

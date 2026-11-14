@@ -65,6 +65,9 @@ export function Footer() {
           <Link href="/contact" className="text-sm text-white/50 hover:text-white/90 transition-colors no-underline">
             Bath, UK · Contact us
           </Link>
+          <Link href="/privacy" className="text-sm text-white/50 hover:text-white/90 transition-colors no-underline">
+            Privacy notice
+          </Link>
         </div>
       </div>
     </footer>

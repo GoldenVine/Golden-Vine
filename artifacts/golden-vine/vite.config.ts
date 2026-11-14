@@ -32,18 +32,15 @@ const netlifyConsentFormPlugin = {
   closeBundle() {
     const outputDirectory = path.resolve(import.meta.dirname, "dist/public");
     const fields = [
+      // Health answers are deliberately not stored in Netlify Forms; they
+      // only travel inside the PDF emailed to the studio.
       "referrals", "practitioner", "guestPractitionerName", "fullName",
       "dateOfBirth", "address", "postcode", "phone", "email", "piercingArea",
       "legalAgeDeclaration", "guardianName", "guardianRelationship",
-      "guardianPhone", "guardianEmail", "bloodborne", "eating",
-      "intoxication", "pregnancy", "medicalConditions",
-      "medicalConditionsAcknowledged", "allergies", "latex", "chlorhexidine",
-      "iodine", "aluminium", "risks", "release", "questions", "aftercare",
-      "changes", "document", "photography", "downsizing",
-      // Tattoo form fields
-      "formType", "tattooDesign", "tattooPrice", "bloodThinners", "skinCondition",
-      "skinMedication", "inkAllergy", "adhesiveAllergy", "ointmentAllergy",
-      "designApproval", "healingResults",
+      "guardianPhone", "guardianEmail", "medicalConditionsAcknowledged",
+      "risks", "release", "questions", "aftercare", "changes", "document",
+      "photography", "downsizing", "formType", "tattooDesign", "tattooPrice",
+      "designApproval", "healingResults", "health-answers",
     ];
     const inputs = fields.map((name) => `<input name="${name}" />`).join("\n");
     const html = `<!doctype html>

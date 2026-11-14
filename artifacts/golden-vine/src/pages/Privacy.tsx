@@ -60,6 +60,10 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
           <li>Your aftercare email is sent from our studio email account (IONOS).</li>
         </ul>
         <p>
+          If you send us a message through the contact form on our website, it is delivered to our studio
+          inbox by a form service (Web3Forms). We only use it to reply to you.
+        </p>
+        <p>
           These companies act on our instructions and do not use your information for their own purposes.
           Some of them may store data outside the UK; where they do, they use safeguards recognised under UK
           data protection law. Access to client records is limited to the studio team, and our accounts are
@@ -103,8 +107,10 @@ const SECTIONS: { title: string; body: React.ReactNode }[] = [
     title: "Our website",
     body: (
       <p>
-        Our website does not use advertising or tracking cookies. The consent form remembers whether you
-        turned on easy-read mode, and that setting is stored only on your own device. The Instagram feed on our home page shows images hosted by Instagram.
+        Our website does not use advertising or analytics cookies of its own. The consent form remembers
+        whether you turned on easy-read mode, and that setting is stored only on your own device. The
+        Instagram feed on our home page shows images hosted by Instagram, and the map on our contact page is
+        provided by Google Maps, which may set its own cookies under Google’s privacy policy.
       </p>
     ),
   },

@@ -251,6 +251,13 @@ const HEALTH_FIELDS: Array<keyof FormValues> = [
   "inkAllergy", "adhesiveAllergy", "ointmentAllergy",
 ];
 
+const UNDER_18_MESSAGE = "By UK law, we can’t tattoo anyone under 18, even with a parent’s consent.";
+
+function isUnderTattooAge(formType: FormType, dateOfBirth: string) {
+  const age = getAge(dateOfBirth);
+  return formType === "tattoo" && age !== null && age < FORM_CONFIG.tattoo.minimumAge;
+}
+
 function readInitialFormType(): FormType {
   try {
     const value = new URLSearchParams(window.location.search).get("form");
@@ -487,7 +494,7 @@ function DetailsStep({
     </div>
     <div className="ns-card ns-card-pad"><div className="ns-grid ns-grid-2">
       <div className="ns-field ns-field-wide"><FieldLabel htmlFor="fullName">Full name</FieldLabel><input className="ns-input" id="fullName" name="fullName" value={values.fullName} onChange={(event) => updateValue("fullName", event.target.value)} placeholder="As shown on your ID" aria-invalid={Boolean(errors.fullName)} /><ErrorText message={errors.fullName} /></div>
-      <div className="ns-field"><FieldLabel htmlFor="dateOfBirth">Date of birth</FieldLabel><input className="ns-input" id="dateOfBirth" name="dateOfBirth" type="date" value={values.dateOfBirth} onChange={(event) => updateValue("dateOfBirth", event.target.value)} aria-invalid={Boolean(errors.dateOfBirth)} /><ErrorText message={errors.dateOfBirth} /></div>
+      <div className="ns-field"><FieldLabel htmlFor="dateOfBirth">Date of birth</FieldLabel><input className="ns-input" id="dateOfBirth" name="dateOfBirth" type="date" value={values.dateOfBirth} onChange={(event) => updateValue("dateOfBirth", event.target.value)} aria-invalid={Boolean(errors.dateOfBirth) || isUnderTattooAge(formType, values.dateOfBirth)} />{age !== null ? <span className="ns-age" aria-live="polite">Age: <strong>{age}</strong></span> : null}{isUnderTattooAge(formType, values.dateOfBirth) && !errors.dateOfBirth ? <ErrorText message={UNDER_18_MESSAGE} /> : <ErrorText message={errors.dateOfBirth} />}</div>
       <div className="ns-field ns-field-wide"><FieldLabel htmlFor="address">Street address</FieldLabel><input className="ns-input" id="address" name="address" value={values.address} onChange={(event) => updateValue("address", event.target.value)} placeholder="Street number and street name" aria-invalid={Boolean(errors.address)} /><ErrorText message={errors.address} /></div>
       <div className="ns-field"><FieldLabel htmlFor="postcode">Postcode</FieldLabel><input className="ns-input" id="postcode" name="postcode" value={values.postcode} onChange={(event) => updateValue("postcode", event.target.value)} placeholder="Postcode" aria-invalid={Boolean(errors.postcode)} /><ErrorText message={errors.postcode} /></div>
       <div className="ns-field"><FieldLabel htmlFor="phone" hint="optional">Mobile number</FieldLabel><input className="ns-input" id="phone" name="phone" type="tel" value={values.phone} onChange={(event) => updateValue("phone", event.target.value)} placeholder="+44" /></div>
@@ -903,7 +910,7 @@ export function Consent() {
       if (formType === "tattoo" && !/^\d+$/.test(values.tattooPrice.trim())) next.tattooPrice = "Please enter the agreed price in pounds, e.g. 120.";
       if (!values.legalAgeDeclaration) next.legalAgeDeclaration = "Please confirm your age and signing authority.";
       const age = getAge(values.dateOfBirth);
-      if (formType === "tattoo" && age !== null && age < config.minimumAge) next.dateOfBirth = "By UK law, we can’t tattoo anyone under 18, even with a parent’s consent.";
+      if (isUnderTattooAge(formType, values.dateOfBirth)) next.dateOfBirth = UNDER_18_MESSAGE;
       if (formType === "piercing" && (age ?? 16) < 16) {
         if (!values.guardianName.trim()) next.guardianName = "Please add the parent or legal guardian’s name.";
         if (!values.guardianRelationship.trim()) next.guardianRelationship = "Please add their relationship to you.";
@@ -1030,7 +1037,7 @@ export function Consent() {
         {step === 2 ? <ConsentStep formType={formType} values={values} errors={errors} updateValue={updateValue} signature={signature} setSignature={setSignature} idFiles={idFiles} fileError={fileError} readFile={readFile} removeFile={removeFile} idInputRef={idInputRef} cameraInputRef={cameraInputRef} /> : null}
          {step === 3 ? <ReviewStep formType={formType} values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} /> : null}
         {submitError ? <div className="ns-submit-error" role="alert"><AlertCircle size={17} />{submitError}</div> : null}
-        <div className="ns-actions"><div className="ns-actions-note"><LockKeyhole size={14} /> Saved only when you submit</div><div className="ns-button-row">{step > 0 ? <button className="ns-button ns-button-quiet" type="button" onClick={() => goToStep((step - 1) as Step)}><ArrowLeft size={15} /> Previous</button> : <span />}{step < 3 ? <button className="ns-button ns-button-primary" type="button" onClick={() => goToStep((step + 1) as Step)}>Continue <ArrowRight size={15} /></button> : <button className="ns-button ns-button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending securely…" : "Submit consent"}{!isSubmitting ? <Check size={15} /> : null}</button>}</div></div>
+        <div className="ns-actions"><div className="ns-actions-note"><LockKeyhole size={14} /> Saved only when you submit</div><div className="ns-button-row">{step > 0 ? <button className="ns-button ns-button-quiet" type="button" onClick={() => goToStep((step - 1) as Step)}><ArrowLeft size={15} /> Previous</button> : <span />}{step < 3 ? <button className="ns-button ns-button-primary" type="button" disabled={step === 0 && isUnderTattooAge(formType, values.dateOfBirth)} onClick={() => goToStep((step + 1) as Step)}>Continue <ArrowRight size={15} /></button> : <button className="ns-button ns-button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending securely…" : "Submit consent"}{!isSubmitting ? <Check size={15} /> : null}</button>}</div></div>
         <p className="ns-privacy">Privacy note: your details are sent securely to Golden Vine, and your health answers, signature and any ID images go privately to the studio. We keep consent forms for two years; see our <a href="/privacy" target="_blank" rel="noreferrer" className="underline">privacy notice</a>. This form is not medical advice; please speak to a qualified healthcare professional about health concerns.</p>
       </form></div>
     </main>}

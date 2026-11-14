@@ -719,3 +719,6 @@
 /* Privacy notice lists */
 .privacy-notice ul { list-style: disc; padding-left: 1.5rem; display: grid; gap: .4rem; }
 .privacy-notice a { text-decoration: underline; }
+.ns-age { color: var(--ink-soft); font-size: 13px; }
+.ns-age strong { color: var(--ink); }
+.ns-button:disabled { opacity: .45; cursor: not-allowed; }

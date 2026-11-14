@@ -79,6 +79,10 @@ export function Contact() {
         <FadeIn className="flex-1" delay={0.05}>
           <div className="section-cream h-full">
             <h3 className="text-2xl font-bold font-serif mb-8 text-center md:text-left border-b border-foreground/10 pb-2">Contact - Booking & Inquiries</h3>
+            <p className="font-serif text-lg mb-6 text-center md:text-left">
+              Prefer to email us directly? Write to<br />
+              <a href="mailto:contact@goldenvinepiercing.co.uk" className="text-primary hover:text-foreground underline break-words">contact@goldenvinepiercing.co.uk</a>
+            </p>
             
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -157,7 +161,8 @@ export function Contact() {
                   Bath<br />
                   BA2 4BA<br />
                   United Kingdom<br />
-                  <a href="tel:01225251026" className="text-primary hover:text-foreground no-underline mt-2 inline-block">01225 251026</a>
+                  <a href="tel:01225251026" className="text-primary hover:text-foreground no-underline mt-2 inline-block">01225 251026</a><br />
+                  <a href="mailto:contact@goldenvinepiercing.co.uk" className="text-primary hover:text-foreground no-underline mt-1 inline-block break-words">contact@goldenvinepiercing.co.uk</a>
                 </address>
               </div>
               

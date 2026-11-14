@@ -473,7 +473,7 @@ function DetailsStep({
         <div className="ns-field"><FieldLabel htmlFor="practitioner">Practitioner</FieldLabel><select className="ns-select" id="practitioner" name="practitioner" value={values.practitioner} onChange={(event) => updateValue("practitioner", event.target.value)} disabled={isPractitionerLocked} aria-invalid={Boolean(errors.practitioner)}>{config.practitioners.map((name) => <option key={name}>{name}</option>)}</select><ErrorText message={errors.practitioner} /></div>
         {values.practitioner === config.guestOption ? <div className="ns-field"><FieldLabel htmlFor="guestPractitionerName">{config.guestOption}’s name</FieldLabel><input className="ns-input" id="guestPractitionerName" name="guestPractitionerName" value={values.guestPractitionerName} onChange={(event) => updateValue("guestPractitionerName", event.target.value)} placeholder="Enter their full name" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.guestPractitionerName)} /><ErrorText message={errors.guestPractitionerName} /></div> : null}
         <div className="ns-field"><FieldLabel htmlFor={areaKey}>{config.areaLabel}</FieldLabel><input className="ns-input" id={areaKey} name={areaKey} value={values[areaKey]} onChange={(event) => updateValue(areaKey, event.target.value)} placeholder={config.areaPlaceholder} disabled={isPractitionerLocked} aria-invalid={Boolean(errors[areaKey])} /><ErrorText message={errors[areaKey]} /></div>
-        {formType === "tattoo" ? <div className="ns-field"><FieldLabel htmlFor="tattooPrice">Agreed price</FieldLabel><div className="ns-price-input"><span aria-hidden="true">£</span><input className="ns-input" id="tattooPrice" name="tattooPrice" inputMode="decimal" value={values.tattooPrice} onChange={(event) => updateValue("tattooPrice", event.target.value.replace(/[^0-9.]/g, ""))} placeholder="0.00" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.tattooPrice)} /></div><ErrorText message={errors.tattooPrice} /></div> : null}
+        {formType === "tattoo" ? <div className="ns-field"><FieldLabel htmlFor="tattooPrice">Agreed price</FieldLabel><div className="ns-price-input"><span aria-hidden="true">£</span><input className="ns-input" id="tattooPrice" name="tattooPrice" inputMode="numeric" value={values.tattooPrice} onChange={(event) => updateValue("tattooPrice", event.target.value.replace(/[^0-9]/g, ""))} placeholder="e.g. 120" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.tattooPrice)} /></div><ErrorText message={errors.tattooPrice} /></div> : null}
       </div>
       {isPractitionerLocked ? <p className="ns-lock-note"><LockKeyhole size={13} /> Practitioner, {config.areaLabel.toLowerCase()}{formType === "tattoo" ? " and price" : ""} are locked in. Tap the button to edit them.</p> : null}
     </div>
@@ -577,7 +577,7 @@ function ReviewStep({
 
 function formatPrice(value: string) {
   const amount = Number(value);
-  return value.trim() && Number.isFinite(amount) ? `£${amount.toFixed(2)}` : "";
+  return value.trim() && Number.isFinite(amount) ? `£${amount}` : "";
 }
 
 function practitionerLabel(values: FormValues, formType: FormType) {
@@ -892,7 +892,7 @@ export function Consent() {
       if (!values.practitioner) next.practitioner = "Please choose a practitioner.";
       if (values.practitioner === config.guestOption && !values.guestPractitionerName.trim()) next.guestPractitionerName = `Please add the ${config.guestOption.toLowerCase()}’s name.`;
       if (!values[config.areaKey].trim()) next[config.areaKey] = config.areaError;
-      if (formType === "tattoo" && !/^\d+(\.\d{1,2})?$/.test(values.tattooPrice.trim())) next.tattooPrice = "Please enter the agreed price, e.g. 120 or 120.50.";
+      if (formType === "tattoo" && !/^\d+$/.test(values.tattooPrice.trim())) next.tattooPrice = "Please enter the agreed price in pounds, e.g. 120.";
       if (!values.legalAgeDeclaration) next.legalAgeDeclaration = "Please confirm your age and signing authority.";
       const age = getAge(values.dateOfBirth);
       if (formType === "tattoo" && age !== null && age < config.minimumAge) next.dateOfBirth = "By UK law, we can’t tattoo anyone under 18, even with a parent’s consent.";

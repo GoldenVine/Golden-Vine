@@ -29,6 +29,7 @@ import { jsPDF } from "jspdf";
 import { Seo } from "@/components/Seo";
 
 type Step = 0 | 1 | 2 | 3;
+type FormType = "piercing" | "tattoo";
 type FieldErrors = Record<string, string>;
 
 type FormValues = {
@@ -42,6 +43,7 @@ type FormValues = {
   phone: string;
   email: string;
   piercingArea: string;
+  tattooDesign: string;
   legalAgeDeclaration: boolean;
   guardianName: string;
   guardianRelationship: string;
@@ -51,6 +53,9 @@ type FormValues = {
   eating: string;
   intoxication: string;
   pregnancy: string;
+  bloodThinners: string;
+  skinCondition: string;
+  skinMedication: string;
   medicalConditions: string;
   medicalConditionsAcknowledged: boolean;
   allergies: string;
@@ -58,6 +63,9 @@ type FormValues = {
   chlorhexidine: string;
   iodine: string;
   aluminium: string;
+  inkAllergy: string;
+  adhesiveAllergy: string;
+  ointmentAllergy: string;
   risks: boolean;
   release: boolean;
   questions: boolean;
@@ -66,6 +74,8 @@ type FormValues = {
   document: boolean;
   photography: string;
   downsizing: boolean;
+  designApproval: boolean;
+  healingResults: boolean;
 };
 
 type IdFile = {
@@ -86,6 +96,7 @@ const initialValues: FormValues = {
   phone: "",
   email: "",
   piercingArea: "",
+  tattooDesign: "",
   legalAgeDeclaration: false,
   guardianName: "",
   guardianRelationship: "",
@@ -95,6 +106,9 @@ const initialValues: FormValues = {
   eating: "",
   intoxication: "",
   pregnancy: "",
+  bloodThinners: "",
+  skinCondition: "",
+  skinMedication: "",
   medicalConditions: "",
   medicalConditionsAcknowledged: false,
   allergies: "",
@@ -102,6 +116,9 @@ const initialValues: FormValues = {
   chlorhexidine: "",
   iodine: "",
   aluminium: "",
+  inkAllergy: "",
+  adhesiveAllergy: "",
+  ointmentAllergy: "",
   risks: false,
   release: false,
   questions: false,
@@ -110,6 +127,8 @@ const initialValues: FormValues = {
   document: false,
   photography: "",
   downsizing: false,
+  designApproval: false,
+  healingResults: false,
 };
 
 const stepNames = ["Your details", "Health & safety", "Consent & ID", "Review"];
@@ -117,7 +136,7 @@ const referralOptions = ["Facebook", "Instagram", "Google", "Family / Friends", 
 const formEndpoint = import.meta.env.BASE_URL || "/";
 const MAX_ID_UPLOAD_BYTES = 7 * 1024 * 1024;
 const EASY_READ_STORAGE_KEY = "golden-vine-easy-read";
-const consentPolicies = [
+const piercingConsentPolicies = [
   ["risks", "Risks & duress", "I understand that known and unknown risks can lead to injury, including infection, scarring, keloids, and allergic reactions. Having been informed of the potential risks associated with getting a piercing, I still wish to proceed and freely accept all risks that may arise. I confirm that I am voluntarily getting a piercing without duress."],
   ["release", "Release", "I give full consent to the Artist and Studio to perform the piercing named above. I waive and release, to the fullest extent permitted by law, the Artist and Studio from all liability whatsoever for any claim or cause I may have for personal injury, including direct or consequential damage caused by not following aftercare instructions or by trauma from outside sources after the initial procedure."],
   ["questions", "Questions", "The Artist and the Studio have given me ample opportunity to ask any and all questions about the piercing procedure, and they have been answered to my total satisfaction."],
@@ -126,18 +145,110 @@ const consentPolicies = [
   ["document", "This document", "I acknowledge that I have had adequate opportunity to read and understand this document, that it was not presented to me at the last minute, and that I understand I am signing a legal contract."],
   ["downsizing", "Downsizing", "I understand that my piercing(s) will initially be fitted with a larger or longer piece of jewellery to allow for natural swelling. Smaller or shorter jewellery will likely, but not always, need to be fitted during healing. This downsize is ultimately optional but important for safe healing. Labrets are £20 each, and I am entitled to a free fitting fee on piercings carried out at Golden Vine. I understand that leaving this too long or deciding against it may have detrimental effects on my piercings’ health."],
 ] as const;
-const healthQuestions = [
+const piercingHealthQuestions = [
   ["bloodborne", "Do you have any bloodborne pathogens, transmittable diseases, or recent illnesses?", "It is okay if you do; we ask for our safety and the safety of others."],
   ["eating", "Have you eaten in the past four hours?", "It is not always necessary, but eating beforehand can help increase your blood sugar levels."],
   ["intoxication", "Are you under the influence of narcotics or alcohol?", ""],
   ["pregnancy", "Are you pregnant or breastfeeding?", ""],
 ] as const;
-const sensitivityQuestions = [
+const piercingSensitivityQuestions = [
   ["latex", "Allergy or sensitivity to latex?", ""],
   ["chlorhexidine", "Allergy or sensitivity to chlorhexidine gluconate?", "Found in products such as Corsodyl mouthwash."],
   ["iodine", "Allergy or sensitivity to iodine?", "If you are allergic to iodine, you may also be allergic to soy sauce."],
   ["aluminium", "Allergy or sensitivity to aluminium?", "Found in some antiperspirant deodorants."],
 ] as const;
+
+// Tattoo consent form wording. Edit the text here to change the tattoo form.
+const tattooConsentPolicies = [
+  ["risks", "Risks & duress", "I understand that known and unknown risks can lead to injury, including infection, scarring, and allergic reactions to pigments, which can sometimes appear years later. Having been informed of the potential risks associated with getting a tattoo, I still wish to proceed and freely accept all risks that may arise. I confirm that I am voluntarily getting a tattoo without duress."],
+  ["designApproval", "Design & placement", "I have checked the design, size, colours, placement, and the spelling of any lettering, and I approve them. I understand that the Artist and Studio are not responsible for any error in a design I have approved."],
+  ["release", "Release", "I give full consent to the Artist and Studio to perform the tattoo described above. I waive and release, to the fullest extent permitted by law, the Artist and Studio from all liability whatsoever for any claim or cause I may have for personal injury, including direct or consequential damage caused by not following aftercare instructions or by trauma from outside sources after the tattoo is completed."],
+  ["questions", "Questions", "The Artist and the Studio have given me ample opportunity to ask any and all questions about the tattooing procedure, and they have been answered to my total satisfaction."],
+  ["aftercare", "Aftercare", "I confirm that I have been given instructions on caring for my tattoo while it is healing. I understand and will follow them. I acknowledge that a tattoo may become infected or heal poorly, particularly if I do not follow the instructions."],
+  ["healingResults", "Healing & touch-ups", "I understand that every person’s skin heals differently and that lines, colour, and shading can settle, soften, or fade during healing. Any touch-up is at the Artist’s discretion, and results can be affected by sun exposure, skin type, and how well the aftercare is followed."],
+  ["changes", "Permanent change", "I acknowledge that a tattoo is a permanent change to my appearance. Removal is not guaranteed, can be costly, and may leave scarring."],
+  ["document", "This document", "I acknowledge that I have had adequate opportunity to read and understand this document, that it was not presented to me at the last minute, and that I understand I am signing a legal contract."],
+] as const;
+const tattooHealthQuestions = [
+  ["bloodborne", "Do you have any bloodborne pathogens, transmittable diseases, or recent illnesses?", "It is okay if you do; we ask for our safety and the safety of others."],
+  ["eating", "Have you eaten in the past four hours?", "Eating beforehand helps keep your blood sugar steady during a longer session."],
+  ["intoxication", "Are you under the influence of narcotics or alcohol, or have you drunk alcohol in the past 24 hours?", "Alcohol thins the blood and can affect how the ink settles."],
+  ["bloodThinners", "Have you taken aspirin, ibuprofen, or any blood-thinning medication in the past 24 hours?", "These can increase bleeding during your tattoo."],
+  ["pregnancy", "Are you pregnant or breastfeeding?", ""],
+  ["skinCondition", "Do you have sunburn, a rash, cuts, moles, raised scars, or a skin condition on or near the area being tattooed?", ""],
+  ["skinMedication", "Are you taking, or have you taken in the last six months, isotretinoin (Roaccutane) or other strong acne medication?", "These can make skin more fragile."],
+] as const;
+const tattooSensitivityQuestions = [
+  ["latex", "Allergy or sensitivity to latex?", ""],
+  ["inkAllergy", "Have you ever reacted to tattoo ink, hair dye, or henna?", "Red pigments are the most common cause of ink reactions."],
+  ["adhesiveAllergy", "Allergy or sensitivity to plasters or adhesive tattoo wrap?", "Some tattoos are covered with a breathable film after the session."],
+  ["ointmentAllergy", "Allergy or sensitivity to petroleum jelly or aftercare creams?", ""],
+] as const;
+
+type ChoiceQuestion = readonly [keyof FormValues & string, string, string];
+type ConsentPolicy = readonly [keyof FormValues & string, string, string];
+
+// Everything that differs between the piercing and tattoo forms.
+const FORM_CONFIG = {
+  piercing: {
+    label: "Piercing",
+    title: "Piercing consent form",
+    practitioners: ["Jason", "Jess", "Guest Piercer"],
+    guestOption: "Guest Piercer",
+    practitionerNoun: "piercer",
+    activity: "piercing",
+    areaKey: "piercingArea" as const,
+    areaLabel: "Body piercing",
+    areaPlaceholder: "e.g. left nostril",
+    areaError: "Please tell us where you are being pierced.",
+    appointmentHeading: "Choose your piercer and piercing.",
+    minimumAge: 0,
+    ageDeclaration: <><strong>I declare that I am of legal age and competent to sign this agreement with valid proof of age.</strong> If I am under 16, my parent or legal guardian will sign on my behalf and confirms they understand and agree to this document.</>,
+    ageDeclarationText: "I declare that I am of legal age and competent to sign this agreement with valid proof of age. If I am under 16, my parent or legal guardian will sign on my behalf.",
+    healthQuestions: piercingHealthQuestions as readonly ChoiceQuestion[],
+    sensitivityQuestions: piercingSensitivityQuestions as readonly ChoiceQuestion[],
+    consentPolicies: piercingConsentPolicies as readonly ConsentPolicy[],
+    allergyPlaceholder: "Tell us about metals, adhesives, medicines, or other allergies.",
+    intro: "This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.",
+  },
+  tattoo: {
+    label: "Tattoo",
+    title: "Tattoo consent form",
+    practitioners: ["Manuel", "Elina", "Guest Artist"],
+    guestOption: "Guest Artist",
+    practitionerNoun: "artist",
+    activity: "tattooing",
+    areaKey: "tattooDesign" as const,
+    areaLabel: "Tattoo design & placement",
+    areaPlaceholder: "e.g. fine line rose, left forearm",
+    areaError: "Please describe your tattoo and where it is going.",
+    appointmentHeading: "Choose your artist and tattoo.",
+    minimumAge: 18,
+    ageDeclaration: <><strong>I confirm that I am 18 or over and can show valid photo ID.</strong> I understand that it is against UK law to tattoo anyone under 18, even with a parent’s consent.</>,
+    ageDeclarationText: "I confirm that I am 18 or over and can show valid photo ID. I understand that it is against UK law to tattoo anyone under 18, even with a parent's consent.",
+    healthQuestions: tattooHealthQuestions as readonly ChoiceQuestion[],
+    sensitivityQuestions: tattooSensitivityQuestions as readonly ChoiceQuestion[],
+    consentPolicies: tattooConsentPolicies as readonly ConsentPolicy[],
+    allergyPlaceholder: "Tell us about inks, dyes, adhesives, creams, medicines, or other allergies.",
+    intro: "This consent form helps your artist understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.",
+  },
+} satisfies Record<FormType, unknown>;
+
+// Fields that only belong to one form, so they are left out of the other
+// form's Netlify submission.
+const FORM_ONLY_FIELDS: Record<FormType, Array<keyof FormValues>> = {
+  piercing: ["piercingArea", "guardianName", "guardianRelationship", "guardianPhone", "guardianEmail", "chlorhexidine", "iodine", "aluminium", "downsizing"],
+  tattoo: ["tattooDesign", "bloodThinners", "skinCondition", "skinMedication", "inkAllergy", "adhesiveAllergy", "ointmentAllergy", "designApproval", "healingResults"],
+};
+
+function readInitialFormType(): FormType {
+  try {
+    const value = new URLSearchParams(window.location.search).get("form");
+    return value === "tattoo" ? "tattoo" : "piercing";
+  } catch {
+    return "piercing";
+  }
+}
 
 function readEasyReadPreference() {
   try {
@@ -325,6 +436,7 @@ function Header({ easyRead, onToggleEasyRead, isAutomatic }: { easyRead: boolean
 }
 
 function DetailsStep({
+  formType,
   values,
   errors,
   toggleReferral,
@@ -332,6 +444,7 @@ function DetailsStep({
   isPractitionerLocked,
   setIsPractitionerLocked,
 }: {
+  formType: FormType;
   values: FormValues;
   errors: FieldErrors;
   toggleReferral: (value: string) => void;
@@ -339,6 +452,9 @@ function DetailsStep({
   isPractitionerLocked: boolean;
   setIsPractitionerLocked: (locked: boolean) => void;
 }) {
+  const config = FORM_CONFIG[formType];
+  const areaKey = config.areaKey;
+  const age = getAge(values.dateOfBirth);
   return <section className="ns-section" aria-labelledby="details-heading">
     <SectionHeading index="01 / 04" title="Let’s start with you." />
     <p className="ns-section-intro" id="details-heading">The practical details let us greet you properly and keep in touch if anything changes before your visit.</p>
@@ -348,15 +464,15 @@ function DetailsStep({
       </div></fieldset>
     </div>
     <div className={`ns-card ns-card-pad ns-practitioner-card ${isPractitionerLocked ? "is-locked" : ""}`}>
-      <div className="ns-practitioner-card-heading"><div><p className="ns-kicker ns-kicker-small">Your appointment details</p><h3 className="ns-policy-title">Choose your piercer and piercing.</h3><p className="ns-policy-copy">Once these details are correct, lock them in before completing the rest of the form.</p></div>
+      <div className="ns-practitioner-card-heading"><div><p className="ns-kicker ns-kicker-small">Your appointment details</p><h3 className="ns-policy-title">{config.appointmentHeading}</h3><p className="ns-policy-copy">Once these details are correct, lock them in before completing the rest of the form.</p></div>
         <button type="button" className={`ns-lock-button ${isPractitionerLocked ? "is-locked" : ""}`} onClick={() => setIsPractitionerLocked(!isPractitionerLocked)} aria-pressed={isPractitionerLocked}>{isPractitionerLocked ? <LockKeyhole size={16} /> : <UnlockKeyhole size={16} />}<span>{isPractitionerLocked ? "Details locked" : "Lock details"}</span></button>
       </div>
       <div className="ns-grid ns-grid-2">
-        <div className="ns-field"><FieldLabel htmlFor="practitioner">Practitioner</FieldLabel><select className="ns-select" id="practitioner" name="practitioner" value={values.practitioner} onChange={(event) => updateValue("practitioner", event.target.value)} disabled={isPractitionerLocked} aria-invalid={Boolean(errors.practitioner)}><option>Jason</option><option>Jess</option><option>Guest Piercer</option></select><ErrorText message={errors.practitioner} /></div>
-        {values.practitioner === "Guest Piercer" ? <div className="ns-field"><FieldLabel htmlFor="guestPractitionerName">Guest piercer’s name</FieldLabel><input className="ns-input" id="guestPractitionerName" name="guestPractitionerName" value={values.guestPractitionerName} onChange={(event) => updateValue("guestPractitionerName", event.target.value)} placeholder="Enter their full name" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.guestPractitionerName)} /><ErrorText message={errors.guestPractitionerName} /></div> : null}
-        <div className="ns-field"><FieldLabel htmlFor="piercingArea">Body piercing</FieldLabel><input className="ns-input" id="piercingArea" name="piercingArea" value={values.piercingArea} onChange={(event) => updateValue("piercingArea", event.target.value)} placeholder="e.g. left nostril" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.piercingArea)} /><ErrorText message={errors.piercingArea} /></div>
+        <div className="ns-field"><FieldLabel htmlFor="practitioner">Practitioner</FieldLabel><select className="ns-select" id="practitioner" name="practitioner" value={values.practitioner} onChange={(event) => updateValue("practitioner", event.target.value)} disabled={isPractitionerLocked} aria-invalid={Boolean(errors.practitioner)}>{config.practitioners.map((name) => <option key={name}>{name}</option>)}</select><ErrorText message={errors.practitioner} /></div>
+        {values.practitioner === config.guestOption ? <div className="ns-field"><FieldLabel htmlFor="guestPractitionerName">{config.guestOption}’s name</FieldLabel><input className="ns-input" id="guestPractitionerName" name="guestPractitionerName" value={values.guestPractitionerName} onChange={(event) => updateValue("guestPractitionerName", event.target.value)} placeholder="Enter their full name" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.guestPractitionerName)} /><ErrorText message={errors.guestPractitionerName} /></div> : null}
+        <div className="ns-field"><FieldLabel htmlFor={areaKey}>{config.areaLabel}</FieldLabel><input className="ns-input" id={areaKey} name={areaKey} value={values[areaKey]} onChange={(event) => updateValue(areaKey, event.target.value)} placeholder={config.areaPlaceholder} disabled={isPractitionerLocked} aria-invalid={Boolean(errors[areaKey])} /><ErrorText message={errors[areaKey]} /></div>
       </div>
-      {isPractitionerLocked ? <p className="ns-lock-note"><LockKeyhole size={13} /> Practitioner and body piercing are locked in. Tap the button to edit them.</p> : null}
+      {isPractitionerLocked ? <p className="ns-lock-note"><LockKeyhole size={13} /> Practitioner and {config.areaLabel.toLowerCase()} are locked in. Tap the button to edit them.</p> : null}
     </div>
     <div className="ns-card ns-card-pad"><div className="ns-grid ns-grid-2">
       <div className="ns-field ns-field-wide"><FieldLabel htmlFor="fullName">Full name</FieldLabel><input className="ns-input" id="fullName" name="fullName" value={values.fullName} onChange={(event) => updateValue("fullName", event.target.value)} placeholder="As shown on your ID" aria-invalid={Boolean(errors.fullName)} /><ErrorText message={errors.fullName} /></div>
@@ -366,8 +482,8 @@ function DetailsStep({
       <div className="ns-field"><FieldLabel htmlFor="phone" hint="optional">Mobile number</FieldLabel><input className="ns-input" id="phone" name="phone" type="tel" value={values.phone} onChange={(event) => updateValue("phone", event.target.value)} placeholder="+44" /></div>
       <div className="ns-field"><FieldLabel htmlFor="email">Email address</FieldLabel><input className="ns-input" id="email" name="email" type="email" value={values.email} onChange={(event) => updateValue("email", event.target.value)} placeholder="you@example.com" aria-invalid={Boolean(errors.email)} /><ErrorText message={errors.email} /></div>
     </div></div>
-    <div className="ns-card ns-card-pad"><label className="ns-checkline"><input type="checkbox" name="legalAgeDeclaration" value="Yes" checked={values.legalAgeDeclaration} onChange={(event) => updateValue("legalAgeDeclaration", event.target.checked)} aria-invalid={Boolean(errors.legalAgeDeclaration)} /><span><strong>I declare that I am of legal age and competent to sign this agreement with valid proof of age.</strong> If I am under 16, my parent or legal guardian will sign on my behalf and confirms they understand and agree to this document.</span></label><ErrorText message={errors.legalAgeDeclaration} />
-      {getAge(values.dateOfBirth) !== null && getAge(values.dateOfBirth)! < 16 ? <div className="ns-grid ns-grid-2 ns-guardian-grid">
+    <div className="ns-card ns-card-pad"><label className="ns-checkline"><input type="checkbox" name="legalAgeDeclaration" value="Yes" checked={values.legalAgeDeclaration} onChange={(event) => updateValue("legalAgeDeclaration", event.target.checked)} aria-invalid={Boolean(errors.legalAgeDeclaration)} /><span>{config.ageDeclaration}</span></label><ErrorText message={errors.legalAgeDeclaration} />
+      {formType === "piercing" && age !== null && age < 16 ? <div className="ns-grid ns-grid-2 ns-guardian-grid">
         <div className="ns-field"><FieldLabel htmlFor="guardianName">Parent / legal guardian name</FieldLabel><input className="ns-input" id="guardianName" name="guardianName" value={values.guardianName} onChange={(event) => updateValue("guardianName", event.target.value)} placeholder="Full name" aria-invalid={Boolean(errors.guardianName)} /><ErrorText message={errors.guardianName} /></div>
         <div className="ns-field"><FieldLabel htmlFor="guardianRelationship">Relationship</FieldLabel><input className="ns-input" id="guardianRelationship" name="guardianRelationship" value={values.guardianRelationship} onChange={(event) => updateValue("guardianRelationship", event.target.value)} placeholder="e.g. parent" aria-invalid={Boolean(errors.guardianRelationship)} /><ErrorText message={errors.guardianRelationship} /></div>
         <div className="ns-field"><FieldLabel htmlFor="guardianPhone" hint="optional">Guardian phone</FieldLabel><input className="ns-input" id="guardianPhone" name="guardianPhone" type="tel" value={values.guardianPhone} onChange={(event) => updateValue("guardianPhone", event.target.value)} placeholder="+44" /></div>
@@ -377,25 +493,27 @@ function DetailsStep({
   </section>;
 }
 
-function HealthStep({ values, errors, updateValue }: { values: FormValues; errors: FieldErrors; updateValue: <K extends keyof FormValues>(key: K, value: FormValues[K]) => void }) {
+function HealthStep({ formType, values, errors, updateValue }: { formType: FormType; values: FormValues; errors: FieldErrors; updateValue: <K extends keyof FormValues>(key: K, value: FormValues[K]) => void }) {
+  const config = FORM_CONFIG[formType];
   return <section className="ns-section" aria-labelledby="health-heading">
     <SectionHeading index="02 / 04" title="Your wellbeing comes first." />
-    <p className="ns-section-intro" id="health-heading">Answer honestly and privately. These questions help your piercer adapt the appointment or recommend another time if needed.</p>
-    <div className="ns-notice"><Sparkles size={17} /><span>This is not medical advice or a diagnosis. If you are unsure how a condition or medication may affect piercing, please speak with a qualified healthcare professional before your appointment.</span></div>
-     <div className="ns-card ns-card-pad"><div className="ns-grid">{healthQuestions.map(([name, title, hint]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={values[name]} options={name === "eating" ? ["Yes", "No"] : ["No", "Yes"]} onChange={(value) => updateValue(name, value)} error={errors[name]} /></fieldset>)}</div></div>
+    <p className="ns-section-intro" id="health-heading">Answer honestly and privately. These questions help your {config.practitionerNoun} adapt the appointment or recommend another time if needed.</p>
+    <div className="ns-notice"><Sparkles size={17} /><span>This is not medical advice or a diagnosis. If you are unsure how a condition or medication may affect {config.activity}, please speak with a qualified healthcare professional before your appointment.</span></div>
+     <div className="ns-card ns-card-pad"><div className="ns-grid">{config.healthQuestions.map(([name, title, hint]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={String(values[name])} options={name === "eating" ? ["Yes", "No"] : ["No", "Yes"]} onChange={(value) => updateValue(name, value as never)} error={errors[name]} /></fieldset>)}</div></div>
     <div className="ns-card ns-card-pad"><div className="ns-grid">
       <div className="ns-field"><FieldLabel htmlFor="medicalConditions" hint="optional">Medical conditions, medications, or anything we should know</FieldLabel><textarea className="ns-textarea" id="medicalConditions" name="medicalConditions" value={values.medicalConditions} onChange={(event) => updateValue("medicalConditions", event.target.value)} placeholder="Include lupus, autoimmune conditions, heart or blood pressure conditions, blood thinners, haemophilia, epilepsy, diabetes, infections, psoriasis, impetigo, or anything else relevant." /></div>
-      <div className="ns-field"><FieldLabel htmlFor="allergies" hint="optional">Other allergies or sensitivities</FieldLabel><textarea className="ns-textarea" id="allergies" name="allergies" value={values.allergies} onChange={(event) => updateValue("allergies", event.target.value)} placeholder="Tell us about metals, adhesives, medicines, or other allergies." /></div>
-       {sensitivityQuestions.map(([name, title, hint]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={values[name]} options={["No", "Yes", "I’m not sure"]} onChange={(value) => updateValue(name, value)} error={errors[name]} /></fieldset>)}
-      <label className="ns-checkline"><input type="checkbox" name="medicalConditionsAcknowledged" value="Yes" checked={values.medicalConditionsAcknowledged} onChange={(event) => updateValue("medicalConditionsAcknowledged", event.target.checked)} aria-invalid={Boolean(errors.medicalConditionsAcknowledged)} /><span><strong>I have disclosed any medical condition, medication, skin condition, infection, or healing concern</strong> that could affect this procedure. If a doctor has prescribed preventive antibiotics for an invasive procedure, I have followed that advice and told my piercer.</span></label><ErrorText message={errors.medicalConditionsAcknowledged} />
+      <div className="ns-field"><FieldLabel htmlFor="allergies" hint="optional">Other allergies or sensitivities</FieldLabel><textarea className="ns-textarea" id="allergies" name="allergies" value={values.allergies} onChange={(event) => updateValue("allergies", event.target.value)} placeholder={config.allergyPlaceholder} /></div>
+       {config.sensitivityQuestions.map(([name, title, hint]) => <fieldset className="ns-fieldset" key={name}><legend className="ns-legend">{title}{hint ? <span className="ns-legend-note">{hint}</span> : null}</legend><ChoiceGroup name={name} value={String(values[name])} options={["No", "Yes", "I’m not sure"]} onChange={(value) => updateValue(name, value as never)} error={errors[name]} /></fieldset>)}
+      <label className="ns-checkline"><input type="checkbox" name="medicalConditionsAcknowledged" value="Yes" checked={values.medicalConditionsAcknowledged} onChange={(event) => updateValue("medicalConditionsAcknowledged", event.target.checked)} aria-invalid={Boolean(errors.medicalConditionsAcknowledged)} /><span><strong>I have disclosed any medical condition, medication, skin condition, infection, or healing concern</strong> that could affect this procedure. If a doctor has prescribed preventive antibiotics for an invasive procedure, I have followed that advice and told my {config.practitionerNoun}.</span></label><ErrorText message={errors.medicalConditionsAcknowledged} />
     </div></div>
     <div className="ns-notice"><AlertCircle size={17} /><span>For your safety, studio staff may pause or refuse a service if you appear unfit to proceed, including if you are intoxicated, unwell, or unable to give informed consent.</span></div>
   </section>;
 }
 
 function ConsentStep({
-  values, errors, updateValue, signature, setSignature, idFiles, fileError, readFile, removeFile, idInputRef, cameraInputRef,
+  formType, values, errors, updateValue, signature, setSignature, idFiles, fileError, readFile, removeFile, idInputRef, cameraInputRef,
 }: {
+  formType: FormType;
   values: FormValues;
   errors: FieldErrors;
   updateValue: <K extends keyof FormValues>(key: K, value: FormValues[K]) => void;
@@ -408,16 +526,17 @@ function ConsentStep({
   idInputRef: React.RefObject<HTMLInputElement | null>;
   cameraInputRef: React.RefObject<HTMLInputElement | null>;
 }) {
+  const config = FORM_CONFIG[formType];
   return <section className="ns-section" aria-labelledby="consent-heading">
     <SectionHeading index="03 / 04" title="Read, then make it yours." />
     <p className="ns-section-intro" id="consent-heading">Consent should feel informed, never rushed. Please read each point carefully. Photography is optional; every other acknowledgment is required.</p>
     <div className="ns-card ns-card-pad"><div className="ns-policy-list">
-       {consentPolicies.map(([key, title, copy]) => <div className="ns-policy-item" key={key}><h3 className="ns-policy-title">{title}</h3><p className="ns-policy-copy">{copy}</p><label className="ns-checkline"><input type="checkbox" name={key} value="Yes" checked={values[key]} onChange={(event) => updateValue(key, event.target.checked)} aria-invalid={Boolean(errors[key])} /><span><strong>I acknowledge this.</strong></span></label><ErrorText message={errors[key]} /></div>)}
-      <div className="ns-policy-item"><h3 className="ns-policy-title">Photography</h3><p className="ns-policy-copy">I consent to having pictures of my piercing taken, release all rights to photographs taken of me, and give consent in advance to their reproduction in print or electronic form.</p><ChoiceGroup name="photography" value={values.photography} options={["Yes, I consent", "No, thank you"]} onChange={(value) => updateValue("photography", value)} /></div>
+       {config.consentPolicies.map(([key, title, copy]) => <div className="ns-policy-item" key={key}><h3 className="ns-policy-title">{title}</h3><p className="ns-policy-copy">{copy}</p><label className="ns-checkline"><input type="checkbox" name={key} value="Yes" checked={Boolean(values[key])} onChange={(event) => updateValue(key, event.target.checked as never)} aria-invalid={Boolean(errors[key])} /><span><strong>I acknowledge this.</strong></span></label><ErrorText message={errors[key]} /></div>)}
+      <div className="ns-policy-item"><h3 className="ns-policy-title">Photography</h3><p className="ns-policy-copy">I consent to having pictures of my {formType === "tattoo" ? "tattoo" : "piercing"} taken, release all rights to photographs taken of me, and give consent in advance to their reproduction in print or electronic form.</p><ChoiceGroup name="photography" value={values.photography} options={["Yes, I consent", "No, thank you"]} onChange={(value) => updateValue("photography", value)} /></div>
     </div></div>
     <div className="ns-notice"><FileCheck2 size={17} /><span>If any provision, section, subsection, clause, or phrase of this release is found to be unenforceable or invalid, that portion will be severed. The remainder of this contract will be construed as though the unenforceable portion had never been included.</span></div>
     <div className="ns-card ns-card-pad"><div className="ns-grid">
-      <div><h3 className="ns-policy-title">Your handwritten signature</h3><p className="ns-policy-copy">By signing, you confirm that your answers are truthful and that you have had the opportunity to ask your piercer questions.</p><SignaturePad value={signature} onChange={setSignature} error={errors.signature} /></div>
+      <div><h3 className="ns-policy-title">Your handwritten signature</h3><p className="ns-policy-copy">By signing, you confirm that your answers are truthful and that you have had the opportunity to ask your {config.practitionerNoun} questions.</p><SignaturePad value={signature} onChange={setSignature} error={errors.signature} /></div>
       <div className="ns-upload"><div><h3 className="ns-policy-title">Government-issued photo ID</h3><p className="ns-policy-copy">You may upload a clear photo of your ID if you would like to provide it in advance. This step is optional; you can continue without adding a photo.</p></div>
         <div className="ns-upload-actions"><input ref={idInputRef} className="ns-file-input" id="id-upload" name="id-photo" type="file" accept="image/*" multiple onChange={readFile} /><input ref={cameraInputRef} className="ns-file-input" id="id-camera" name="id-photo-camera" type="file" accept="image/*" capture="environment" onChange={readFile} /><label className="ns-file-button" htmlFor="id-upload"><Upload size={15} /> Choose photo</label><label className="ns-file-button is-secondary" htmlFor="id-camera"><Camera size={15} /> Use camera</label></div>
         {idFiles.length ? <div className="ns-upload-files">{idFiles.map((file, index) => <div className="ns-upload-preview" key={`${file.name}-${index}`}><div><strong>{file.name}</strong><span>{(file.size / 1024 / 1024).toFixed(1)} MB · photo ready</span></div><button type="button" className="ns-clear" onClick={() => removeFile(index)} aria-label={`Remove uploaded ID ${index + 1}`}><X size={15} /></button></div>)}</div> : <div className="ns-upload-preview"><Paperclip size={15} /><span>No ID photo added yet</span></div>}<ErrorText message={fileError} />
@@ -427,6 +546,7 @@ function ConsentStep({
 }
 
 function ReviewStep({
+  formType,
   values,
   signature,
   idFiles,
@@ -434,6 +554,7 @@ function ReviewStep({
   confirmationCodeError,
   onConfirmationCodeChange,
 }: {
+  formType: FormType;
   values: FormValues;
   signature: string;
   idFiles: IdFile[];
@@ -441,13 +562,19 @@ function ReviewStep({
   confirmationCodeError?: string;
   onConfirmationCodeChange: (value: string) => void;
 }) {
+  const config = FORM_CONFIG[formType];
   const rows = [
-    ["Name", values.fullName], ["Address", `${values.address} · ${values.postcode}`], ["Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`],
-    ["Practitioner", values.practitioner === "Guest Piercer" ? `${values.guestPractitionerName} (Guest Piercer)` : values.practitioner], ["Body piercing", values.piercingArea],
-    ["Guardian", values.guardianName ? `${values.guardianName} · ${values.guardianRelationship}` : "Not required"], ["Health screening", "Complete — answers shared with your piercer"],
+    ["Consent form", config.label], ["Name", values.fullName], ["Address", `${values.address} · ${values.postcode}`], ["Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`],
+    ["Practitioner", practitionerLabel(values, formType)], [config.areaLabel, values[config.areaKey]],
+    ...(formType === "piercing" ? [["Guardian", values.guardianName ? `${values.guardianName} · ${values.guardianRelationship}` : "Not required"]] : []), ["Health screening", `Complete — answers shared with your ${config.practitionerNoun}`],
     ["Photography", values.photography || "Not chosen"], ["Signature", signature ? "Captured" : "Missing"], ["Photo ID", idFiles.length ? `${idFiles.length} photo${idFiles.length === 1 ? "" : "s"} attached` : "Not provided (optional)"],
   ];
-  return <section className="ns-section" aria-labelledby="review-heading"><SectionHeading index="04 / 04" title="A final look together." /><p className="ns-section-intro" id="review-heading">Please check the details below. You can use Previous to make any changes before submitting.</p><div className="ns-review">{rows.map(([label, value]) => <div className="ns-review-row" key={label}><span className="ns-review-label">{label}</span><span className="ns-review-value">{value || "Not provided"}</span></div>)}</div><div className="ns-notice"><FileCheck2 size={17} /><span>When you submit, your answers, handwritten signature, and ID photos will be sent securely to Golden Vine through Netlify Forms.</span></div><div className="ns-card ns-card-pad ns-confirmation-code"><div className="ns-field"><FieldLabel htmlFor="confirmation-code">Final confirmation code</FieldLabel><p className="ns-policy-copy">Enter the four-digit code provided by Golden Vine to confirm that you have reviewed everything above.</p><input className="ns-input ns-code-input" id="confirmation-code" inputMode="numeric" autoComplete="off" maxLength={4} pattern="[0-9]{4}" value={confirmationCode} onChange={(event) => onConfirmationCodeChange(event.target.value.replace(/\D/g, "").slice(0, 4))} aria-invalid={Boolean(confirmationCodeError)} aria-describedby="confirmation-code-help" /><span className="ns-label-hint" id="confirmation-code-help">This code is not saved with your consent form.</span><ErrorText message={confirmationCodeError} /></div></div></section>;
+  return <section className="ns-section" aria-labelledby="review-heading"><SectionHeading index="04 / 04" title="A final look together." /><p className="ns-section-intro" id="review-heading">Please check the details below. You can use Previous to make any changes before submitting.</p><div className="ns-review">{rows.map(([label, value]) => <div className="ns-review-row" key={label}><span className="ns-review-label">{label}</span><span className="ns-review-value">{value || "Not provided"}</span></div>)}</div><div className="ns-notice"><FileCheck2 size={17} /><span>When you submit, your answers are sent securely to Golden Vine, and a copy with your signature and any ID photos goes privately to the studio.</span></div><div className="ns-card ns-card-pad ns-confirmation-code"><div className="ns-field"><FieldLabel htmlFor="confirmation-code">Final confirmation code</FieldLabel><p className="ns-policy-copy">Enter the four-digit code provided by Golden Vine to confirm that you have reviewed everything above.</p><input className="ns-input ns-code-input" id="confirmation-code" inputMode="numeric" autoComplete="off" maxLength={4} pattern="[0-9]{4}" value={confirmationCode} onChange={(event) => onConfirmationCodeChange(event.target.value.replace(/\D/g, "").slice(0, 4))} aria-invalid={Boolean(confirmationCodeError)} aria-describedby="confirmation-code-help" /><span className="ns-label-hint" id="confirmation-code-help">This code is not saved with your consent form.</span><ErrorText message={confirmationCodeError} /></div></div></section>;
+}
+
+function practitionerLabel(values: FormValues, formType: FormType) {
+  const guest = FORM_CONFIG[formType].guestOption;
+  return values.practitioner === guest ? `${values.guestPractitionerName} (${guest})` : values.practitioner;
 }
 
 function pdfSafe(value: string) {
@@ -488,7 +615,8 @@ function fileToPdfImage(file: File) {
   });
 }
 
-async function createConsentPdf(values: FormValues, signature: string, idFiles: IdFile[]) {
+async function createConsentPdf(values: FormValues, signature: string, idFiles: IdFile[], formType: FormType) {
+  const config = FORM_CONFIG[formType];
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
@@ -545,7 +673,7 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
   doc.setTextColor(35, 52, 58);
   doc.text("Golden Vine", margin, y);
   y += 27;
-  addText("Participant copy of consent form", 15, "normal", 4);
+  addText(`Participant copy of ${config.title.toLowerCase()}`, 15, "normal", 4);
   addText(`Submitted ${new Date().toLocaleString("en-GB", { timeZone: "Europe/London" })}`, 9, "normal", 14);
 
   addSection("Your details");
@@ -553,27 +681,27 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
   addField("Date of birth", values.dateOfBirth);
   addField("Address", `${values.address} · ${values.postcode}`);
   addField("Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`);
-  addField("Practitioner", values.practitioner === "Guest Piercer" ? `${values.guestPractitionerName} (Guest Piercer)` : values.practitioner);
-  addField("Body piercing", values.piercingArea);
+  addField("Practitioner", practitionerLabel(values, formType));
+  addField(config.areaLabel, values[config.areaKey]);
   addField("How you heard about us", values.referrals.length ? values.referrals.join(", ") : "Not provided");
-  addField("Legal age declaration", values.legalAgeDeclaration ? "Confirmed" : "Not confirmed");
-  if (values.guardianName) addField("Parent / legal guardian", `${values.guardianName} · ${values.guardianRelationship}`);
+  addField("Age declaration", values.legalAgeDeclaration ? `Confirmed: ${config.ageDeclarationText}` : "Not confirmed");
+  if (formType === "piercing" && values.guardianName) addField("Parent / legal guardian", `${values.guardianName} · ${values.guardianRelationship}`);
 
   addSection("Health & safety");
-  for (const [key, title] of healthQuestions) addField(title, values[key]);
-  for (const [key, title] of sensitivityQuestions) addField(title, values[key]);
+  for (const [key, title] of config.healthQuestions) addField(title, String(values[key]));
+  for (const [key, title] of config.sensitivityQuestions) addField(title, String(values[key]));
   addField("Medical conditions, medications, or anything to know", values.medicalConditions);
   addField("Other allergies or sensitivities", values.allergies);
   addField("Health disclosure acknowledgement", values.medicalConditionsAcknowledged ? "Confirmed" : "Not confirmed");
 
   addSection("Consent acknowledgements");
-  for (const [key, title, copy] of consentPolicies) {
+  for (const [key, title, copy] of config.consentPolicies) {
     addText(title, 11, "bold", 3);
     addText(copy, 10, "normal", 2);
     addText(`Acknowledged: ${values[key] ? "Yes" : "No"}`, 10, "bold", 9);
   }
   addText("Photography", 11, "bold", 3);
-  addText("I consent to having pictures of my piercing taken, release all rights to photographs taken of me, and give consent in advance to their reproduction in print or electronic form.", 10, "normal", 2);
+  addText(`I consent to having pictures of my ${formType === "tattoo" ? "tattoo" : "piercing"} taken, release all rights to photographs taken of me, and give consent in advance to their reproduction in print or electronic form.`, 10, "normal", 2);
   addText(`Photography choice: ${values.photography || "Not chosen"}`, 10, "bold", 9);
   addText("If any provision, section, subsection, clause, or phrase of this release is found to be unenforceable or invalid, that portion will be severed. The remainder of this contract will be construed as though the unenforceable portion had never been included.", 9, "normal", 10);
 
@@ -606,12 +734,12 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
     // Keep the PDF bytes and filename, but present the blob as a generic
     // downloadable file so Safari does not open its PDF preview viewer.
     blob: new Blob([doc.output("arraybuffer")], { type: "application/octet-stream" }),
-    name: `golden-vine-consent-${(values.fullName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "copy")}.pdf`,
+    name: `golden-vine-${formType}-consent-${(values.fullName.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "copy")}.pdf`,
   };
 }
 
-async function downloadConsentCopy(values: FormValues, signature: string, idFiles: IdFile[]) {
-  const pdf = await createConsentPdf(values, signature, idFiles);
+async function downloadConsentCopy(values: FormValues, signature: string, idFiles: IdFile[], formType: FormType) {
+  const pdf = await createConsentPdf(values, signature, idFiles, formType);
   const { blob, name } = pdf;
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
@@ -626,9 +754,8 @@ async function downloadConsentCopy(values: FormValues, signature: string, idFile
 }
 
 // Emails the finished PDF to the studio's storage inbox (see
-// netlify/functions/consent-archive.ts). formType lets a future tattoo
-// consent form reuse the same route.
-async function emailStudioCopy(pdf: { blob: Blob; name: string }, values: FormValues, formType: "piercing" | "tattoo" = "piercing") {
+// netlify/functions/consent-archive.ts). formType picks the email subject.
+async function emailStudioCopy(pdf: { blob: Blob; name: string }, values: FormValues, formType: FormType) {
   const pdfBase64 = await new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
     reader.onerror = () => reject(new Error("The studio copy could not be prepared."));
@@ -653,7 +780,7 @@ async function emailStudioCopy(pdf: { blob: Blob; name: string }, values: FormVa
 
 // Sends the client their aftercare email from the studio address
 // (see netlify/functions/send-aftercare.ts).
-async function sendClientConfirmation(values: FormValues, formType: "piercing" | "tattoo" = "piercing") {
+async function sendClientConfirmation(values: FormValues, formType: FormType) {
   const response = await fetch("/.netlify/functions/send-aftercare", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -666,7 +793,8 @@ async function sendClientConfirmation(values: FormValues, formType: "piercing" |
 
 export function Consent() {
   const [step, setStep] = useState<Step>(0);
-  const [values, setValues] = useState<FormValues>(initialValues);
+  const [formType, setFormType] = useState<FormType>(readInitialFormType);
+  const [values, setValues] = useState<FormValues>(() => ({ ...initialValues, practitioner: FORM_CONFIG[readInitialFormType()].practitioners[0] }));
   const [signature, setSignature] = useState("");
   const [idFiles, setIdFiles] = useState<IdFile[]>([]);
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -703,14 +831,14 @@ export function Consent() {
   const sendStudioCopy = async () => {
     let pdf: { blob: Blob; name: string };
     try {
-      pdf = await createConsentPdf(values, signature, idFiles);
+      pdf = await createConsentPdf(values, signature, idFiles, formType);
     } catch (error) {
       console.error("The consent copy could not be created.", error);
       setArchiveStatus("failed");
       return;
     }
     try {
-      setArchiveStatus(await emailStudioCopy(pdf, values));
+      setArchiveStatus(await emailStudioCopy(pdf, values, formType));
     } catch (error) {
       console.error("The studio copy could not be emailed.", error);
       setArchiveStatus("failed");
@@ -726,10 +854,26 @@ export function Consent() {
       return next;
     });
   };
+  const switchFormType = (next: FormType) => {
+    if (next === formType) return;
+    setFormType(next);
+    setValues((current) => ({ ...current, practitioner: FORM_CONFIG[next].practitioners[0], guestPractitionerName: "" }));
+    setIsPractitionerLocked(false);
+    setErrors({});
+    try {
+      const url = new URL(window.location.href);
+      if (next === "tattoo") url.searchParams.set("form", "tattoo");
+      else url.searchParams.delete("form");
+      window.history.replaceState(null, "", url);
+    } catch {
+      // The address bar simply won't update.
+    }
+  };
   const toggleReferral = (referral: string) => updateValue("referrals", values.referrals.includes(referral) ? values.referrals.filter((item) => item !== referral) : [...values.referrals, referral]);
 
   const validateStep = (targetStep: Step) => {
     const next: FieldErrors = {};
+    const config = FORM_CONFIG[formType];
     if (targetStep === 0) {
       if (!values.fullName.trim()) next.fullName = "Please enter your full name.";
       if (!values.dateOfBirth) next.dateOfBirth = "Please add your date of birth.";
@@ -737,20 +881,22 @@ export function Consent() {
       if (!values.postcode.trim()) next.postcode = "Please add your postcode.";
       if (!values.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) next.email = "Please enter a valid email address.";
       if (!values.practitioner) next.practitioner = "Please choose a practitioner.";
-      if (values.practitioner === "Guest Piercer" && !values.guestPractitionerName.trim()) next.guestPractitionerName = "Please add the guest piercer’s name.";
-      if (!values.piercingArea.trim()) next.piercingArea = "Please tell us where you are being pierced.";
+      if (values.practitioner === config.guestOption && !values.guestPractitionerName.trim()) next.guestPractitionerName = `Please add the ${config.guestOption.toLowerCase()}’s name.`;
+      if (!values[config.areaKey].trim()) next[config.areaKey] = config.areaError;
       if (!values.legalAgeDeclaration) next.legalAgeDeclaration = "Please confirm your age and signing authority.";
-      if ((getAge(values.dateOfBirth) ?? 16) < 16) {
+      const age = getAge(values.dateOfBirth);
+      if (formType === "tattoo" && age !== null && age < config.minimumAge) next.dateOfBirth = "By UK law, we can’t tattoo anyone under 18, even with a parent’s consent.";
+      if (formType === "piercing" && (age ?? 16) < 16) {
         if (!values.guardianName.trim()) next.guardianName = "Please add the parent or legal guardian’s name.";
         if (!values.guardianRelationship.trim()) next.guardianRelationship = "Please add their relationship to you.";
       }
     }
     if (targetStep === 1) {
-      for (const key of ["bloodborne", "eating", "intoxication", "pregnancy", "latex", "chlorhexidine", "iodine", "aluminium"] as const) if (!values[key]) next[key] = "Please choose an answer.";
+      for (const [key] of [...config.healthQuestions, ...config.sensitivityQuestions]) if (!values[key]) next[key] = "Please choose an answer.";
       if (!values.medicalConditionsAcknowledged) next.medicalConditionsAcknowledged = "Please confirm you have disclosed anything that may affect healing.";
     }
     if (targetStep === 2) {
-      for (const key of ["risks", "release", "questions", "aftercare", "changes", "document", "downsizing"] as const) if (!values[key]) next[key] = "Please acknowledge this before continuing.";
+      for (const [key] of config.consentPolicies) if (!values[key]) next[key] = "Please acknowledge this before continuing.";
       if (!signature) next.signature = "Please add your handwritten signature.";
     }
     setErrors((current) => ({ ...current, ...next }));
@@ -783,12 +929,15 @@ export function Consent() {
   };
 
   const appendValues = (data: FormData) => {
+    const otherType: FormType = formType === "tattoo" ? "piercing" : "tattoo";
     for (const key of Object.keys(values) as Array<keyof FormValues>) {
       data.delete(key);
+      if (FORM_ONLY_FIELDS[otherType].includes(key)) continue;
       const value = values[key];
       data.set(key, Array.isArray(value) ? value.join(", ") : typeof value === "boolean" ? (value ? "Yes" : "No") : value);
     }
     data.set("form-name", "consent");
+    data.set("formType", FORM_CONFIG[formType].label);
     data.set("signature-captured", signature ? "Yes" : "No");
   };
 
@@ -825,7 +974,7 @@ export function Consent() {
       const response = await fetch(formEndpoint, { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body });
       if (!response.ok) throw new Error("Netlify could not receive your form. Please try again.");
        try {
-         setEmailStatus(await sendClientConfirmation(values));
+         setEmailStatus(await sendClientConfirmation(values, formType));
        } catch (error) {
          console.error("The client confirmation email failed.", error);
          setEmailStatus("failed");
@@ -852,17 +1001,18 @@ export function Consent() {
       <p className="ns-privacy">Your information is handled securely by Netlify Forms. Storage, retention, and deletion are configured by Golden Vine.</p>
       {archiveStatus === "sent" ? <p className="ns-privacy">Studio copy saved.</p> : null}
       {archiveStatus === "failed" || archiveStatus === "unconfigured" ? <p className="ns-privacy">Studio note: the emailed copy didn’t go through.{" "}
-        <button type="button" className="underline font-semibold" onClick={() => void downloadConsentCopy(values, signature, idFiles).catch((error) => console.error("The consent copy could not be downloaded.", error))}>Download a copy instead</button></p> : null}
+        <button type="button" className="underline font-semibold" onClick={() => void downloadConsentCopy(values, signature, idFiles, formType).catch((error) => console.error("The consent copy could not be downloaded.", error))}>Download a copy instead</button></p> : null}
     </section></main> : <main className="ns-main">
-      <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.webp")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">This consent form helps your piercer understand you and prepare a safe, considered appointment. Take your time — most people finish in about five minutes.</p></section>
+      <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.webp")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">{FORM_CONFIG[formType].intro}</p>
+        {step === 0 ? <><div className="ns-form-switch" role="group" aria-label="Choose your consent form">{(["piercing", "tattoo"] as const).map((type) => <button key={type} type="button" className={`ns-form-switch-button ${formType === type ? "is-active" : ""}`} aria-pressed={formType === type} onClick={() => switchFormType(type)}>{FORM_CONFIG[type].label}</button>)}</div><p className="ns-form-switch-note">You’re filling in the {FORM_CONFIG[formType].title.toLowerCase()}.</p></> : <p className="ns-form-switch-note">{FORM_CONFIG[formType].title}</p>}</section>
       <div className="ns-flow"><Progress step={step} /><form ref={formRef} className="ns-form" name="consent" method="POST" action={formEndpoint} data-netlify="true" onSubmit={submit} noValidate><input type="hidden" name="form-name" value="consent" /><input type="hidden" name="bot-field" value="" aria-hidden="true" />
-        {step === 0 ? <DetailsStep values={values} errors={errors} toggleReferral={toggleReferral} updateValue={updateValue} isPractitionerLocked={isPractitionerLocked} setIsPractitionerLocked={setIsPractitionerLocked} /> : null}
-        {step === 1 ? <HealthStep values={values} errors={errors} updateValue={updateValue} /> : null}
-        {step === 2 ? <ConsentStep values={values} errors={errors} updateValue={updateValue} signature={signature} setSignature={setSignature} idFiles={idFiles} fileError={fileError} readFile={readFile} removeFile={removeFile} idInputRef={idInputRef} cameraInputRef={cameraInputRef} /> : null}
-         {step === 3 ? <ReviewStep values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} /> : null}
+        {step === 0 ? <DetailsStep formType={formType} values={values} errors={errors} toggleReferral={toggleReferral} updateValue={updateValue} isPractitionerLocked={isPractitionerLocked} setIsPractitionerLocked={setIsPractitionerLocked} /> : null}
+        {step === 1 ? <HealthStep formType={formType} values={values} errors={errors} updateValue={updateValue} /> : null}
+        {step === 2 ? <ConsentStep formType={formType} values={values} errors={errors} updateValue={updateValue} signature={signature} setSignature={setSignature} idFiles={idFiles} fileError={fileError} readFile={readFile} removeFile={removeFile} idInputRef={idInputRef} cameraInputRef={cameraInputRef} /> : null}
+         {step === 3 ? <ReviewStep formType={formType} values={values} signature={signature} idFiles={idFiles} confirmationCode={confirmationCode} confirmationCodeError={errors.confirmationCode} onConfirmationCodeChange={(value) => { setConfirmationCode(value); setErrors((current) => { if (!current.confirmationCode) return current; const next = { ...current }; delete next.confirmationCode; return next; }); }} /> : null}
         {submitError ? <div className="ns-submit-error" role="alert"><AlertCircle size={17} />{submitError}</div> : null}
         <div className="ns-actions"><div className="ns-actions-note"><LockKeyhole size={14} /> Saved only when you submit</div><div className="ns-button-row">{step > 0 ? <button className="ns-button ns-button-quiet" type="button" onClick={() => goToStep((step - 1) as Step)}><ArrowLeft size={15} /> Previous</button> : <span />}{step < 3 ? <button className="ns-button ns-button-primary" type="button" onClick={() => goToStep((step + 1) as Step)}>Continue <ArrowRight size={15} /></button> : <button className="ns-button ns-button-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? "Sending securely…" : "Submit consent"}{!isSubmitting ? <Check size={15} /> : null}</button>}</div></div>
-        <p className="ns-privacy">Privacy note: your details, signature, and optional ID images are sent securely to Golden Vine through Netlify Forms. This form is not medical advice; please speak to a qualified healthcare professional about health concerns.</p>
+        <p className="ns-privacy">Privacy note: your details are sent securely to Golden Vine, and your signature and any ID images go privately to the studio. This form is not medical advice; please speak to a qualified healthcare professional about health concerns.</p>
       </form></div>
     </main>}
     <footer className="ns-footer">Golden Vine · Consent & client details</footer>

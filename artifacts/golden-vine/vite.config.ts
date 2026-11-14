@@ -40,6 +40,10 @@ const netlifyConsentFormPlugin = {
       "medicalConditionsAcknowledged", "allergies", "latex", "chlorhexidine",
       "iodine", "aluminium", "risks", "release", "questions", "aftercare",
       "changes", "document", "photography", "downsizing",
+      // Tattoo form fields
+      "formType", "tattooDesign", "bloodThinners", "skinCondition",
+      "skinMedication", "inkAllergy", "adhesiveAllergy", "ointmentAllergy",
+      "designApproval", "healingResults",
     ];
     const inputs = fields.map((name) => `<input name="${name}" />`).join("\n");
     const html = `<!doctype html>

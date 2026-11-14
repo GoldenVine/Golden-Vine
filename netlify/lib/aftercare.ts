@@ -241,10 +241,87 @@ Best regards,
 The Golden Fern Team
 `;
 
+// Tattoo aftercare email. The steps match the Tattoo Aftercare page on the
+// website (src/pages/TattooAftercare.tsx); update both together.
+const tattooHtml = `<div style="font-family: Georgia, 'Times New Roman', serif; color: #2f3b26; max-width: 600px; margin: 0 auto; line-height: 1.5;">
+
+  <div style="background: #fffae7; border: 1px solid #c9a84c; border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 24px;">
+    <p style="margin: 0 0 6px; font-size: 18px; font-weight: bold;">Loved your visit?</p>
+    <p style="margin: 0 0 16px;">We'd be so grateful if you could take a minute to leave us a review. It really helps a small studio like ours.</p>
+    <a href="${REVIEW_URL}"
+       style="display: inline-block; background: #526545; color: #ffffff; text-decoration: none; padding: 12px 28px; border-radius: 999px; font-weight: bold;">
+      Leave us a Google review
+    </a>
+  </div>
+
+  <p>Thank you for completing your consent form, and for getting tattooed with us.</p>
+
+  <p>Here's how to look after your new tattoo while it heals. If anything doesn't look or feel right, or you have any questions, just reply to this email or pop into the studio.</p>
+
+  <h3>TATTOO AFTERCARE</h3>
+  <p><strong>1. First wash</strong><br>Three hours after your tattoo is finished, wash it gently with plenty of water at normal room temperature.</p>
+  <p><strong>2. Pat dry</strong><br>Dry it with a clean, disposable paper towel using small, gentle dabs. Don't rub.</p>
+  <p><strong>3. From the next day</strong><br>After 24 hours, wash your tattoo with a pH-neutral soap.</p>
+  <p><strong>4. Moisturise</strong><br>Apply the aftercare cream recommended by your tattoo artist two to three times a day throughout the healing process.</p>
+  <p><strong>5. Watch what you eat</strong><br>Avoid irritating foods for 15 days.</p>
+  <p><strong>6. No alcohol</strong><br>Don't drink alcohol while your tattoo is healing.</p>
+  <p><strong>7. Keep it out of the sun and water</strong><br>Don't expose your tattoo to sunlight, and avoid the beach, swimming pools, saunas and steam rooms until it has healed.</p>
+  <p><strong>8. Hands off</strong><br>Never touch your tattoo with dirty hands. Once it starts to heal, don't pick, peel or scratch any scabs. Let them come away on their own.</p>
+
+  <p>Healing usually takes two to four weeks on the surface, and a little longer underneath. Some redness, swelling, flaking and itching is normal. If you notice spreading redness, heat, pus, or you feel unwell, please contact your GP.</p>
+
+  <p>Best regards,</p>
+  <p>The Golden Vine Team</p>
+</div>`;
+
+const tattooText = `Loved your visit? We'd be so grateful if you could take a minute to leave us a review. It really helps a small studio like ours.
+Leave us a Google review: ${REVIEW_URL}
+
+Thank you for completing your consent form, and for getting tattooed with us.
+
+Here's how to look after your new tattoo while it heals. If anything doesn't look or feel right, or you have any questions, just reply to this email or pop into the studio.
+
+TATTOO AFTERCARE
+
+1. FIRST WASH
+Three hours after your tattoo is finished, wash it gently with plenty of water at normal room temperature.
+
+2. PAT DRY
+Dry it with a clean, disposable paper towel using small, gentle dabs. Don't rub.
+
+3. FROM THE NEXT DAY
+After 24 hours, wash your tattoo with a pH-neutral soap.
+
+4. MOISTURISE
+Apply the aftercare cream recommended by your tattoo artist two to three times a day throughout the healing process.
+
+5. WATCH WHAT YOU EAT
+Avoid irritating foods for 15 days.
+
+6. NO ALCOHOL
+Don't drink alcohol while your tattoo is healing.
+
+7. KEEP IT OUT OF THE SUN AND WATER
+Don't expose your tattoo to sunlight, and avoid the beach, swimming pools, saunas and steam rooms until it has healed.
+
+8. HANDS OFF
+Never touch your tattoo with dirty hands. Once it starts to heal, don't pick, peel or scratch any scabs. Let them come away on their own.
+
+Healing usually takes two to four weeks on the surface, and a little longer underneath. Some redness, swelling, flaking and itching is normal. If you notice spreading redness, heat, pus, or you feel unwell, please contact your GP.
+
+Best regards,
+The Golden Vine Team
+`;
+
 export const AFTERCARE_EMAILS: Record<string, AftercareEmail> = {
   piercing: {
     subject: "Your Golden Vine piercing aftercare",
     html: piercingHtml,
     text: piercingText,
+  },
+  tattoo: {
+    subject: "Your Golden Vine tattoo aftercare",
+    html: tattooHtml,
+    text: tattooText,
   },
 };

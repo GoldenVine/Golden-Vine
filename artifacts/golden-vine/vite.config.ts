@@ -41,7 +41,7 @@ const netlifyConsentFormPlugin = {
       "iodine", "aluminium", "risks", "release", "questions", "aftercare",
       "changes", "document", "photography", "downsizing",
       // Tattoo form fields
-      "formType", "tattooDesign", "bloodThinners", "skinCondition",
+      "formType", "tattooDesign", "tattooPrice", "bloodThinners", "skinCondition",
       "skinMedication", "inkAllergy", "adhesiveAllergy", "ointmentAllergy",
       "designApproval", "healingResults",
     ];

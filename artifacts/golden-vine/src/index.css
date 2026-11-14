@@ -712,3 +712,6 @@
   .ns-form-switch { display: grid; width: 100%; }
   .ns-form-switch-button { min-width: 0; }
 }
+.ns-price-input { position: relative; }
+.ns-price-input > span { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--ink-soft); pointer-events: none; }
+.ns-price-input .ns-input { padding-left: 32px; }

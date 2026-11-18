@@ -844,6 +844,27 @@ export function Consent() {
     return () => mediaQuery.removeEventListener("change", updateOrientation);
   }, []);
 
+  // Clears everything so the next client can start a fresh form on the same
+  // device without closing and reopening the page.
+  const startNewForm = () => {
+    const type = readInitialFormType();
+    setFormType(type);
+    setValues({ ...initialValues, practitioner: FORM_CONFIG[type].practitioners[0] });
+    setSignature("");
+    setIdFiles([]);
+    setErrors({});
+    setSubmitError("");
+    setIsSubmitting(false);
+    setEmailStatus(null);
+    setArchiveStatus(null);
+    setConfirmationCode("");
+    setFileError("");
+    setIsPractitionerLocked(false);
+    setStep(0);
+    setSubmitted(false);
+    window.scrollTo({ top: 0 });
+  };
+
   const easyRead = easyReadPreference ?? isLandscapeCoarse;
   const toggleEasyRead = () => {
     const next = !easyRead;
@@ -1028,6 +1049,7 @@ export function Consent() {
       {archiveStatus === "sent" ? <p className="ns-privacy">Studio copy saved.</p> : null}
       {archiveStatus === "failed" || archiveStatus === "unconfigured" ? <p className="ns-privacy">Studio note: the emailed copy didn’t go through.{" "}
         <button type="button" className="underline font-semibold" onClick={() => void downloadConsentCopy(values, signature, idFiles, formType).catch((error) => console.error("The consent copy could not be downloaded.", error))}>Download a copy instead</button></p> : null}
+      <button type="button" className="ns-button ns-button-primary ns-new-form" onClick={startNewForm}>Start a new consent form <ArrowRight size={15} /></button>
     </section></main> : <main className="ns-main">
       <section className="ns-intro"><div className="ns-intro-art" aria-hidden="true"><img src={asset("images/gv-app-logo.webp")} alt="" /><span className="ns-intro-art-line" /></div><p className="ns-kicker">Before your appointment</p><h1 className="ns-title">A little care before we begin.</h1><p className="ns-intro-copy">{FORM_CONFIG[formType].intro}</p>
         {step === 0 ? <><div className="ns-form-switch" role="group" aria-label="Choose your consent form">{(["piercing", "tattoo"] as const).map((type) => <button key={type} type="button" className={`ns-form-switch-button ${formType === type ? "is-active" : ""}`} aria-pressed={formType === type} onClick={() => switchFormType(type)}>{FORM_CONFIG[type].label}</button>)}</div><p className="ns-form-switch-note">You’re filling in the {FORM_CONFIG[formType].title.toLowerCase()}.</p></> : <p className="ns-form-switch-note">{FORM_CONFIG[formType].title}</p>}</section>

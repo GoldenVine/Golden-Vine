@@ -722,3 +722,4 @@
 .ns-age { color: var(--ink-soft); font-size: 13px; }
 .ns-age strong { color: var(--ink); }
 .ns-button:disabled { opacity: .45; cursor: not-allowed; }
+.ns-new-form { margin-top: 28px; }

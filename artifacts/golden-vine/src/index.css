@@ -723,3 +723,4 @@
 .ns-age strong { color: var(--ink); }
 .ns-button:disabled { opacity: .45; cursor: not-allowed; }
 .ns-new-form { margin-top: 28px; }
+.ns-mark-logo { width: 34px; height: 34px; object-fit: cover; display: block; border-radius: 8px; }

@@ -447,7 +447,7 @@ function SectionHeading({ index, title }: { index: string; title: string }) {
 
 function Header({ easyRead, onToggleEasyRead, isAutomatic }: { easyRead: boolean; onToggleEasyRead: () => void; isAutomatic: boolean }) {
   return <header className="ns-header"><div className="ns-header-inner">
-    <div className="ns-wordmark"><span className="ns-mark" aria-hidden="true" /><span className="ns-wordmark-text">Golden Vine</span></div>
+    <div className="ns-wordmark"><img className="ns-mark-logo" src={asset("images/gv-app-logo.webp")} alt="" aria-hidden="true" /><span className="ns-wordmark-text">Golden Vine</span></div>
     <button className={`ns-accessibility-toggle ${easyRead ? "is-active" : ""}`} type="button" aria-pressed={easyRead} onClick={onToggleEasyRead} title={isAutomatic ? "Easy-read mode is on for landscape. Tap to turn it off." : "Toggle easy-read mode"}>
       <Eye size={15} /><span>Easy-read {easyRead ? "on" : "off"}</span>
     </button>

@@ -45,6 +45,7 @@ type FormValues = {
   piercingArea: string;
   tattooDesign: string;
   tattooPrice: string;
+  tattooPriceConfirmed: boolean;
   legalAgeDeclaration: boolean;
   guardianName: string;
   guardianRelationship: string;
@@ -99,6 +100,7 @@ const initialValues: FormValues = {
   piercingArea: "",
   tattooDesign: "",
   tattooPrice: "",
+  tattooPriceConfirmed: false,
   legalAgeDeclaration: false,
   guardianName: "",
   guardianRelationship: "",
@@ -240,7 +242,7 @@ const FORM_CONFIG = {
 // form's Netlify submission.
 const FORM_ONLY_FIELDS: Record<FormType, Array<keyof FormValues>> = {
   piercing: ["piercingArea", "guardianName", "guardianRelationship", "guardianPhone", "guardianEmail", "chlorhexidine", "iodine", "aluminium", "downsizing"],
-  tattoo: ["tattooDesign", "tattooPrice", "bloodThinners", "skinCondition", "skinMedication", "inkAllergy", "adhesiveAllergy", "ointmentAllergy", "designApproval", "healingResults"],
+  tattoo: ["tattooDesign", "tattooPrice", "tattooPriceConfirmed", "bloodThinners", "skinCondition", "skinMedication", "inkAllergy", "adhesiveAllergy", "ointmentAllergy", "designApproval", "healingResults"],
 };
 
 // Health answers are special category data. They are only sent to the studio
@@ -251,6 +253,7 @@ const HEALTH_FIELDS: Array<keyof FormValues> = [
   "inkAllergy", "adhesiveAllergy", "ointmentAllergy",
 ];
 
+const PRICE_CONFIRMATION = "I confirm this is the price I have agreed to pay for today’s tattoo session.";
 const UNDER_18_MESSAGE = "By UK law, we can’t tattoo anyone under 18, even with a parent’s consent.";
 
 function isUnderTattooAge(formType: FormType, dateOfBirth: string) {
@@ -488,9 +491,8 @@ function DetailsStep({
         <div className="ns-field"><FieldLabel htmlFor="practitioner">Practitioner</FieldLabel><select className="ns-select" id="practitioner" name="practitioner" value={values.practitioner} onChange={(event) => updateValue("practitioner", event.target.value)} disabled={isPractitionerLocked} aria-invalid={Boolean(errors.practitioner)}>{config.practitioners.map((name) => <option key={name}>{name}</option>)}</select><ErrorText message={errors.practitioner} /></div>
         {values.practitioner === config.guestOption ? <div className="ns-field"><FieldLabel htmlFor="guestPractitionerName">{config.guestOption}’s name</FieldLabel><input className="ns-input" id="guestPractitionerName" name="guestPractitionerName" value={values.guestPractitionerName} onChange={(event) => updateValue("guestPractitionerName", event.target.value)} placeholder="Enter their full name" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.guestPractitionerName)} /><ErrorText message={errors.guestPractitionerName} /></div> : null}
         <div className="ns-field"><FieldLabel htmlFor={areaKey}>{config.areaLabel}</FieldLabel><input className="ns-input" id={areaKey} name={areaKey} value={values[areaKey]} onChange={(event) => updateValue(areaKey, event.target.value)} placeholder={config.areaPlaceholder} disabled={isPractitionerLocked} aria-invalid={Boolean(errors[areaKey])} /><ErrorText message={errors[areaKey]} /></div>
-        {formType === "tattoo" ? <div className="ns-field"><FieldLabel htmlFor="tattooPrice">Agreed price</FieldLabel><div className="ns-price-input"><span aria-hidden="true">£</span><input className="ns-input" id="tattooPrice" name="tattooPrice" inputMode="numeric" value={values.tattooPrice} onChange={(event) => updateValue("tattooPrice", event.target.value.replace(/[^0-9]/g, ""))} placeholder="e.g. 120" disabled={isPractitionerLocked} aria-invalid={Boolean(errors.tattooPrice)} /></div><ErrorText message={errors.tattooPrice} /></div> : null}
       </div>
-      {isPractitionerLocked ? <p className="ns-lock-note"><LockKeyhole size={13} /> Practitioner, {config.areaLabel.toLowerCase()}{formType === "tattoo" ? " and price" : ""} are locked in. Tap the button to edit them.</p> : null}
+      {isPractitionerLocked ? <p className="ns-lock-note"><LockKeyhole size={13} /> Practitioner and {config.areaLabel.toLowerCase()} are locked in. Tap the button to edit them.</p> : null}
     </div>
     <div className="ns-card ns-card-pad"><div className="ns-grid ns-grid-2">
       <div className="ns-field ns-field-wide"><FieldLabel htmlFor="fullName">Full name</FieldLabel><input className="ns-input" id="fullName" name="fullName" value={values.fullName} onChange={(event) => updateValue("fullName", event.target.value)} placeholder="As shown on your ID" aria-invalid={Boolean(errors.fullName)} /><ErrorText message={errors.fullName} /></div>
@@ -500,6 +502,11 @@ function DetailsStep({
       <div className="ns-field"><FieldLabel htmlFor="phone" hint="optional">Mobile number</FieldLabel><input className="ns-input" id="phone" name="phone" type="tel" value={values.phone} onChange={(event) => updateValue("phone", event.target.value)} placeholder="+44" /></div>
       <div className="ns-field"><FieldLabel htmlFor="email">Email address</FieldLabel><input className="ns-input" id="email" name="email" type="email" value={values.email} onChange={(event) => updateValue("email", event.target.value)} placeholder="you@example.com" aria-invalid={Boolean(errors.email)} /><ErrorText message={errors.email} /></div>
     </div></div>
+    {formType === "tattoo" ? <div className="ns-card ns-card-pad">
+      <p className="ns-kicker ns-kicker-small">Your price</p><h3 className="ns-policy-title">What are you paying today?</h3><p className="ns-policy-copy">Please enter the price you have agreed to pay for today’s session yourself. If the price changes, a new form is needed.</p>
+      <div className="ns-grid ns-grid-2"><div className="ns-field"><FieldLabel htmlFor="tattooPrice">Price for today’s session</FieldLabel><div className="ns-price-input"><span aria-hidden="true">£</span><input className="ns-input" id="tattooPrice" name="tattooPrice" inputMode="numeric" value={values.tattooPrice} onChange={(event) => updateValue("tattooPrice", event.target.value.replace(/[^0-9]/g, ""))} placeholder="e.g. 120" aria-invalid={Boolean(errors.tattooPrice)} /></div><ErrorText message={errors.tattooPrice} /></div></div>
+      <label className="ns-checkline" style={{ marginTop: "1rem" }}><input type="checkbox" name="tattooPriceConfirmed" value="Yes" checked={values.tattooPriceConfirmed} onChange={(event) => updateValue("tattooPriceConfirmed", event.target.checked)} aria-invalid={Boolean(errors.tattooPriceConfirmed)} /><span>{PRICE_CONFIRMATION}</span></label><ErrorText message={errors.tattooPriceConfirmed} />
+    </div> : null}
     <div className="ns-card ns-card-pad"><label className="ns-checkline"><input type="checkbox" name="legalAgeDeclaration" value="Yes" checked={values.legalAgeDeclaration} onChange={(event) => updateValue("legalAgeDeclaration", event.target.checked)} aria-invalid={Boolean(errors.legalAgeDeclaration)} /><span>{config.ageDeclaration}</span></label><ErrorText message={errors.legalAgeDeclaration} />
       {formType === "piercing" && age !== null && age < 16 ? <div className="ns-grid ns-grid-2 ns-guardian-grid">
         <div className="ns-field"><FieldLabel htmlFor="guardianName">Parent / legal guardian name</FieldLabel><input className="ns-input" id="guardianName" name="guardianName" value={values.guardianName} onChange={(event) => updateValue("guardianName", event.target.value)} placeholder="Full name" aria-invalid={Boolean(errors.guardianName)} /><ErrorText message={errors.guardianName} /></div>
@@ -583,7 +590,7 @@ function ReviewStep({
   const config = FORM_CONFIG[formType];
   const rows = [
     ["Consent form", config.label], ["Name", values.fullName], ["Address", `${values.address} · ${values.postcode}`], ["Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`],
-    ["Practitioner", practitionerLabel(values, formType)], [config.areaLabel, values[config.areaKey]], ...(formType === "tattoo" ? [["Agreed price", formatPrice(values.tattooPrice)]] : []),
+    ["Practitioner", practitionerLabel(values, formType)], [config.areaLabel, values[config.areaKey]], ...(formType === "tattoo" ? [["Price for today’s session (entered by client)", formatPrice(values.tattooPrice)], ["Price confirmed by client", values.tattooPriceConfirmed ? "Yes" : "No"]] : []),
     ...(formType === "piercing" ? [["Guardian", values.guardianName ? `${values.guardianName} · ${values.guardianRelationship}` : "Not required"]] : []), ["Health screening", `Complete — answers shared with your ${config.practitionerNoun}`],
     ["Photography", values.photography || "Not chosen"], ["Signature", signature ? "Captured" : "Missing"], ["Photo ID", idFiles.length ? `${idFiles.length} photo${idFiles.length === 1 ? "" : "s"} attached` : "Not provided (optional)"],
   ];
@@ -706,7 +713,10 @@ async function createConsentPdf(values: FormValues, signature: string, idFiles: 
   addField("Contact", `${values.email}${values.phone ? ` · ${values.phone}` : ""}`);
   addField("Practitioner", practitionerLabel(values, formType));
   addField(config.areaLabel, values[config.areaKey]);
-  if (formType === "tattoo") addField("Agreed price", formatPrice(values.tattooPrice));
+  if (formType === "tattoo") {
+    addField("Price for today’s session (entered by client)", formatPrice(values.tattooPrice));
+    addField("Price confirmation", values.tattooPriceConfirmed ? `Confirmed: ${PRICE_CONFIRMATION}` : "Not confirmed");
+  }
   addField("How you heard about us", values.referrals.length ? values.referrals.join(", ") : "Not provided");
   addField("Age declaration", values.legalAgeDeclaration ? `Confirmed: ${config.ageDeclarationText}` : "Not confirmed");
   if (formType === "piercing" && values.guardianName) addField("Parent / legal guardian", `${values.guardianName} · ${values.guardianRelationship}`);
@@ -928,7 +938,8 @@ export function Consent() {
       if (!values.practitioner) next.practitioner = "Please choose a practitioner.";
       if (values.practitioner === config.guestOption && !values.guestPractitionerName.trim()) next.guestPractitionerName = `Please add the ${config.guestOption.toLowerCase()}’s name.`;
       if (!values[config.areaKey].trim()) next[config.areaKey] = config.areaError;
-      if (formType === "tattoo" && !/^\d+$/.test(values.tattooPrice.trim())) next.tattooPrice = "Please enter the agreed price in pounds, e.g. 120.";
+      if (formType === "tattoo" && !/^\d+$/.test(values.tattooPrice.trim())) next.tattooPrice = "Please enter the price you are paying today, in pounds, e.g. 120.";
+      if (formType === "tattoo" && !values.tattooPriceConfirmed) next.tattooPriceConfirmed = "Please confirm this is the price you have agreed to pay.";
       if (!values.legalAgeDeclaration) next.legalAgeDeclaration = "Please confirm your age and signing authority.";
       const age = getAge(values.dateOfBirth);
       if (isUnderTattooAge(formType, values.dateOfBirth)) next.dateOfBirth = UNDER_18_MESSAGE;

@@ -39,7 +39,7 @@ const netlifyConsentFormPlugin = {
       "legalAgeDeclaration", "guardianName", "guardianRelationship",
       "guardianPhone", "guardianEmail", "medicalConditionsAcknowledged",
       "risks", "release", "questions", "aftercare", "changes", "document",
-      "photography", "downsizing", "formType", "tattooDesign", "tattooPrice",
+      "photography", "downsizing", "formType", "tattooDesign", "tattooPrice", "tattooPriceConfirmed",
       "designApproval", "healingResults", "health-answers",
     ];
     const inputs = fields.map((name) => `<input name="${name}" />`).join("\n");
